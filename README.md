@@ -14,7 +14,7 @@ và **thế giới đứng yên trong lúc trả lời**.
 2. Cài [Git LFS](https://git-lfs.com) rồi clone:
    ```bash
    git lfs install
-   git clone <link-repo> dien-bien-phu-1954
+   git clone https://github.com/Phanbatien/dien-bien-phu-1954.git
    ```
 3. Unity Hub → **Add project from disk** → chọn thư mục `dien-bien-phu-1954`.
 4. Mở scene `Assets/_Project/Scenes/Sandbox.unity` → bấm **Play**.
