@@ -1,0 +1,34 @@
+{
+  "weapons": [
+    {
+      "id": "W-MOSIN", "name": "Mosin-Nagant (K-44)", "origin": "aid", "ammoType": "7.62x54R",
+      "availableFrom": 1944, "rarity": "common", "fireMode": "single", "sourceId": "",
+      "stats": { "damage": 75, "rpm": 40, "mag": 5, "reloadSec": 3.2, "reserve": 30, "range": 200,
+                 "hipSpread": 2.5, "adsSpread": 0.15, "recoilPitch": 3.5, "recoilYaw": 0.8, "adsFov": 50, "scopeZoom": 1 }
+    },
+    {
+      "id": "W-MOSIN-SCOPE", "name": "Mosin có ống ngắm", "origin": "aid", "ammoType": "7.62x54R",
+      "availableFrom": 0, "rarity": "legendary", "fireMode": "single", "sourceId": "",
+      "stats": { "damage": 90, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 20, "range": 300,
+                 "hipSpread": 4, "adsSpread": 0.02, "recoilPitch": 4, "recoilYaw": 0.6, "adsFov": 40, "scopeZoom": 4 }
+    },
+    {
+      "id": "W-MAUSER", "name": "Mauser", "origin": "mixed", "ammoType": "7.92x57",
+      "availableFrom": 0, "rarity": "uncommon", "fireMode": "single", "sourceId": "",
+      "stats": { "damage": 85, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 25, "range": 220,
+                 "hipSpread": 2.5, "adsSpread": 0.12, "recoilPitch": 4, "recoilYaw": 0.9, "adsFov": 50, "scopeZoom": 1 }
+    },
+    {
+      "id": "W-MAT49", "name": "Tiểu liên MAT-49", "origin": "captured", "ammoType": "9x19",
+      "availableFrom": 1949, "rarity": "rare", "fireMode": "auto", "sourceId": "",
+      "stats": { "damage": 22, "rpm": 600, "mag": 32, "reloadSec": 2.6, "reserve": 96, "range": 90,
+                 "hipSpread": 3, "adsSpread": 1.2, "recoilPitch": 0.8, "recoilYaw": 0.5, "adsFov": 58, "scopeZoom": 1 }
+    },
+    {
+      "id": "W-TYPE50", "name": "Tiểu liên Kiểu 50", "origin": "aid", "ammoType": "7.62x25",
+      "availableFrom": 1951, "rarity": "rare", "fireMode": "auto", "sourceId": "",
+      "stats": { "damage": 20, "rpm": 900, "mag": 35, "reloadSec": 2.8, "reserve": 105, "range": 80,
+                 "hipSpread": 3.5, "adsSpread": 1.5, "recoilPitch": 0.7, "recoilYaw": 0.6, "adsFov": 58, "scopeZoom": 1 }
+    }
+  ]
+}

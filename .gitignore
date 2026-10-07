@@ -1,0 +1,43 @@
+# Unity tự sinh lại — không commit
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Bb]uild/
+/[Bb]uilds/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Mm]emoryCaptures/
+/[Rr]ecordings/
+/Assets/Plugins/Editor/JetBrains*
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.csproj
+*.sln
+*.slnx
+*.suo
+*.user
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.mdb
+*.opendb
+*.VC.db
+
+# Hệ điều hành
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Crash/khôi phục
+sysinfo.txt
+crashlytics-buildid.txt
+/Assets/_Recovery/
+/Assets/_Recovery.meta
+
+# Kết quả test/build chạy bằng dòng lệnh
+test-results*.xml
+build.log
