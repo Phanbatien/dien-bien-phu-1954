@@ -14,7 +14,16 @@ namespace DBP.Quiz
         public QuestionOption[] options;
         public string correct;
         public string fact;
+        public QuestionSource source;
         public string status;
+        public int revision;
+    }
+
+    [Serializable]
+    public class QuestionSource
+    {
+        public string sourceId;
+        public string page;
     }
 
     [Serializable]
@@ -38,14 +47,14 @@ namespace DBP.Quiz
         public QuizOutcome outcome;
     }
 
-    /// Nguồn câu hỏi. Bản thật: bộ chọn câu không lặp của T17 (Thiên Trí, BR-31).
-    /// Trả null khi thiếu câu hợp lệ.
+    /// Nguồn câu hỏi: QuestionSelector (T17). Trả null khi thiếu câu hợp lệ (BR-31).
     public interface IQuestionProvider
     {
-        Question Next(int level, QuizForm form);
+        /// Câu có cấp trong [minLevel, maxLevel], dùng được ở hình thức form, chưa gặp trong lượt.
+        Question Next(int minLevel, int maxLevel, QuizForm form);
     }
 
-    /// Giao diện câu hỏi. Bản thật: UI câu hỏi ngoài trận của T18 (Thiên Trí).
+    /// Giao diện câu hỏi. Bản thật: UI câu hỏi ngoài trận của T18 (Thiên Trí); bản tạm là DebugQuizView.
     /// Phải chạy bằng thời gian thực vì lúc hiển thị Time.timeScale = 0.
     public interface IQuizView
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using DBP.Core;
 using DBP.DebugTools;
 using DBP.Interaction;
@@ -49,6 +50,12 @@ namespace DBP.EditorTools
         {
             if (EditorUtility.DisplayDialog("Ghi đè scene?", "Mọi chỉnh sửa trong 6 scene greybox sẽ mất.", "Ghi đè", "Hủy"))
                 Build(overwrite: true);
+        }
+
+        public static void RebuildAllCI()
+        {
+            try { Build(overwrite: true); EditorApplication.Exit(0); }
+            catch (Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
         }
 
         public static void BuildMissingCI()
@@ -103,11 +110,8 @@ namespace DBP.EditorTools
             Dummy("LinhPhap_2", new Vector3(5, 0, 54), TargetKind.Infantry, 100, enemies);
             Dummy("LinhPhap_3", new Vector3(0, 0, 62), TargetKind.Infantry, 100, enemies);
 
-            var crates = Group("Crates");
-            Crate(crates, new Vector3(2, 0, 10), Rarity.Common, null, 15, 0);
-            Crate(crates, new Vector3(-3, 0, 32), Rarity.Common, null, 0, 2);
-            Crate(crates, new Vector3(6, 0, 40), Rarity.Uncommon, "W-MAUSER", 15, 0);
-            Crate(crates, new Vector3(-8, 0, 44), Rarity.Rare, null, 0, 3);
+            Spawner(Points(-10, 10, 6, 48, 12, 0f), StandardRewards("W-MAT49"));
+            Phone("DienThoai_GoiPhao", new Vector3(2.2f, 0, 16), bunkers[0]);
 
             Mission("M1", "Mở màn Him Lam", "M2", "M2_GiuDocLap", player, true,
                 Make<TutorialObjective>("Làm quen: đi, bắn, thay đạn"),
@@ -133,9 +137,7 @@ namespace DBP.EditorTools
             var mg = gun.AddComponent<MountedGun>();
             SetRef(mg, "seat", seat);
 
-            var crates = Group("Crates");
-            Crate(crates, new Vector3(-6, 2, 3), Rarity.Rare, "W-MAT49", 64, 0);
-            Crate(crates, new Vector3(6, 2, 3), Rarity.Common, null, 0, 2);
+            Spawner(Points(-10, 10, 0, 9, 12, 2f), StandardRewards("W-MAT49"));
 
             var waves = Group("Waves");
             var list = new List<GameObject>();
@@ -176,37 +178,48 @@ namespace DBP.EditorTools
                 Dummy("ToSungMay_2", new Vector3(17, 5, 80), TargetKind.MachineGunNest, 150, enemies),
             };
 
-            var crates = Group("Crates");
-            Crate(crates, new Vector3(3, 0, 6), Rarity.Legendary, "W-MOSIN-SCOPE", 10, 0);
-            Crate(crates, new Vector3(-4, 0, 22), Rarity.Uncommon, "W-MAUSER", 15, 0);
+            Spawner(Points(-12, 12, 4, 40, 12, 0f), StandardRewards("W-MAT49"));
 
             Mission("M3", "Đêm đồi E, D", "M4", "M4_LongHao", player, true,
                 Destroy("Hạ lính gác và tổ súng máy", targets),
                 Reach("Tới điểm rút", new Vector3(-20, 1, 5), new Vector3(6, 3, 6)));
         }
 
-        /// Màn 4: chiếm các đoạn hào theo thứ tự rồi đẩy lùi phản kích (BR-32).
+        /// Màn 4 "Trong lòng hào" (T51, T54): mê cung giao thông hào, chiếm 4 đoạn theo thứ tự rồi đẩy lùi phản kích (BR-32).
         static void BuildM4()
         {
             SetupScene(night: false);
             var player = Spawn(new Vector3(0, 0, 0), 0);
             var env = Group("Environment");
-            Trench(env, 0, -3, 72);
-            Trench(env, 8, 28, 44);
-            Box("HaoNgang_1", new Vector3(4, 0.9f, 26.5f), new Vector3(6, 1.8f, 0.5f), Mat("Trench", TrenchColor), env);
+            var sand = Mat("Sandbag", SandbagColor);
+
+            // Trục hào chính chạy dọc màn; vách chừa lối vào 4 nhánh ngang cụt (trái 18, phải 30, phải 52, trái 64).
+            var trench = Mat("Trench", TrenchColor);
+            float[][] left = { new float[] { -3, 16.5f }, new float[] { 19.5f, 62.5f }, new float[] { 65.5f, 88 } };
+            float[][] right = { new float[] { -3, 28.5f }, new float[] { 31.5f, 50.5f }, new float[] { 53.5f, 88 } };
+            foreach (var s in left) WallZ(env, -1.25f, s[0], s[1], trench);
+            foreach (var s in right) WallZ(env, 1.25f, s[0], s[1], trench);
+            TrenchX(env, 18, -1.5f, -12);
+            TrenchX(env, 30, 1.5f, 12);
+            TrenchX(env, 52, 1.5f, 12);
+            TrenchX(env, 64, -1.5f, -12);
+            for (int i = 0; i < 8; i++)
+                Box($"BaoCat_{i}", new Vector3(i % 2 == 0 ? -0.7f : 0.7f, 0.35f, 10 + i * 10), new Vector3(0.8f, 0.7f, 1.4f), sand, env);
 
             var enemies = Group("Enemies");
             var objectives = new List<Objective>();
-            for (int s = 0; s < 3; s++)
+            float[] sections = { 14, 34, 56, 76 };
+            for (int s = 0; s < sections.Length; s++)
             {
-                float z = 18 + s * 20;
+                float z = sections[s];
                 var holders = new List<Health>
                 {
                     Dummy($"GiuHao_{s + 1}_a", new Vector3(-0.5f, 0, z + 2), TargetKind.Infantry, 100, enemies),
                     Dummy($"GiuHao_{s + 1}_b", new Vector3(0.5f, 0, z + 5), TargetKind.Infantry, 100, enemies),
                 };
+                if (s % 2 == 1) holders.Add(Dummy($"GiuHao_{s + 1}_c", new Vector3(0, 0, z + 7), TargetKind.Infantry, 100, enemies));
                 var capture = Make<CaptureZoneObjective>($"Chiếm đoạn hào {s + 1}");
-                capture.zone = Zone($"DoanHao_{s + 1}", new Vector3(0, 1, z + 3), new Vector3(3, 3, 8));
+                capture.zone = Zone($"DoanHao_{s + 1}", new Vector3(0, 1, z + 4), new Vector3(3, 3, 9));
                 capture.holders = holders;
                 objectives.Add(capture);
             }
@@ -214,16 +227,20 @@ namespace DBP.EditorTools
             var waves = Group("Waves");
             var counter = new GameObject("PhanKich_Cuoi");
             counter.transform.SetParent(waves, false);
-            for (int i = 0; i < 5; i++) Dummy($"PhanKich_{i}", new Vector3(-0.5f + (i % 2), 0, 66 + i * 1.5f), TargetKind.Infantry, 100, counter.transform);
+            for (int i = 0; i < 6; i++) Dummy($"PhanKich_{i}", new Vector3(-0.5f + (i % 2), 0, 84 + i * 0.6f), TargetKind.Infantry, 100, counter.transform);
             counter.SetActive(false);
             var repel = Make<RepelWavesObjective>("Đẩy lùi phản kích cuối");
             repel.waves = new List<GameObject> { counter };
             objectives.Add(repel);
 
-            var crates = Group("Crates");
-            Crate(crates, new Vector3(0.6f, 0, 12), Rarity.Rare, "W-TYPE50", 70, 0);
-            Crate(crates, new Vector3(-0.6f, 0, 33), Rarity.Rare, "W-MAT49", 64, 0);
-            Crate(crates, new Vector3(0.6f, 0, 50), Rarity.Common, null, 0, 2);
+            var points = new List<Vector3>();
+            for (int i = 0; i < 6; i++) points.Add(new Vector3(i % 2 == 0 ? 0.7f : -0.7f, 0, 5 + i * 12.5f)); // phía đối diện bao cát
+            points.AddRange(new[]
+            {
+                new Vector3(-10, 0, 18), new Vector3(-6, 0, 18), new Vector3(10, 0, 30),
+                new Vector3(10, 0, 52), new Vector3(6, 0, 52), new Vector3(-10, 0, 64),
+            });
+            Spawner(points.ToArray(), StandardRewards("W-TYPE50"));
 
             Mission("M4", "Trong lòng hào", "M5", "M5_ChieuMungBay", player, true, objectives.ToArray());
         }
@@ -260,9 +277,7 @@ namespace DBP.EditorTools
             var raiser = hq.gameObject.AddComponent<FlagRaise>();
             SetRef(raiser, "flag", flag.transform);
 
-            var crates = Group("Crates");
-            Crate(crates, new Vector3(3, 0, 15), Rarity.Rare, "W-TYPE50", 70, 0);
-            Crate(crates, new Vector3(-3, 0, 60), Rarity.Common, null, 0, 2);
+            Spawner(Points(-12, 12, 12, 36, 6, 0f).Concat(Points(-12, 12, 58, 92, 6, 0f)).ToArray(), StandardRewards("W-TYPE50"));
 
             var mc = Mission("M5", "Chiều mùng Bảy", "", "", player, true,
                 Reach("Vượt cầu Mường Thanh", new Vector3(0, 1, 54), new Vector3(8, 3, 4)),
@@ -296,7 +311,8 @@ namespace DBP.EditorTools
             var enemies = Group("Targets");
             var targets = new List<Health>();
             for (int i = 0; i < 5; i++) targets.Add(Dummy($"Linh_{i}", new Vector3(-8 + i * 4, 0, 30), TargetKind.Infantry, 100, enemies));
-            Dummy("LoCot", new Vector3(-12, 0, 34), TargetKind.Bunker, 300, enemies);
+            var sandboxBunker = Dummy("LoCot", new Vector3(-12, 0, 34), TargetKind.Bunker, 300, enemies);
+            Phone("DienThoai_GoiPhao", new Vector3(-6, 0, 8), sandboxBunker);
             Dummy("XeTang", new Vector3(12, 0, 34), TargetKind.Tank, 600, enemies);
 
             Mission("SANDBOX", "Sandbox", "", "", player, true, Destroy("Hạ 5 hình nộm", targets));
@@ -376,6 +392,68 @@ namespace DBP.EditorTools
             Box($"Hao_{x}_{z0}_Phai", new Vector3(x + 1.25f, 0.9f, mid), new Vector3(0.5f, 1.8f, len), m, parent);
         }
 
+        /// Một vách hào dọc trục Z tại x, từ z0 tới z1.
+        static void WallZ(Transform parent, float x, float z0, float z1, Material m) =>
+            Box($"VachHao_{x}_{z0}", new Vector3(x, 0.9f, (z0 + z1) / 2f), new Vector3(0.5f, 1.8f, z1 - z0), m, parent);
+
+        /// Đoạn hào ngang theo trục X tại z, từ x0 tới x1.
+        static void TrenchX(Transform parent, float z, float x0, float x1)
+        {
+            float len = Mathf.Abs(x1 - x0), mid = (x0 + x1) / 2f;
+            var m = Mat("Trench", TrenchColor);
+            Box($"HaoNgang_{z}_{x0}_Truoc", new Vector3(mid, 0.9f, z - 1.25f), new Vector3(len, 1.8f, 0.5f), m, parent);
+            Box($"HaoNgang_{z}_{x0}_Sau", new Vector3(mid, 0.9f, z + 1.25f), new Vector3(len, 1.8f, 0.5f), m, parent);
+        }
+
+        /// Lưới điểm đặt hòm trong vùng [x0,x1] × [z0,z1] (BR-13: 10–15 điểm mỗi màn).
+        static Vector3[] Points(float x0, float x1, float z0, float z1, int count, float y)
+        {
+            var list = new Vector3[count];
+            int cols = 3, rows = Mathf.CeilToInt(count / 3f);
+            for (int i = 0; i < count; i++)
+            {
+                float fx = (i % cols) / (float)(cols - 1);
+                float fz = rows == 1 ? 0.5f : (i / cols) / (float)(rows - 1);
+                list[i] = new Vector3(Mathf.Lerp(x0, x1, fx) + ((i / cols) % 2 == 0 ? 0.8f : -0.8f), y, Mathf.Lerp(z0, z1, fz));
+            }
+            return list;
+        }
+
+        /// Danh mục phần thưởng mặc định, đủ 4 độ hiếm (BR-15, BR-29). Cân bằng lại ở T65.
+        static CrateReward[] StandardRewards(string smgId) => new[]
+        {
+            new CrateReward { rarity = Rarity.Common, ammoType = "7.62x54R", ammo = 15 },
+            new CrateReward { rarity = Rarity.Common, ammo = 0, grenades = 2 },
+            new CrateReward { rarity = Rarity.Uncommon, weaponId = "W-MAUSER", ammoType = "7.92x57", ammo = 15 },
+            new CrateReward { rarity = Rarity.Rare, weaponId = smgId, ammoType = smgId == "W-TYPE50" ? "7.62x25" : "9x19", ammo = 64 },
+            new CrateReward { rarity = Rarity.Rare, ammo = 0, grenades = 3 },
+            new CrateReward { rarity = Rarity.Legendary, weaponId = "W-MOSIN-SCOPE", ammoType = "7.62x54R", ammo = 10 },
+        };
+
+        static CrateSpawner Spawner(Vector3[] points, CrateReward[] rewards)
+        {
+            var go = new GameObject("CrateSpawner");
+            var spawner = go.AddComponent<CrateSpawner>();
+            for (int i = 0; i < points.Length; i++)
+            {
+                var p = new GameObject($"DiemHom_{i + 1:00}").transform;
+                p.SetParent(go.transform, false);
+                p.localPosition = points[i];
+                p.localRotation = Quaternion.Euler(0, (i * 47) % 360, 0);
+                spawner.points.Add(p);
+            }
+            spawner.rewards = new List<CrateReward>(rewards);
+            return spawner;
+        }
+
+        static FieldPhone Phone(string name, Vector3 basePos, Health target)
+        {
+            var go = Box(name, basePos + Vector3.up * 0.35f, new Vector3(0.35f, 0.7f, 0.35f), Mat("Metal", MetalColor), null);
+            var phone = go.AddComponent<FieldPhone>();
+            phone.target = target;
+            return phone;
+        }
+
         static Health Dummy(string name, Vector3 basePos, TargetKind kind, float hp, Transform parent)
         {
             var (type, size, mat) = kind switch
@@ -397,6 +475,7 @@ namespace DBP.EditorTools
             bool armored = kind == TargetKind.Bunker || kind == TargetKind.Tank;
             health.Configure(kind, hp, armored ? new[] { DamageType.Bullet } : Array.Empty<DamageType>());
             go.AddComponent<DisableOnDeath>();
+            if (kind == TargetKind.Infantry) go.AddComponent<WeaponDrop>(); // BR-14: tỉ lệ và giới hạn ở MissionController
             return health;
         }
 

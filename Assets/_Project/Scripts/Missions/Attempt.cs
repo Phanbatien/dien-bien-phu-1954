@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBP.Interaction;
 using DBP.Quiz;
 
 namespace DBP.Missions
@@ -25,6 +26,14 @@ namespace DBP.Missions
         public bool RankEligible = true;
         public readonly List<QuizResult> Answers = new List<QuizResult>();
 
+        /// Chuỗi sai của hòm (BR-16); lượt mới bắt đầu từ 0.
+        public readonly PityTracker Pity = new PityTracker();
+        /// Ngẫu nhiên của lượt (súng rơi…), suy ra từ seed để tái hiện khi kiểm tra (BR-13).
+        public readonly System.Random Rng;
+        public int WeaponDrops;
+        /// Ghi hồ sơ lỗi khi quyết toán: màn kết quả phải báo, không hiện "đã lưu" (BR-37).
+        public bool SaveFailed;
+
         public MissionOutcome Outcome { get; private set; } = MissionOutcome.None;
         public double CompletionSeconds => BattleEnd - BattleStart;
 
@@ -32,6 +41,7 @@ namespace DBP.Missions
         {
             MissionId = missionId;
             Seed = seed;
+            Rng = new System.Random(seed ^ 0x5EED);
         }
 
         /// Chốt kết quả đúng một lần (BR-32).

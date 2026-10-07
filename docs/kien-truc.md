@@ -10,7 +10,7 @@ Scene màn (M1…M5)
 ├── GameSystems
 │   ├── WorldFreeze ─────────── Freeze(): timeScale=0, khóa điều khiển, nền nâu xám, tắt tiếng
 │   ├── FieldQuizSession ────── TryOpen(cấp, thời hạn, onResolved) → hỏi → chốt → Resume(0,5 s)
-│   │     ├── IQuestionProvider   (Thiên Trí – T17 thay PlaceholderQuestionProvider)
+│   │     ├── IQuestionProvider   QuestionSelector: câu approved, đúng màn, không lặp (T17)
 │   │     └── IQuizView           (Thiên Trí – T18 thay DebugQuizView)
 │   └── DebugOverlay ────────── HUD/menu/kết quả tạm (Long – T27, T35, T36 thay)
 ├── Player (prefab)
@@ -23,7 +23,8 @@ Scene màn (M1…M5)
 ├── Mission
 │   ├── MissionController       kích hoạt mục tiêu theo thứ tự, thắng/thua/bỏ dở, mở khóa màn
 │   └── các Objective           DestroyTargets / ReachZone / RepelWaves / CaptureZone / Tutorial
-├── Crates                      QuizCrate (giữ E 1 s → FieldQuizSession)
+├── CrateSpawner                rút 5–7 hòm theo seed (T22) → QuizCrate (giữ E 1 s → FieldQuizSession)
+├── DienThoai_GoiPhao           FieldPhone: câu cấp 3 → pháo trúng/trượt mục tiêu (T31)
 └── Enemies / Waves             hiện là hình nộm có Health (Đạt thay bằng AI)
 ```
 
@@ -41,7 +42,10 @@ Scene màn (M1…M5)
 | `FieldQuizSession.Answered` (static event, `QuizResult`) | `Quiz/FieldQuizSession.cs` | Long tính điểm kiến thức (T19, BR-25); Attempt lưu lại |
 | `Objective` (Activate, Check, onCompleted) | `Missions/Objective.cs` | Thêm loại mục tiêu mới bằng cách kế thừa |
 | `MissionController.Ended` (static event, `Attempt`) | `Missions/MissionController.cs` | Màn kết quả, bảng xếp hạng (Long – T36, T57) |
-| `ProfileService.Data / Save / Buy` | `Upgrades/ProfileService.cs` | Long thay phần lưu bằng file JSON an toàn (T20), giữ nguyên hàm public |
+| `ProfileService.Data / Save / Buy / ProfileId` | `Upgrades/ProfileService.cs` | Lưu `profiles/<id>/progress.json`, ghi tạm rồi thay, có `.bak` (T20). Menu hồ sơ (T27) đổi `ProfileId` rồi gọi `Reload()`. `Save()` trả false thì phải báo người chơi |
+| `QuestionBank.LoadAll` / `QuestionSelector.Next(minCấp, maxCấp, form)` | `Content/ContentLoader.cs`, `Quiz/QuestionSelector.cs` | Hầm chuẩn bị (T25) dùng `Next(1, 3, QuizForm.Bunker)` trên cùng selector của lượt: `FieldQuizSession.Instance.Questions` |
+| `MissionController.Current.Attempt` (Seed, Rng, Pity, Answers) | `Missions/Attempt.cs` | Mọi thứ ngẫu nhiên trong lượt dùng seed này để tái hiện được (BR-13) |
+| `ExplosionFlash.Spawn(vị trí, bán kính)` | `Core/ExplosionFlash.cs` | Bộc phá/lựu đạn (Đạt) dùng tạm; Long thay bằng hạt khói (T67) |
 | `Inventory.GiveWeapon / TakeBack / AddAmmo / AddGrenades` | `Weapons/Inventory.cs` | Mọi phần thưởng đều đi qua đây (BR-36) |
 
 ## Mỗi người cắm vào đâu
@@ -49,19 +53,20 @@ Scene màn (M1…M5)
 **Đạt (AI & Combat)**
 - AI lính: tạo `Scripts/AI/`, gắn lên hình nộm (đã có `Health`). Khi lính rút thì đặt `health.Retreated = true`.
 - Hình nộm hiện dùng `DebugTools/DisableOnDeath` (biến mất ngay). Thay bằng ngã rồi mờ dần (T08, BR-21).
-- Hòm ngẫu nhiên (T22): sinh `QuizCrate` theo seed `MissionController.Current.Attempt.Seed`. Bảng độ hiếm → cấp/thời hạn đã có trong `RarityRules` (BR-15). Bảo hiểm 3 lần sai (BR-16) thì thêm vào `QuizCrate.Interact`.
+- Hòm ngẫu nhiên, bảo hiểm 3 lần sai, súng rơi (T22, T23) **đã xong**: `CrateSpawner`, `PityTracker`, `WeaponDrop` (gắn sẵn trên lính bộ binh). Tỉ lệ rơi và giới hạn chỉnh trên `MissionController`.
 - Bộc phá/lựu đạn/pháo: gọi `TakeDamage(..., DamageType.Explosive/Artillery/AntiTank, ...)`. Lô cốt và xe tăng đã miễn `Bullet`.
-- Điện thoại gọi pháo (T31): một `IInteractable` có `HoldSeconds = 1`, gọi `FieldQuizSession.Instance.TryOpen(3, 15f, …)` (BR-38).
+- Điện thoại gọi pháo (T31) **đã xong**: `FieldPhone`, gắn `target` là lô cốt/xe tăng. Có sẵn ở Màn 1 và Sandbox.
 
 **Thiên Trí (Quiz)**
-- Cài `IQuestionProvider` đọc `StreamingAssets/content/questions/*.json` theo schema `Question` (GDD §8). Gán vào `FieldQuizSession.Instance.Questions` trong `Awake`.
+- **Viết câu hỏi vào `StreamingAssets/content/questions/`**: `campaign.json` (dùng chung, `missionId: "CAMPAIGN"`) và `m1.json` … `m5.json`. Mẫu xem `campaign.json`. Câu chỉ vào bản nộp khi `"status": "approved"` và có `source.sourceId` + `fact`.
+- Chạy **DBP → Validate Content** sau mỗi đợt câu: nó báo thiếu bao nhiêu câu mỗi cấp cho từng màn (BR-28).
 - UI câu hỏi: một MonoBehaviour cài `IQuizView`, gắn lên **cùng GameObject `GameSystems`** rồi xóa `DebugQuizView`. FieldQuizSession tự tìm.
 
 **Long (Data/UI/Audio)**
-- `ProfileService`: thay `Load/Save` (PlayerPrefs) bằng ghi file tạm rồi đổi tên (BR-37). Giữ `Data`, `Save`, `Buy`, `OnMissionWon`.
+- Lưu hồ sơ (T20) **đã xong** bằng file JSON. Menu hồ sơ (T27): đặt `ProfileService.ProfileId`, ghi `displayName`, `className`, `consentAt` vào `ProfileService.Data` rồi `Save()`.
 - HUD/menu/kết quả: đọc như `DebugOverlay` đang đọc (Health, Stamina, Inventory, Objective.Progress, Attempt). Xong thì gỡ `DebugOverlay` khỏi scene.
 - Âm thanh súng: kéo clip vào `WeaponController` (fireClip, reloadClip, dryClip) trên prefab Player. Âm UI câu hỏi: `AudioSource.ignoreListenerPause = true`.
-- Validate Content (T40): gọi trong `Editor/BuildTools.cs` trước khi build (đã để sẵn chỗ).
+- Validate Content (T40) **đã xong**, gắn vào build: bản nộp bị chặn khi còn lỗi. Long chạy lần cuối ở T70 (nay là Đạt).
 
 **Khôi (3D)**
 - Mỗi scene là khối hộp dựng bởi `Editor/SceneBuilder.cs`. Thay khối trong nhóm `Environment` bằng model; **giữ nguyên** `Mission`, `GameSystems`, các Zone.
