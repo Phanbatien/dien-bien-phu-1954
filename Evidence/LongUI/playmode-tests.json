@@ -1,0 +1,98 @@
+{
+  "success": true,
+  "command": "command test_status",
+  "data": {
+    "command": "test_status",
+    "parameters": {},
+    "result": {
+      "status": "completed",
+      "duration": 21.98,
+      "summary": {
+        "total": 10,
+        "passed": 10,
+        "failed": 0,
+        "skipped": 0,
+        "inconclusive": 0
+      },
+      "results": [
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.Menu_CreatesDistinctProfiles_ConsentVolumeAndMissionLocks",
+          "Status": "Passed",
+          "Duration": 1.17936,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.Menu_LongNamesRemainStoredAndProfileListFits",
+          "Status": "Passed",
+          "Duration": 0.9730642,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.Menu_MouseInputAndEscapePause_WorkThroughInputSystem",
+          "Status": "Passed",
+          "Duration": 1.2190769,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.Shop_InsufficientFunds_DuplicateClick_AndDeploymentModifiers",
+          "Status": "Passed",
+          "Duration": 0.9873596,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.Tutorial_HudTracksDamageAmmoStamina_ResultsAndFreshReplay",
+          "Status": "Passed",
+          "Duration": 1.4986563,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.WinningMission_SaveFailureStillShowsResults_AndRetrySavesOnce",
+          "Status": "Passed",
+          "Duration": 1.1714339,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.LongUIFlowTests.WinningMission_UnlocksNextOnlyForActiveProfile",
+          "Status": "Passed",
+          "Duration": 1.1967548,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.SandboxFlowTests.Crate_FreezesWorld_TimesOut_ThenResumesTogether",
+          "Status": "Passed",
+          "Duration": 13.090633,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.SandboxFlowTests.KillingAllTargets_WinsOnce",
+          "Status": "Passed",
+          "Duration": 0.3066565,
+          "Message": null,
+          "StackTrace": null
+        },
+        {
+          "FullName": "DBP.Tests.SandboxFlowTests.PlayerDeath_LosesMission",
+          "Status": "Passed",
+          "Duration": 0.2931285,
+          "Message": null,
+          "StackTrace": null
+        }
+      ]
+    },
+    "target": {
+      "host": "127.0.0.1",
+      "port": 7800,
+      "projectPath": "D:\\FPT\\k 7\\PRU213\\project môn\\dien-bien-phu-1954"
+    }
+  },
+  "errors": [],
+  "warnings": []
+}

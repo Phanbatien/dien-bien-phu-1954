@@ -1,54 +1,62 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-
 namespace DBP.Upgrades
 {
-    /// Phần hồ sơ mà luồng màn và nâng cấp cần. T20 (Long) mở rộng thành profile.json/progress.json đầy đủ (BR-22, BR-37).
     [Serializable]
     public class ProfileData
     {
+        public string id;
+        public string displayName;
+        public string className;
+        public string consentAt;
+        public float volume = 0.8f;
         public int resolve;
         public List<string> upgrades = new List<string>();
         public List<string> unlockedMissions = new List<string> { "M1" };
     }
-
-    // ponytail: lưu tạm bằng PlayerPrefs để màn chơi chạy được. T20 (Long) thay Load/Save bằng
-    // ghi file tạm rồi đổi tên trong persistentDataPath/profiles/<id>/; giữ nguyên các hàm public.
     public static class ProfileService
     {
-        const string Key = "dbp.profile.v1";
-        static ProfileData data;
-
-        public static ProfileData Data => data ??= Load();
-
-        static ProfileData Load()
+        static ProfileRepository repository;
+        static ProfileData guest;
+        public static ProfileRepository Repository => repository ??= Open();
+        public static ProfileData Data => Repository.Active ?? (guest ??= new ProfileData());
+        public static bool HasProfile => Repository.Active != null;
+        static ProfileRepository Open()
         {
-            var json = PlayerPrefs.GetString(Key, "");
-            return string.IsNullOrEmpty(json) ? new ProfileData() : JsonUtility.FromJson<ProfileData>(json);
+            var store = new ProfileRepository(Path.Combine(Application.persistentDataPath, "profiles.json"));
+            if (!store.Exists && PlayerPrefs.HasKey("dbp.profile.v1"))
+            {
+                var legacy = JsonUtility.FromJson<ProfileData>(PlayerPrefs.GetString("dbp.profile.v1"));
+                if (legacy != null) store.ImportLegacy(legacy);
+            }
+            return store;
         }
-
-        public static void Save()
-        {
-            PlayerPrefs.SetString(Key, JsonUtility.ToJson(Data));
-            PlayerPrefs.Save();
-        }
-
-        /// Thắng màn N mở màn N+1; thua không khóa lại màn đã mở (BR-32).
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        static void Reset() { repository = null; guest = null; }
+        public static void Save() { if (HasProfile) Repository.Save(); }
         public static void OnMissionWon(string nextMissionId)
         {
-            if (!string.IsNullOrEmpty(nextMissionId) && !Data.unlockedMissions.Contains(nextMissionId))
-                Data.unlockedMissions.Add(nextMissionId);
-            Save();
+            if (HasProfile) Repository.Unlock(nextMissionId);
+            else if (!string.IsNullOrEmpty(nextMissionId) && !Data.unlockedMissions.Contains(nextMissionId)) Data.unlockedMissions.Add(nextMissionId);
         }
-
         public static bool IsUnlocked(string missionId) => Data.unlockedMissions.Contains(missionId);
-
-        public static BuyResult Buy(string upgradeId, bool inBunker)
+        public static BuyResult Buy(string upgradeId, bool inBunker) => HasProfile ? Repository.Buy(upgradeId, inBunker) : BuyResult.NotInBunker;
+#if UNITY_EDITOR
+        // Tests and capture tools must never change the user's real profiles.
+        public static IDisposable UseTemporaryStore(string path)
         {
-            var result = UpgradeService.TryBuy(Data, upgradeId, inBunker);
-            if (result == BuyResult.Ok) Save();
-            return result;
+            var previous = repository;
+            repository = new ProfileRepository(path);
+            return new RestoreStore(() => repository = previous);
         }
+        sealed class RestoreStore : IDisposable
+        {
+            readonly Action restore;
+            public RestoreStore(Action action) { restore = action; }
+            public void Dispose() => restore();
+        }
+#endif
     }
 }

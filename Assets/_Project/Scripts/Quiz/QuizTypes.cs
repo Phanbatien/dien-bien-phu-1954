@@ -31,6 +31,7 @@ namespace DBP.Quiz
     [Serializable]
     public struct QuizResult
     {
+        public bool inBunker;
         public string questionId;
         public int level;
         public float timeLimit;

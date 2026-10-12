@@ -65,6 +65,8 @@ namespace DBP.EditorTools
             playerPrefab = PlayerPrefab();
 
             var buildScenes = new List<EditorBuildSettingsScene>();
+            if (File.Exists(SceneDir + "/MainMenu.unity"))
+                buildScenes.Add(new EditorBuildSettingsScene(SceneDir + "/MainMenu.unity", true));
             foreach (var (name, build) in Scenes)
             {
                 string path = $"{SceneDir}/{name}.unity";

@@ -37,6 +37,7 @@ namespace DBP.DebugTools
 
         void OnEnded(Attempt attempt)
         {
+            if (UI.CampaignUI.Current) return;
             if (paused) SetPaused(false);
             InputLock.Push();
             FirstPersonController.UnlockCursor();
@@ -51,7 +52,7 @@ namespace DBP.DebugTools
             bool ended = mission && mission.Attempt.Outcome != MissionOutcome.None;
 
             // BR-10: không cho tạm dừng đồng hồ câu ngoài trận bằng menu.
-            if (keyboard.escapeKey.wasPressedThisFrame && !WorldFreeze.IsFrozen && !ended) SetPaused(!paused);
+            if (!UI.CampaignUI.Current && keyboard.escapeKey.wasPressedThisFrame && !WorldFreeze.IsFrozen && !ended) SetPaused(!paused);
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             if (keyboard.f9Key.wasPressedThisFrame && !InputLock.Locked) BlastAimedTarget();
@@ -76,6 +77,7 @@ namespace DBP.DebugTools
 
         void OnGUI()
         {
+            if (UI.CampaignUI.Current) return;
             big ??= new GUIStyle(GUI.skin.label) { fontSize = 20, wordWrap = true };
             var mission = MissionController.Current;
 
