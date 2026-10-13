@@ -26,6 +26,9 @@ namespace DBP.Missions
         [Tooltip("Mục tiêu bắt buộc. Sequential: làm lần lượt; không: làm theo thứ tự bất kỳ.")]
         [SerializeField] List<Objective> objectives = new List<Objective>();
         [SerializeField] bool sequential = true;
+        [Header("Súng rơi từ địch (BR-14) — chốt khi cân bằng")]
+        [Range(0f, 1f)] [SerializeField] float enemyDropChance = 0.08f;
+        [SerializeField] int maxEnemyDrops = 3;
 
         public UnityEvent onWon = new UnityEvent();
         public UnityEvent onLost = new UnityEvent();
@@ -114,6 +117,18 @@ namespace DBP.Missions
             return all;
         }
 
+        public float EnemyDropChance => enemyDropChance;
+        public int MaxEnemyDrops => maxEnemyDrops;
+
+        /// Mỗi địch bị hạ chỉ xét rơi súng một lần; đạt giới hạn của màn thì không sinh thêm (BR-14).
+        public bool TryRollDrop()
+        {
+            if (Attempt.Outcome != MissionOutcome.None || Attempt.WeaponDrops >= maxEnemyDrops) return false;
+            if (Attempt.Rng.NextDouble() >= enemyDropChance) return false;
+            Attempt.WeaponDrops++;
+            return true;
+        }
+
         /// Chủ động kết thúc trước khi thắng (menu tạm dừng): bỏ dở, không lên bảng (BR-32, BR-33).
         public void Abandon() => End(MissionOutcome.Abandoned);
 
@@ -125,7 +140,7 @@ namespace DBP.Missions
 
             if (outcome == MissionOutcome.Won)
             {
-                ProfileService.OnMissionWon(nextMissionId);
+                if (!ProfileService.OnMissionWon(nextMissionId)) Attempt.SaveFailed = true;
                 onWon.Invoke();
             }
             else if (outcome == MissionOutcome.Lost) onLost.Invoke();

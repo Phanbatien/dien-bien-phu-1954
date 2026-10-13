@@ -1,0 +1,31 @@
+{
+  "questions": [
+    {
+      "id": "Q-CAMP-L1-001", "missionId": "CAMPAIGN", "level": 1, "forms": ["bunker", "field"],
+      "stem": "Trận mở màn chiến dịch Điện Biên Phủ (13/3/1954) đánh vào cứ điểm nào?",
+      "options": [ { "id": "a", "text": "Him Lam" }, { "id": "b", "text": "Đồi A1" }, { "id": "c", "text": "Hồng Cúm" }, { "id": "d", "text": "Mường Thanh" } ],
+      "correct": "a",
+      "fact": "Chiều 13/3/1954 quân ta tiến công cứ điểm Him Lam, mở màn chiến dịch.",
+      "source": { "sourceId": "", "page": "" },
+      "status": "draft", "revision": 1
+    },
+    {
+      "id": "Q-CAMP-L2-001", "missionId": "CAMPAIGN", "level": 2, "forms": ["bunker", "field"],
+      "stem": "Anh hùng nào lấy thân mình lấp lỗ châu mai ở Him Lam?",
+      "options": [ { "id": "a", "text": "Tô Vĩnh Diện" }, { "id": "b", "text": "Phan Đình Giót" }, { "id": "c", "text": "Bế Văn Đàn" }, { "id": "d", "text": "Cù Chính Lan" } ],
+      "correct": "b",
+      "fact": "Phan Đình Giót hi sinh khi lấp lỗ châu mai lô cốt Him Lam.",
+      "source": { "sourceId": "", "page": "" },
+      "status": "draft", "revision": 1
+    },
+    {
+      "id": "Q-CAMP-L3-001", "missionId": "CAMPAIGN", "level": 3, "forms": ["bunker", "field"],
+      "stem": "Chiến dịch Điện Biên Phủ kết thúc thắng lợi vào ngày nào?",
+      "options": [ { "id": "a", "text": "13/3/1954" }, { "id": "b", "text": "30/3/1954" }, { "id": "c", "text": "7/5/1954" }, { "id": "d", "text": "21/7/1954" } ],
+      "correct": "c",
+      "fact": "Chiều 7/5/1954 ta đánh vào hầm chỉ huy, bắt sống De Castries.",
+      "source": { "sourceId": "", "page": "" },
+      "status": "draft", "revision": 1
+    }
+  ]
+}

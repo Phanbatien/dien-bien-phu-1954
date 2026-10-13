@@ -135,6 +135,7 @@ namespace DBP.DebugTools
             GUILayout.Label($"Địch bị hạ: {a.Kills}   Lô cốt phá: {a.BunkersDestroyed}   Đợt đẩy lùi: {a.WavesRepelled}");
             GUILayout.Label($"Sát thương nhận: {a.DamageTaken:0}   Thời gian: {a.CompletionSeconds:0.0}s");
             GUILayout.Label($"Câu ngoài trận đúng: {correct}/{a.Answers.Count}{(a.RankEligible ? "" : "  (lượt lỗi câu hỏi: không xếp hạng)")}");
+            if (a.SaveFailed) GUILayout.Label("⚠ Chưa lưu được tiến độ (lỗi ghi đĩa)");
             GUILayout.Space(10);
             if (GUILayout.Button("Chơi lại", GUILayout.Height(36))) mission.Restart();
             if (a.Outcome == MissionOutcome.Won && !string.IsNullOrEmpty(mission.NextSceneName)
