@@ -334,23 +334,37 @@ namespace DBP.EditorTools
             var ground = Box("Ground", new Vector3(0, -0.5f, groundZ), new Vector3(300, 1, groundZ < 0 ? 210 : 300), Mat("Mud", MudColor), null);
             GameObjectUtility.SetStaticEditorFlags(ground, StaticEditorFlags.BatchingStatic);
 
-            var systems = new GameObject("GameSystems");
-            var freeze = systems.AddComponent<WorldFreeze>();
-            var volumeGo = new GameObject("FreezeVolume");
-            volumeGo.transform.SetParent(systems.transform, false);
-            var volume = volumeGo.AddComponent<Volume>();
+            CreateGameSystems(freezeProfile);
+            missionRoot = null;
+        }
+
+        /// WorldFreeze + FreezeVolume + quiz. Scene đã có GameSystems thì gắn lại, không tạo bản thứ hai.
+        internal static GameObject CreateGameSystems(VolumeProfile profile)
+        {
+            var systems = GameObject.Find("GameSystems");
+            if (!systems) systems = new GameObject("GameSystems");
+
+            var freeze = systems.GetComponent<WorldFreeze>();
+            if (!freeze) freeze = systems.AddComponent<WorldFreeze>();
+
+            var volumeTransform = systems.transform.Find("FreezeVolume");
+            var volumeGo = volumeTransform ? volumeTransform.gameObject : new GameObject("FreezeVolume");
+            if (!volumeTransform) volumeGo.transform.SetParent(systems.transform, false);
+            var volume = volumeGo.GetComponent<Volume>();
+            if (!volume) volume = volumeGo.AddComponent<Volume>();
             volume.isGlobal = true;
             volume.priority = 10;
             volume.weight = 0f;
-            volume.sharedProfile = freezeProfile;
+            volume.sharedProfile = profile;
             freeze.SetVolume(volume);
-            var session = systems.AddComponent<FieldQuizSession>();
-            SetRef(session, "freeze", freeze);
-            systems.AddComponent<DebugQuizView>();
-            systems.AddComponent<DBP.DebugTools.DebugOverlay>();
-            systems.AddComponent<FogBackground>();
 
-            missionRoot = null;
+            var session = systems.GetComponent<FieldQuizSession>();
+            if (!session) session = systems.AddComponent<FieldQuizSession>();
+            SetRef(session, "freeze", freeze);
+            if (!systems.GetComponent<DebugQuizView>()) systems.AddComponent<DebugQuizView>();
+            if (!systems.GetComponent<DBP.DebugTools.DebugOverlay>()) systems.AddComponent<DBP.DebugTools.DebugOverlay>();
+            if (!systems.GetComponent<FogBackground>()) systems.AddComponent<FogBackground>();
+            return systems;
         }
 
         static Transform Group(string name) => new GameObject(name).transform;
@@ -473,15 +487,11 @@ namespace DBP.EditorTools
         static Material Mat(string name, Color color)
         {
             string path = $"{MatDir}/{name}.mat";
-            var mat = AssetDatabase.LoadAssetAtPath<Material>(path);
-            if (!mat)
+            return UrpMaterialUtility.EnsureUrpLitMaterial(path, mat =>
             {
-                mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
                 mat.SetColor("_BaseColor", color);
                 mat.SetFloat("_Smoothness", 0.1f);
-                AssetDatabase.CreateAsset(mat, path);
-            }
-            return mat;
+            });
         }
 
         /// Màn hình ngả nâu xám + tối viền khi thế giới đứng yên (BR-09).
