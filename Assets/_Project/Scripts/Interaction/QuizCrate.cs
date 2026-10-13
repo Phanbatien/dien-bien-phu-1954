@@ -65,7 +65,14 @@ namespace DBP.Interaction
         public void Interact(Interactor who)
         {
             var session = FieldQuizSession.Instance;
-            if (!session.TryOpen(RarityRules.Level(rarity, Rng), RarityRules.TimeLimit(rarity), r => Resolve(r, who)))
+            if (!session) return;
+
+            var tracker = InsuranceTracker.Instance;
+            bool isInsurance = tracker != null && tracker.IsInsuranceActive;
+            int level = isInsurance ? tracker.InsuranceLevel : RarityRules.Level(rarity, Rng);
+            float limit = isInsurance ? tracker.InsuranceTimeLimit : RarityRules.TimeLimit(rarity);
+
+            if (!session.TryOpen(level, limit, r => Resolve(r, who, isInsurance)))
             {
                 if (!session.IsOpen) locked = true; // thiếu câu: khóa hòm lỗi trong lượt, không phát thưởng miễn phí (BR-31)
                 return;
@@ -73,8 +80,15 @@ namespace DBP.Interaction
             used = true;
         }
 
-        void Resolve(QuizResult result, Interactor who)
+        void Resolve(QuizResult result, Interactor who, bool isInsurance)
         {
+            var tracker = InsuranceTracker.Instance;
+            if (tracker != null)
+            {
+                tracker.RecordCrateResult(result.outcome);
+                if (isInsurance) tracker.ConsumeInsurance();
+            }
+
             var inventory = who.Weapons.Inventory;
             Weapon dropped = null;
             string leftoverType = fallbackAmmoType;
