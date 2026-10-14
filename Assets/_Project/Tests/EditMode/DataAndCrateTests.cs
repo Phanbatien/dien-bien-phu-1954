@@ -269,6 +269,18 @@ namespace DBP.Tests
         }
 
         [Test]
+        public void Validate_MissionController_OnlyRequiredInMissionScenes()
+        {
+            Assert.IsNull(ContentRules.CheckMissionCount("MainMenu", 0), "Menu không phải màn chơi");
+            Assert.IsNull(ContentRules.CheckMissionCount("Sandbox", 1));
+            Assert.IsNull(ContentRules.CheckMissionCount("M1_HimLam", 1));
+            StringAssert.Contains("thiếu MissionController", ContentRules.CheckMissionCount("M3_DoiED", 0));
+            StringAssert.Contains("chỉ được 1", ContentRules.CheckMissionCount("MainMenu", 2));
+            Assert.IsFalse(ContentRules.IsMissionScene("MainMenu"));
+            Assert.IsTrue(ContentRules.IsMissionScene("M5_ChieuMungBay"));
+        }
+
+        [Test]
         public void Validate_Budget_ReportsShortfall()
         {
             var errors = new List<string>();
