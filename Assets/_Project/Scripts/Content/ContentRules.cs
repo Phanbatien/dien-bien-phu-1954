@@ -124,6 +124,19 @@ namespace DBP.Content
             if (Math.Abs(sum - 1.0) > 0.0005) errors.Add($"{where}: tổng trọng số = {sum:0.###}, phải bằng 1");
         }
 
+        /// Scene màn chơi đặt tên "M&lt;số&gt;_…" (M1_HimLam…). Scene khác (MainMenu, Sandbox…) không bắt buộc có MissionController.
+        public static bool IsMissionScene(string sceneName) =>
+            !string.IsNullOrEmpty(sceneName) && sceneName.Length >= 2 && sceneName[0] == 'M' && char.IsDigit(sceneName[1]);
+
+        /// Màn chơi cần đúng 1 MissionController (BR-30); scene khác được có 0 hoặc 1, không được nhiều hơn.
+        /// Trả null nếu hợp lệ.
+        public static string CheckMissionCount(string sceneName, int count)
+        {
+            if (count > 1) return $"{sceneName}: có {count} MissionController, chỉ được 1";
+            if (count == 0 && IsMissionScene(sceneName)) return $"{sceneName}: màn chơi thiếu MissionController (BR-30)";
+            return null;
+        }
+
         public static void CheckChance(float chance, string where, List<string> errors)
         {
             if (chance < 0f || chance > 1f) errors.Add($"{where}: tỉ lệ {chance} ngoài 0–1 (BR-14)");

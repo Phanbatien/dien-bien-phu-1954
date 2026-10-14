@@ -81,7 +81,8 @@ namespace DBP.EditorTools
                 T[] All<T>() where T : Component => scene.GetRootGameObjects().SelectMany(g => g.GetComponentsInChildren<T>(true)).ToArray();
 
                 var missions = All<MissionController>();
-                if (missions.Length != 1) r.Errors.Add($"{name}: cần đúng 1 MissionController, đang có {missions.Length}");
+                var missionError = ContentRules.CheckMissionCount(name, missions.Length);
+                if (missionError != null) r.Errors.Add(missionError);
                 foreach (var m in missions)
                 {
                     if (!m.Player) r.Errors.Add($"{name}: MissionController chưa gắn người chơi (BR-30)");
