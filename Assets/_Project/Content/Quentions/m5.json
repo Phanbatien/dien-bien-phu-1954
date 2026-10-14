@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "Q-M5-L1-001",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 1,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Chiến dịch Điện Biên Phủ kết thúc vào ngày nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "13/3/1954"
+      },
+      {
+        "id": "b",
+        "text": "7/5/1954"
+      },
+      {
+        "id": "c",
+        "text": "30/4/1954"
+      },
+      {
+        "id": "d",
+        "text": "8/5/1954"
+      }
+    ],
+    "correct": "b",
+    "fact": "17 giờ 30 phút ngày 7/5/1954 tướng De Castries cùng bộ tham mưu bị bắt.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOVANHOA",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L1-002",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 1,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Lá cờ cắm trên nóc hầm De Castries mang dòng chữ nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Độc lập Tự do"
+      },
+      {
+        "id": "b",
+        "text": "Tất cả cho tiền tuyến"
+      },
+      {
+        "id": "c",
+        "text": "Quyết chiến Quyết thắng"
+      },
+      {
+        "id": "d",
+        "text": "Thà hy sinh tất cả"
+      }
+    ],
+    "correct": "c",
+    "fact": "Lá cờ 'Quyết chiến - Quyết thắng' tung bay trên nóc hầm sở chỉ huy địch.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOKONTUM",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L1-003",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 1,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Ngày nay Điện Biên Phủ thuộc tỉnh nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sơn La"
+      },
+      {
+        "id": "b",
+        "text": "Lai Châu"
+      },
+      {
+        "id": "c",
+        "text": "Lào Cai"
+      },
+      {
+        "id": "d",
+        "text": "Điện Biên"
+      }
+    ],
+    "correct": "d",
+    "fact": "Thành phố Điện Biên Phủ là trung tâm tỉnh Điện Biên, nơi có đồi A1, hầm De Castries.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOKONTUM",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L1-004",
+    "missionId": "M5",
+    "eventId": "EVT-19540508",
+    "level": 1,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hội nghị quốc tế nào bàn việc chấm dứt chiến tranh Đông Dương năm 1954?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Hội nghị Genève"
+      },
+      {
+        "id": "b",
+        "text": "Hội nghị Yalta"
+      },
+      {
+        "id": "c",
+        "text": "Hội nghị Potsdam"
+      },
+      {
+        "id": "d",
+        "text": "Hội nghị Bandung"
+      }
+    ],
+    "correct": "a",
+    "fact": "Sau Điện Biên Phủ, Hội nghị Genève giải quyết vấn đề Đông Dương.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L1-005",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 1,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Ngày 7/5 hằng năm được nhớ đến là ngày gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Ngày Độc lập"
+      },
+      {
+        "id": "b",
+        "text": "Ngày Chiến thắng Điện Biên Phủ"
+      },
+      {
+        "id": "c",
+        "text": "Ngày Thương binh liệt sĩ"
+      },
+      {
+        "id": "d",
+        "text": "Ngày Quốc phòng toàn dân"
+      }
+    ],
+    "correct": "b",
+    "fact": "Ngày 7/5/1954 là ngày chiến thắng Điện Biên Phủ.",
+    "source": {
+      "sourceId": "SRC-WEB-THUVIENPHAPLUAT",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L2-001",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 2,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Ta tiêu diệt và bắt sống bao nhiêu quân địch ở Điện Biên Phủ?",
+    "options": [
+      {
+        "id": "a",
+        "text": "6.200 tên"
+      },
+      {
+        "id": "b",
+        "text": "16.200 tên"
+      },
+      {
+        "id": "c",
+        "text": "26.200 tên"
+      },
+      {
+        "id": "d",
+        "text": "36.200 tên"
+      }
+    ],
+    "correct": "b",
+    "fact": "Sau 56 ngày đêm ta tiêu diệt và bắt sống 16.200 địch, bắn rơi 62 máy bay.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOVANHOA",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L2-002",
+    "missionId": "M5",
+    "eventId": "EVT-19540508",
+    "level": 2,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hội nghị Genève về Đông Dương khai mạc vào ngày nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "7/5/1954"
+      },
+      {
+        "id": "b",
+        "text": "1/5/1954"
+      },
+      {
+        "id": "c",
+        "text": "8/5/1954"
+      },
+      {
+        "id": "d",
+        "text": "20/7/1954"
+      }
+    ],
+    "correct": "c",
+    "fact": "Hội nghị bàn việc chấm dứt chiến tranh ở Đông Dương khai mạc ngày 8/5/1954, ngay sau Điện Biên Phủ.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L2-003",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 2,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "cau"
+    ],
+    "stem": "Cầu Mường Thanh bắc qua sông nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Sông Đà"
+      },
+      {
+        "id": "b",
+        "text": "Sông Mã"
+      },
+      {
+        "id": "c",
+        "text": "Sông Hồng"
+      },
+      {
+        "id": "d",
+        "text": "Sông Nậm Rốm"
+      }
+    ],
+    "correct": "d",
+    "fact": "Sông Nậm Rốm chảy qua lòng chảo Mường Thanh.",
+    "source": {
+      "sourceId": "SRC-VNG-DBP",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L2-004",
+    "missionId": "M5",
+    "eventId": "EVT-19540508",
+    "level": 2,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hội nghị Genève 1954 họp ở quốc gia nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Thụy Sĩ"
+      },
+      {
+        "id": "b",
+        "text": "Pháp"
+      },
+      {
+        "id": "c",
+        "text": "Mỹ"
+      },
+      {
+        "id": "d",
+        "text": "Trung Quốc"
+      }
+    ],
+    "correct": "a",
+    "fact": "Genève là thành phố của Thụy Sĩ.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L2-005",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 2,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Hầm chỉ huy của De Castries thuộc phân khu nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Phân khu Bắc"
+      },
+      {
+        "id": "b",
+        "text": "Phân khu Trung tâm"
+      },
+      {
+        "id": "c",
+        "text": "Phân khu Nam"
+      },
+      {
+        "id": "d",
+        "text": "Phân khu Tây"
+      }
+    ],
+    "correct": "b",
+    "fact": "Sở chỉ huy nằm ở Mường Thanh, trung tâm tập đoàn cứ điểm.",
+    "source": {
+      "sourceId": "SRC-FALL-HELL",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-001",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Cờ 'Quyết chiến Quyết thắng' tung bay trên nóc hầm lúc mấy giờ?",
+    "options": [
+      {
+        "id": "a",
+        "text": "15 giờ"
+      },
+      {
+        "id": "b",
+        "text": "17 giờ 30 phút"
+      },
+      {
+        "id": "c",
+        "text": "19 giờ"
+      },
+      {
+        "id": "d",
+        "text": "20 giờ 30 phút"
+      }
+    ],
+    "correct": "b",
+    "fact": "Đúng 17 giờ 30 phút ngày 7/5/1954 cờ tung bay, De Castries bị bắt.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOKONTUM",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-002",
+    "missionId": "M5",
+    "eventId": "EVT-19540506",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "dot3"
+    ],
+    "stem": "Ta lấy tiếng nổ nào làm hiệu lệnh tổng công kích 6/5/1954?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Tiếng pháo cao xạ"
+      },
+      {
+        "id": "b",
+        "text": "Còi báo động"
+      },
+      {
+        "id": "c",
+        "text": "Khối bộc phá lớn ở đồi A1"
+      },
+      {
+        "id": "d",
+        "text": "Pháo sáng"
+      }
+    ],
+    "correct": "c",
+    "fact": "Tiếng nổ khối bộc phá ở A1 lúc 20 giờ 30 là hiệu lệnh đồng loạt tiến công.",
+    "source": {
+      "sourceId": "SRC-WEB-NHANDAN-A1",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-003",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Cùng De Castries, ai khác bị bắt sống?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chỉ mình De Castries"
+      },
+      {
+        "id": "b",
+        "text": "Tướng Navarre"
+      },
+      {
+        "id": "c",
+        "text": "Tướng Cogny"
+      },
+      {
+        "id": "d",
+        "text": "Toàn bộ Bộ Tham mưu tập đoàn cứ điểm"
+      }
+    ],
+    "correct": "d",
+    "fact": "De Castries cùng toàn bộ Bộ Tham mưu ra hàng.",
+    "source": {
+      "sourceId": "SRC-WEB-BAOVANHOA",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-004",
+    "missionId": "M5",
+    "eventId": "EVT-19540721",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hiệp định Genève 1954 cam kết tôn trọng điều gì với Việt Nam?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Độc lập, chủ quyền, thống nhất, toàn vẹn lãnh thổ"
+      },
+      {
+        "id": "b",
+        "text": "Chế độ bảo hộ của Pháp"
+      },
+      {
+        "id": "c",
+        "text": "Quyền tự trị hạn chế"
+      },
+      {
+        "id": "d",
+        "text": "Nền kinh tế thuộc địa"
+      }
+    ],
+    "correct": "a",
+    "fact": "Các nước tham dự cam kết tôn trọng độc lập, chủ quyền, thống nhất và toàn vẹn lãnh thổ của Việt Nam.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-005",
+    "missionId": "M5",
+    "eventId": "EVT-19540721",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hội nghị Genève 1954 giải quyết vấn đề gì ở Đông Dương?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Chia lại châu Âu"
+      },
+      {
+        "id": "b",
+        "text": "Chấm dứt chiến tranh, lập lại hòa bình"
+      },
+      {
+        "id": "c",
+        "text": "Xây kênh đào"
+      },
+      {
+        "id": "d",
+        "text": "Phân chia biên giới Nga - Nhật"
+      }
+    ],
+    "correct": "b",
+    "fact": "Hội nghị ký hiệp định đình chiến, lập lại hòa bình ở Đông Dương.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L3-006",
+    "missionId": "M5",
+    "eventId": "EVT-19540313",
+    "level": 3,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Chiến dịch Điện Biên Phủ nằm trong cuộc tiến công chiến lược nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Thu - Đông 1947"
+      },
+      {
+        "id": "b",
+        "text": "Thu - Đông 1950"
+      },
+      {
+        "id": "c",
+        "text": "Đông - Xuân 1953 - 1954"
+      },
+      {
+        "id": "d",
+        "text": "Xuân 1975"
+      }
+    ],
+    "correct": "c",
+    "fact": "Chiến dịch là trận quyết định của tiến công chiến lược Đông - Xuân 1953 - 1954.",
+    "source": {
+      "sourceId": "SRC-WEB-LUATMINHKHUE",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L4-001",
+    "missionId": "M5",
+    "eventId": "EVT-19540506",
+    "level": 4,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "dot3"
+    ],
+    "stem": "Khối bộc phá ở đồi A1 nổ lúc mấy giờ ngày 6/5/1954?",
+    "options": [
+      {
+        "id": "a",
+        "text": "17 giờ"
+      },
+      {
+        "id": "b",
+        "text": "20 giờ 30 phút"
+      },
+      {
+        "id": "c",
+        "text": "17 giờ 30 phút"
+      },
+      {
+        "id": "d",
+        "text": "22 giờ"
+      }
+    ],
+    "correct": "b",
+    "fact": "20 giờ 30 phút ngày 6/5/1954 khối bộc phá nổ, làm hiệu lệnh tổng công kích.",
+    "source": {
+      "sourceId": "SRC-WEB-NHANDAN-A1",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L4-002",
+    "missionId": "M5",
+    "eventId": "EVT-19540506",
+    "level": 4,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "bocPha"
+    ],
+    "stem": "Khối bộc phá đặt dưới đồi A1 nặng khoảng bao nhiêu?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Khoảng 100 kg"
+      },
+      {
+        "id": "b",
+        "text": "Khoảng 10 tấn"
+      },
+      {
+        "id": "c",
+        "text": "Khoảng 1 tấn"
+      },
+      {
+        "id": "d",
+        "text": "Khoảng 50 kg"
+      }
+    ],
+    "correct": "c",
+    "fact": "Các nguồn ghi gần 1 tấn (960-1.000 kg) thuốc nổ đặt dưới đường hầm A1.",
+    "source": {
+      "sourceId": "SRC-WEB-VTV",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L4-003",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 4,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "hamchihuy"
+    ],
+    "stem": "Ai chỉ huy đơn vị bắt sống tướng De Castries?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Phan Đình Giót"
+      },
+      {
+        "id": "b",
+        "text": "Tô Vĩnh Diện"
+      },
+      {
+        "id": "c",
+        "text": "Bế Văn Đàn"
+      },
+      {
+        "id": "d",
+        "text": "Tạ Quốc Luật"
+      }
+    ],
+    "correct": "d",
+    "fact": "Đại đội trưởng Tạ Quốc Luật dẫn đầu tổ bắt De Castries trong hầm chỉ huy.",
+    "source": {
+      "sourceId": "SRC-VNG-DBP",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L4-004",
+    "missionId": "M5",
+    "eventId": "EVT-19540721",
+    "level": 4,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Hiệp định Genève về Đông Dương được ký vào khoảng ngày nào?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Ngày 20-21/7/1954"
+      },
+      {
+        "id": "b",
+        "text": "Ngày 7-8/5/1954"
+      },
+      {
+        "id": "c",
+        "text": "Ngày 2/9/1945"
+      },
+      {
+        "id": "d",
+        "text": "Ngày 30/4/1975"
+      }
+    ],
+    "correct": "a",
+    "fact": "Hiệp định ký rạng ngày 21/7/1954, chấm dứt chiến sự ở Đông Dương.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L4-005",
+    "missionId": "M5",
+    "eventId": "EVT-19540721",
+    "level": 4,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Giới tuyến quân sự tạm thời theo Hiệp định Genève là vĩ tuyến mấy?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Vĩ tuyến 16"
+      },
+      {
+        "id": "b",
+        "text": "Vĩ tuyến 17"
+      },
+      {
+        "id": "c",
+        "text": "Vĩ tuyến 18"
+      },
+      {
+        "id": "d",
+        "text": "Vĩ tuyến 38"
+      }
+    ],
+    "correct": "b",
+    "fact": "Việt Nam tạm thời chia ở vĩ tuyến 17 (sông Bến Hải) để chuyển quân, chờ tổng tuyển cử.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L5-001",
+    "missionId": "M5",
+    "eventId": "EVT-19540508",
+    "level": 5,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Vì sao chiến thắng ĐBP tăng thế mạnh cho ta ở Genève?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Pháp đã rút khỏi châu Á"
+      },
+      {
+        "id": "b",
+        "text": "Pháp mất ý chí tiếp tục chiến tranh"
+      },
+      {
+        "id": "c",
+        "text": "Ta chiếm được Hà Nội"
+      },
+      {
+        "id": "d",
+        "text": "Mỹ rút khỏi Đông Dương"
+      }
+    ],
+    "correct": "b",
+    "fact": "Đòn quyết định làm lung lay ý chí xâm lược của Pháp, tạo thế thuận lợi khi đàm phán.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L5-002",
+    "missionId": "M5",
+    "eventId": "EVT-19540721",
+    "level": 5,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "genève"
+    ],
+    "stem": "Giới tuyến ở vĩ tuyến 17 mang tính chất gì?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Biên giới quốc gia vĩnh viễn"
+      },
+      {
+        "id": "b",
+        "text": "Ranh giới hai nước riêng"
+      },
+      {
+        "id": "c",
+        "text": "Tạm thời, chờ tổng tuyển cử thống nhất"
+      },
+      {
+        "id": "d",
+        "text": "Khu vực cho Pháp thuê"
+      }
+    ],
+    "correct": "c",
+    "fact": "Vĩ tuyến 17 chỉ là giới tuyến quân sự tạm thời; tổng tuyển cử dự kiến thống nhất đất nước.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L5-003",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 5,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Mất Điện Biên Phủ, kế hoạch nào của Pháp phá sản?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Kế hoạch Đờ Lát"
+      },
+      {
+        "id": "b",
+        "text": "Kế hoạch Rơve"
+      },
+      {
+        "id": "c",
+        "text": "Kế hoạch Marshall"
+      },
+      {
+        "id": "d",
+        "text": "Kế hoạch Nava"
+      }
+    ],
+    "correct": "d",
+    "fact": "Thất bại ở Điện Biên Phủ làm kế hoạch Nava phá sản.",
+    "source": {
+      "sourceId": "SRC-WEB-VIETTIMES",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  },
+  {
+    "id": "Q-M5-L5-004",
+    "missionId": "M5",
+    "eventId": "EVT-19540507",
+    "level": 5,
+    "forms": [
+      "bunker",
+      "field"
+    ],
+    "sceneTags": [
+      "chiendich"
+    ],
+    "stem": "Chiến thắng ĐBP có ý nghĩa gì với thế giới?",
+    "options": [
+      {
+        "id": "a",
+        "text": "Cổ vũ phong trào giải phóng dân tộc"
+      },
+      {
+        "id": "b",
+        "text": "Chấm dứt phong trào ở châu Á"
+      },
+      {
+        "id": "c",
+        "text": "Không có tác động"
+      },
+      {
+        "id": "d",
+        "text": "Chỉ có ý nghĩa quân sự nội bộ"
+      }
+    ],
+    "correct": "a",
+    "fact": "Chiến thắng làm lung lay chủ nghĩa thực dân, cổ vũ phong trào giải phóng dân tộc.",
+    "source": {
+      "sourceId": "SRC-GENEVE-1954",
+      "page": ""
+    },
+    "status": "draft",
+    "revision": 1
+  }
+]
