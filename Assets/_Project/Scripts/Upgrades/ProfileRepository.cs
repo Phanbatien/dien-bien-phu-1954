@@ -21,10 +21,15 @@ namespace DBP.Upgrades
         public bool RecoveredBackup { get; private set; }
         public IReadOnlyList<ProfileData> Profiles => document.profiles;
         public ProfileData Active => document.profiles.Find(p => p.id == document.activeId);
-        public ProfileRepository(string filePath)
+        public ProfileRepository(string filePath, string legacyRoot = null)
         {
             path = filePath;
-            if (!File.Exists(path) && !File.Exists(path + ".bak")) { document = new Document(); return; }
+            if (!File.Exists(path) && !File.Exists(path + ".bak"))
+            {
+                document = new Document();
+                ImportDirectory(legacyRoot);
+                return;
+            }
             try { document = Read(path); }
             catch (Exception e) when (e is IOException || e is ArgumentException)
             {
@@ -55,9 +60,56 @@ namespace DBP.Upgrades
         public void ImportLegacy(ProfileData legacy)
         {
             if (document.profiles.Count != 0) return;
-            legacy.id = Guid.NewGuid().ToString("N"); legacy.displayName = "Hồ sơ cũ"; legacy.className = ""; legacy.consentAt = "";
+            legacy.id = Guid.NewGuid().ToString("N");
+            if (string.IsNullOrWhiteSpace(legacy.displayName)) legacy.displayName = "Hồ sơ cũ";
+            legacy.className ??= ""; legacy.consentAt ??= "";
             legacy.upgrades ??= new List<string>(); legacy.unlockedMissions ??= new List<string> { "M1" };
+            legacy.rewardedQuestions ??= new List<string>();
             Change(() => { document.profiles.Add(legacy); document.activeId = legacy.id; });
+        }
+        void ImportDirectory(string root)
+        {
+            if (string.IsNullOrEmpty(root) || !Directory.Exists(root)) return;
+            var folders = Directory.GetDirectories(root);
+            Array.Sort(folders, (a, b) =>
+            {
+                bool aDefault = Path.GetFileName(a) == "default", bDefault = Path.GetFileName(b) == "default";
+                return aDefault != bDefault ? (aDefault ? -1 : 1) : StringComparer.Ordinal.Compare(a, b);
+            });
+            var profiles = new List<ProfileData>();
+            foreach (var folder in folders)
+            {
+                var file = Path.Combine(folder, "progress.json");
+                if (!File.Exists(file) && !File.Exists(file + ".bak")) continue;
+                var profile = ReadLegacy(file);
+                profile.id = Guid.NewGuid().ToString("N");
+                if (string.IsNullOrWhiteSpace(profile.displayName)) profile.displayName = "Hồ sơ cũ";
+                profile.className ??= ""; profile.consentAt ??= "";
+                profile.upgrades ??= new List<string>();
+                profile.unlockedMissions ??= new List<string> { "M1" };
+                profile.rewardedQuestions ??= new List<string>();
+                profiles.Add(profile);
+            }
+            if (profiles.Count == 0) return;
+            // Read every old profile before saving one atomic snapshot. Original files stay intact.
+            Change(() => { document.profiles.AddRange(profiles); document.activeId = profiles[0].id; });
+        }
+        static ProfileData ReadLegacy(string file)
+        {
+            Exception lastError = null;
+            foreach (var candidate in new[] { file, file + ".bak" })
+            {
+                if (!File.Exists(candidate)) continue;
+                try
+                {
+                    var profile = JsonUtility.FromJson<ProfileData>(File.ReadAllText(candidate, Encoding.UTF8));
+                    if (profile == null || profile.resolve < 0 || float.IsNaN(profile.volume) || profile.volume < 0 || profile.volume > 1)
+                        throw new InvalidDataException("Hồ sơ cũ không hợp lệ.");
+                    return profile;
+                }
+                catch (Exception e) when (e is IOException || e is ArgumentException || e is UnauthorizedAccessException) { lastError = e; }
+            }
+            throw new InvalidDataException("Không đọc được hồ sơ cũ. Dữ liệu gốc được giữ nguyên: " + file, lastError);
         }
         public void Select(string id)
         {

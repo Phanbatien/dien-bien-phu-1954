@@ -6,7 +6,6 @@ using DBP.Interaction;
 using DBP.Quiz;
 using DBP.Upgrades;
 using DBP.Weapons;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
 using UnityEngine.TestTools;
 
@@ -38,8 +37,6 @@ namespace DBP.Tests
         {
             if (Directory.Exists(tempDir)) Directory.Delete(tempDir, true);
             ContentLoader.Root = Path.Combine(UnityEngine.Application.streamingAssetsPath, "content");
-            ProfileService.Root = Path.Combine(UnityEngine.Application.persistentDataPath, "profiles");
-            ProfileService.Reload();
         }
 
         // ── T11: đọc JSON ──
@@ -69,7 +66,8 @@ namespace DBP.Tests
             Assert.IsNotEmpty(QuestionBank.LoadAll(errors));
             Assert.IsEmpty(errors);
             Assert.IsTrue(ContentLoader.TryLoad<WeaponFileForTest>("weapons.json", out var w, out _));
-            Assert.AreEqual(5, w.weapons.Length);
+            CollectionAssert.IsSubsetOf(new[] { "W-MOSIN", "W-MOSIN-SCOPE", "W-MAUSER", "W-MAT49", "W-TYPE50", "W-MAS36", "W-BAZOOKA" },
+                w.weapons.Select(weapon => weapon.id).ToArray());
         }
 
         [System.Serializable]
@@ -116,42 +114,46 @@ namespace DBP.Tests
         [Test]
         public void Profile_SaveLoadRoundTrip()
         {
-            ProfileService.Root = tempDir;
-            ProfileService.Reload();
-            ProfileService.Data.resolve = 250;
-            ProfileService.Data.upgrades.Add("U-AMMO-1");
-            Assert.IsTrue(ProfileService.Save());
-            ProfileService.Reload();
-            Assert.AreEqual(250, ProfileService.Data.resolve);
-            Assert.Contains("U-AMMO-1", ProfileService.Data.upgrades);
+            var path = Path.Combine(tempDir, "profiles.json");
+            using (ProfileService.UseTemporaryStore(path))
+            {
+                ProfileService.Repository.Create("Test", "", false);
+                ProfileService.Data.resolve = 250;
+                ProfileService.Data.upgrades.Add("U-AMMO-1");
+                ProfileService.Save();
+                var reloaded = new ProfileRepository(path);
+                Assert.AreEqual(250, reloaded.Active.resolve);
+                Assert.Contains("U-AMMO-1", reloaded.Active.upgrades);
+            }
         }
 
         [Test]
         public void Profile_CorruptFile_FallsBackToBackup()
         {
-            ProfileService.Root = tempDir;
-            ProfileService.Reload();
-            ProfileService.Data.resolve = 100;
-            ProfileService.Save();
-            ProfileService.Data.resolve = 200;
-            ProfileService.Save(); // bản 100 thành .bak
-            File.WriteAllText(ProfileService.FilePath, "{ hỏng giữa chừng");
-            ProfileService.Reload();
-            Assert.AreEqual(100, ProfileService.Data.resolve);
+            var path = Path.Combine(tempDir, "profiles.json");
+            var store = new ProfileRepository(path);
+            store.Create("Test", "", false).resolve = 100;
+            store.Save();
+            store.Active.resolve = 200;
+            store.Save(); // bản 100 thành .bak
+            File.WriteAllText(path, "{ hỏng giữa chừng");
+            Assert.AreEqual(100, new ProfileRepository(path).Active.resolve);
         }
 
         [Test]
         public void Profile_BuyFailsToSave_RollsBack()
         {
-            var blocked = Path.Combine(tempDir, "blocked");
-            File.WriteAllText(blocked, "file chặn: không tạo được thư mục hồ sơ");
-            ProfileService.Root = blocked;
-            ProfileService.Reload();
-            ProfileService.Data.resolve = 300;
-            LogAssert.Expect(UnityEngine.LogType.Error, new Regex("Không lưu được hồ sơ"));
-            Assert.AreEqual(BuyResult.SaveFailed, ProfileService.Buy("U-AMMO-1", true));
-            Assert.AreEqual(300, ProfileService.Data.resolve);
-            Assert.IsEmpty(ProfileService.Data.upgrades);
+            var path = Path.Combine(tempDir, "profiles.json");
+            using (ProfileService.UseTemporaryStore(path))
+            {
+                ProfileService.Repository.Create("Test", "", false).resolve = 300;
+                ProfileService.Save();
+                using (var locked = new FileStream(path + ".tmp", FileMode.Create, FileAccess.Write, FileShare.None))
+                    Assert.AreEqual(BuyResult.SaveFailed, ProfileService.Buy("U-AMMO-1", true));
+                Assert.AreEqual(300, ProfileService.Data.resolve);
+                Assert.IsEmpty(ProfileService.Data.upgrades);
+                Assert.AreEqual(300, new ProfileRepository(path).Active.resolve);
+            }
         }
 
         // ── T22: rút hòm theo seed (BR-13, BR-15) ──

@@ -169,12 +169,14 @@ namespace DBP.Tests
                 Assert.AreEqual(CampaignScreen.Results, CampaignUI.Current.ScreenState, "Save failure must not strand the player in combat.");
                 Assert.AreEqual(1, wins);
                 Assert.IsFalse(ProfileService.IsUnlocked("M2"));
+                Assert.IsTrue(mission.Attempt.SaveFailed);
                 StringAssert.Contains("Chưa lưu", Find<Text>("ResultNote").text);
                 Assert.IsTrue(Find<Button>("RetrySave").interactable);
                 Assert.IsTrue(Find<Button>("ResultMenu").interactable);
             }
             Click("RetrySave");
             Assert.IsTrue(ProfileService.IsUnlocked("M2")); Assert.AreEqual(1, wins);
+            Assert.IsFalse(mission.Attempt.SaveFailed);
             Assert.Contains("M2", new ProfileRepository(Path.Combine(folder, "profiles.json")).Active.unlockedMissions);
             Click("ResultMenu"); yield return Frames(); Assert.AreEqual(CampaignScreen.Menu, CampaignUI.Current.ScreenState);
         }

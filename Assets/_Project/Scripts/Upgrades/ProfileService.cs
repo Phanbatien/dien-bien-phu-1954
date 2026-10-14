@@ -27,7 +27,8 @@ namespace DBP.Upgrades
         public static bool HasProfile => Repository.Active != null;
         static ProfileRepository Open()
         {
-            var store = new ProfileRepository(Path.Combine(Application.persistentDataPath, "profiles.json"));
+            var store = new ProfileRepository(Path.Combine(Application.persistentDataPath, "profiles.json"),
+                Path.Combine(Application.persistentDataPath, "profiles"));
             if (!store.Exists && PlayerPrefs.HasKey("dbp.profile.v1"))
             {
                 var legacy = JsonUtility.FromJson<ProfileData>(PlayerPrefs.GetString("dbp.profile.v1"));
@@ -44,7 +45,13 @@ namespace DBP.Upgrades
             else if (!string.IsNullOrEmpty(nextMissionId) && !Data.unlockedMissions.Contains(nextMissionId)) Data.unlockedMissions.Add(nextMissionId);
         }
         public static bool IsUnlocked(string missionId) => Data.unlockedMissions.Contains(missionId);
-        public static BuyResult Buy(string upgradeId, bool inBunker) => HasProfile ? Repository.Buy(upgradeId, inBunker) : BuyResult.NotInBunker;
+        public static BuyResult Buy(string upgradeId, bool inBunker)
+        {
+            if (!HasProfile) return BuyResult.NotInBunker;
+            try { return Repository.Buy(upgradeId, inBunker); }
+            catch (IOException) { return BuyResult.SaveFailed; }
+            catch (UnauthorizedAccessException) { return BuyResult.SaveFailed; }
+        }
 #if UNITY_EDITOR
         // Tests and capture tools must never change the user's real profiles.
         public static IDisposable UseTemporaryStore(string path)

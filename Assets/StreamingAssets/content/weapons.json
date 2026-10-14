@@ -1,6 +1,12 @@
 {
   "weapons": [
     {
+      "id": "W-MAUSER", "name": "Mauser", "origin": "mixed", "ammoType": "7.92x57",
+      "availableFrom": 0, "rarity": "uncommon", "fireMode": "single", "sourceId": "",
+      "stats": { "damage": 85, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 25, "range": 220,
+                 "hipSpread": 2.5, "adsSpread": 0.12, "recoilPitch": 4, "recoilYaw": 0.9, "adsFov": 50, "scopeZoom": 1 }
+    },
+    {
       "id": "W-MOSIN",
       "name": "Mosin-Nagant M91/30",
       "origin": "Soviet Union",

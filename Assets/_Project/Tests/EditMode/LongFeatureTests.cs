@@ -59,6 +59,39 @@ namespace DBP.Tests
             Assert.AreEqual(BuyResult.NotInBunker, store.Buy("U-AMMO-2", false));
             Assert.AreEqual(400, store.Active.resolve);
         }
+        [Test] public void Profiles_RewardedQuestionsPersistSeparately()
+        {
+            var store = new ProfileRepository(path);
+            var first = store.Create("Same name", "", false);
+            first.rewardedQuestions.Add("Q-M1-L1-001"); store.Save();
+            var second = store.Create("Same name", "", false);
+            store = new ProfileRepository(path);
+            Assert.AreEqual(second.id, store.Active.id);
+            Assert.IsEmpty(store.Active.rewardedQuestions);
+            store.Select(first.id);
+            CollectionAssert.AreEqual(new[] { "Q-M1-L1-001" }, store.Active.rewardedQuestions);
+        }
+        [Test] public void Profiles_DevelopSavesMigrateWithBackupAndKeepOriginals()
+        {
+            var legacyRoot = Path.Combine(folder, "profiles");
+            var firstDir = Path.Combine(legacyRoot, "default");
+            var secondDir = Path.Combine(legacyRoot, "second");
+            Directory.CreateDirectory(firstDir); Directory.CreateDirectory(secondDir);
+            const string saved = "{\"displayName\":\"Long\",\"className\":\"SE\",\"consentAt\":\"2026-10-01\",\"resolve\":250,\"upgrades\":[\"U-AMMO-1\"],\"unlockedMissions\":[\"M1\",\"M2\"],\"rewardedQuestions\":[\"Q1\"]}";
+            File.WriteAllText(Path.Combine(firstDir, "progress.json"), "broken");
+            File.WriteAllText(Path.Combine(firstDir, "progress.json.bak"), saved);
+            File.WriteAllText(Path.Combine(secondDir, "progress.json"), "{\"displayName\":\"Long\",\"resolve\":0}");
+            var store = new ProfileRepository(path, legacyRoot);
+            Assert.AreEqual(2, store.Profiles.Count);
+            Assert.AreEqual("Long", store.Active.displayName); Assert.AreEqual("SE", store.Active.className);
+            Assert.AreEqual("2026-10-01", store.Active.consentAt); Assert.AreEqual(250, store.Active.resolve);
+            Assert.Contains("U-AMMO-1", store.Active.upgrades); Assert.Contains("M2", store.Active.unlockedMissions);
+            Assert.Contains("Q1", store.Active.rewardedQuestions);
+            Assert.AreNotEqual(store.Profiles[0].id, store.Profiles[1].id);
+            Assert.AreEqual("broken", File.ReadAllText(Path.Combine(firstDir, "progress.json")));
+            Assert.AreEqual(saved, File.ReadAllText(Path.Combine(firstDir, "progress.json.bak")));
+            Assert.AreEqual(2, new ProfileRepository(path, legacyRoot).Profiles.Count);
+        }
         [Test] public void Profiles_BackupRecoveryAndInterruptedTemporaryFile()
         {
             var store = new ProfileRepository(path); store.Create("Saved", "", false); store.SetVolume(0.4f);

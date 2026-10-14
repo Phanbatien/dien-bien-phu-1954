@@ -157,10 +157,12 @@ namespace DBP.Missions
             {
                 ProfileService.OnMissionWon(nextMissionId);
                 ProgressSaveError = null;
+                Attempt.SaveFailed = false;
                 return true;
             }
             catch (IOException error) { ProgressSaveError = error.Message; }
             catch (UnauthorizedAccessException error) { ProgressSaveError = error.Message; }
+            Attempt.SaveFailed = true;
             return false;
         }
 

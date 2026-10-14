@@ -218,7 +218,7 @@ namespace DBP.Tests
 
             var bazooka = WeaponCatalog.Get("W-BAZOOKA");
             Assert.IsNotNull(bazooka);
-            Assert.AreEqual("Bazooka-Rocket", bazooka.ammoType);
+            Assert.AreEqual("60mm Rocket", bazooka.ammoType);
         }
     }
 }

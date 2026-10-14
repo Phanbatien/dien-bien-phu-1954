@@ -220,8 +220,9 @@ namespace DBP.DebugTools
         /// TH-17: Đóng ứng dụng trong lúc trả lời → bỏ dở lượt chưa lưu (BR-37).
         void CheckTH17()
         {
-            var profileSvc = FindAnyObjectByType<DBP.Upgrades.ProfileService>();
-            if (profileSvc != null) Pass("TH-17"); else Fail("TH-17", "ProfileService không có trong scene");
+            // ProfileService is static; profiles are selected through the campaign menu.
+            // The interrupted-quiz scenario still requires an actual quit/reload check.
+            Fail("TH-17", "Cần kiểm tra đóng ứng dụng giữa câu hỏi và mở lại hồ sơ");
         }
     }
 }
