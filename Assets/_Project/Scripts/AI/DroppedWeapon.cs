@@ -24,7 +24,6 @@ namespace DBP.AI
 
         bool used;
         bool locked;
-        static readonly System.Random Rng = new System.Random();
 
         public string WeaponId => weaponId;
         public Rarity Rarity => rarity;
@@ -60,10 +59,11 @@ namespace DBP.AI
             var session = FieldQuizSession.Instance;
             if (!session) return;
 
-            int level = RarityRules.Level(rarity, Rng);
+            int minLevel = RarityRules.MinLevel(rarity);
+            int maxLevel = RarityRules.MaxLevel(rarity);
             float limit = RarityRules.TimeLimit(rarity);
 
-            if (!session.TryOpen(level, limit, r => Resolve(r, who)))
+            if (!session.TryOpen(minLevel, maxLevel, limit, r => Resolve(r, who)))
             {
                 if (!session.IsOpen) locked = true; // Thiếu câu: khóa lại trong lượt (BR-31)
                 return;

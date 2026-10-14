@@ -2,6 +2,8 @@
     "name": "DBP.Tests.PlayMode",
     "rootNamespace": "DBP.Tests",
     "references": [
+        "Unity.InputSystem",
+        "Unity.ugui",
         "DBP.Runtime",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"

@@ -2,6 +2,7 @@
     "name": "DBP.Runtime",
     "rootNamespace": "DBP",
     "references": [
+        "Unity.ugui",
         "Unity.InputSystem",
         "Unity.RenderPipelines.Core.Runtime",
         "Unity.RenderPipelines.Universal.Runtime"

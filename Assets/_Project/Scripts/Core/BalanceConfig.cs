@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using DBP.Interaction;
 using UnityEngine;
 
 namespace DBP.Core

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using DBP.Core;
 using DBP.Quiz;
 using DBP.Upgrades;
@@ -34,6 +35,7 @@ namespace DBP.Missions
         public UnityEvent onLost = new UnityEvent();
 
         public Attempt Attempt { get; private set; }
+        public string ProgressSaveError { get; private set; }
         public string MissionId => missionId;
         public string Title => missionTitle;
         public string NextSceneName => nextSceneName;
@@ -140,12 +142,28 @@ namespace DBP.Missions
 
             if (outcome == MissionOutcome.Won)
             {
-                if (!ProfileService.OnMissionWon(nextMissionId)) Attempt.SaveFailed = true;
+                TrySaveProgress();
                 onWon.Invoke();
             }
             else if (outcome == MissionOutcome.Lost) onLost.Invoke();
 
             Ended?.Invoke(Attempt);
+        }
+
+        public bool TrySaveProgress()
+        {
+            if (Attempt.Outcome != MissionOutcome.Won) return false;
+            try
+            {
+                ProfileService.OnMissionWon(nextMissionId);
+                ProgressSaveError = null;
+                Attempt.SaveFailed = false;
+                return true;
+            }
+            catch (IOException error) { ProgressSaveError = error.Message; }
+            catch (UnauthorizedAccessException error) { ProgressSaveError = error.Message; }
+            Attempt.SaveFailed = true;
+            return false;
         }
 
         /// Chơi lại = lượt mới hoàn toàn (BR-33).
