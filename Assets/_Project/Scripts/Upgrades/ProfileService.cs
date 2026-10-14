@@ -15,6 +15,8 @@ namespace DBP.Upgrades
         public int resolve;
         public List<string> upgrades = new List<string>();
         public List<string> unlockedMissions = new List<string> { "M1" };
+        // BR-34: track bunker questions rewarded once for each profile.
+        public List<string> rewardedQuestions = new List<string>();
     }
     public static class ProfileService
     {
