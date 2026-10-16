@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Project/Scenes/MainMenu.unity
+    guid: 13ebcd684d5eea14198ec1a7a745579d
+  - enabled: 1
     path: Assets/_Project/Scenes/M1_HimLam.unity
     guid: 36447b22f58038d489925ffe5452e150
   - enabled: 1

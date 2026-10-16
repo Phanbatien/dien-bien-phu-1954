@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using DBP.Core;
 using DBP.Quiz;
 using DBP.Upgrades;
@@ -26,11 +27,15 @@ namespace DBP.Missions
         [Tooltip("Mục tiêu bắt buộc. Sequential: làm lần lượt; không: làm theo thứ tự bất kỳ.")]
         [SerializeField] List<Objective> objectives = new List<Objective>();
         [SerializeField] bool sequential = true;
+        [Header("Súng rơi từ địch (BR-14) — chốt khi cân bằng")]
+        [Range(0f, 1f)] [SerializeField] float enemyDropChance = 0.08f;
+        [SerializeField] int maxEnemyDrops = 3;
 
         public UnityEvent onWon = new UnityEvent();
         public UnityEvent onLost = new UnityEvent();
 
         public Attempt Attempt { get; private set; }
+        public string ProgressSaveError { get; private set; }
         public string MissionId => missionId;
         public string Title => missionTitle;
         public string NextSceneName => nextSceneName;
@@ -114,6 +119,18 @@ namespace DBP.Missions
             return all;
         }
 
+        public float EnemyDropChance => enemyDropChance;
+        public int MaxEnemyDrops => maxEnemyDrops;
+
+        /// Mỗi địch bị hạ chỉ xét rơi súng một lần; đạt giới hạn của màn thì không sinh thêm (BR-14).
+        public bool TryRollDrop()
+        {
+            if (Attempt.Outcome != MissionOutcome.None || Attempt.WeaponDrops >= maxEnemyDrops) return false;
+            if (Attempt.Rng.NextDouble() >= enemyDropChance) return false;
+            Attempt.WeaponDrops++;
+            return true;
+        }
+
         /// Chủ động kết thúc trước khi thắng (menu tạm dừng): bỏ dở, không lên bảng (BR-32, BR-33).
         public void Abandon() => End(MissionOutcome.Abandoned);
 
@@ -125,12 +142,28 @@ namespace DBP.Missions
 
             if (outcome == MissionOutcome.Won)
             {
-                ProfileService.OnMissionWon(nextMissionId);
+                TrySaveProgress();
                 onWon.Invoke();
             }
             else if (outcome == MissionOutcome.Lost) onLost.Invoke();
 
             Ended?.Invoke(Attempt);
+        }
+
+        public bool TrySaveProgress()
+        {
+            if (Attempt.Outcome != MissionOutcome.Won) return false;
+            try
+            {
+                ProfileService.OnMissionWon(nextMissionId);
+                ProgressSaveError = null;
+                Attempt.SaveFailed = false;
+                return true;
+            }
+            catch (IOException error) { ProgressSaveError = error.Message; }
+            catch (UnauthorizedAccessException error) { ProgressSaveError = error.Message; }
+            Attempt.SaveFailed = true;
+            return false;
         }
 
         /// Chơi lại = lượt mới hoàn toàn (BR-33).

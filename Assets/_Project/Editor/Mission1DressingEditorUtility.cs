@@ -79,6 +79,7 @@ namespace DBP.EditorTools
                 RemoveGreybox(env.transform);
                 DisableGround(m1);
                 SeatActors(m1, terrain);
+                PlaceCratePoints(m1, terrain, zShift);
                 PlacePlayer(m1, terrain, zShift);
                 AlignZones(m1, terrain);
                 DressAtmosphere(m1, env.transform, terrain, zShift);
@@ -159,6 +160,47 @@ namespace DBP.EditorTools
                 t.position = p;
                 Debug.Log($"[M1] Zone '{zone.Title}' tại {t.position}.");
             }
+        }
+
+        static void PlaceCratePoints(Scene scene, Terrain terrain, float zShift)
+        {
+            var poly = RouteWorld(zShift);
+            float length = 0f;
+            for (int i = 0; i < poly.Count - 1; i++) length += Vector3.Distance(poly[i], poly[i + 1]);
+
+            foreach (var root in scene.GetRootGameObjects())
+            {
+                foreach (var spawner in root.GetComponentsInChildren<CrateSpawner>(true))
+                {
+                    int count = spawner.points.Count;
+                    for (int i = 0; i < count; i++)
+                    {
+                        var point = spawner.points[i];
+                        if (!point) continue;
+                        float dist = length * (i + 1) / (count + 1);
+                        var at = PointAlong(poly, dist, out var forward);
+                        var side = Vector3.Cross(Vector3.up, forward) * (i % 2 == 0 ? 0.55f : -0.55f);
+                        var pos = at + side;
+                        pos.y = Surface(terrain, pos) + 0.2f;
+                        point.position = pos;
+                    }
+                    Debug.Log($"[M1] {count} điểm hòm nằm dọc hào.");
+                }
+
+                var phone = FindNamed(root.transform, "DienThoai_GoiPhao");
+                if (!phone) continue;
+                var spot = PointAlong(poly, 18f, out var phoneForward);
+                spot += Vector3.Cross(Vector3.up, phoneForward) * 0.7f;
+                spot.y = Surface(terrain, spot) + 0.15f;
+                phone.position = spot;
+            }
+        }
+
+        static Transform FindNamed(Transform root, string name)
+        {
+            foreach (var t in root.GetComponentsInChildren<Transform>(true))
+                if (t.name == name) return t;
+            return null;
         }
 
         static void DressAtmosphere(Scene scene, Transform env, Terrain terrain, float zShift)

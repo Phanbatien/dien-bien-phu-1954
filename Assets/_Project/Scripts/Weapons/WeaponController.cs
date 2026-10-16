@@ -15,7 +15,7 @@ namespace DBP.Weapons
         [SerializeField] FirstPersonController body;
         [SerializeField] string startingWeaponId = "W-MOSIN";
         [SerializeField] LayerMask hitMask = ~0;
-        [Tooltip("Hiệu ứng trúng đích (T67 – Khôi). Bỏ trống thì không sinh.")]
+        [Tooltip("Hiệu ứng trúng đích (T67 – Long). Bỏ trống thì không sinh.")]
         [SerializeField] GameObject impactPrefab;
         [Tooltip("Mô hình súng góc nhìn thứ nhất (T16 – Khôi). Ẩn khi soi ống ngắm.")]
         [SerializeField] GameObject viewModel;

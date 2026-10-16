@@ -41,3 +41,10 @@ crashlytics-buildid.txt
 # Kết quả test/build chạy bằng dòng lệnh
 test-results*.xml
 build.log
+/[Ee]vidence/
+
+# Local agent configuration, skills, and helper scripts
+.agents/
+.codex/
+AgentScripts/
+AGENTS.md

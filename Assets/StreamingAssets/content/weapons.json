@@ -1,34 +1,154 @@
 {
   "weapons": [
     {
-      "id": "W-MOSIN", "name": "Mosin-Nagant (K-44)", "origin": "aid", "ammoType": "7.62x54R",
-      "availableFrom": 1944, "rarity": "common", "fireMode": "single", "sourceId": "",
-      "stats": { "damage": 75, "rpm": 40, "mag": 5, "reloadSec": 3.2, "reserve": 30, "range": 200,
-                 "hipSpread": 2.5, "adsSpread": 0.15, "recoilPitch": 3.5, "recoilYaw": 0.8, "adsFov": 50, "scopeZoom": 1 }
-    },
-    {
-      "id": "W-MOSIN-SCOPE", "name": "Mosin có ống ngắm", "origin": "aid", "ammoType": "7.62x54R",
-      "availableFrom": 0, "rarity": "legendary", "fireMode": "single", "sourceId": "",
-      "stats": { "damage": 90, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 20, "range": 300,
-                 "hipSpread": 4, "adsSpread": 0.02, "recoilPitch": 4, "recoilYaw": 0.6, "adsFov": 40, "scopeZoom": 4 }
-    },
-    {
       "id": "W-MAUSER", "name": "Mauser", "origin": "mixed", "ammoType": "7.92x57",
       "availableFrom": 0, "rarity": "uncommon", "fireMode": "single", "sourceId": "",
       "stats": { "damage": 85, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 25, "range": 220,
                  "hipSpread": 2.5, "adsSpread": 0.12, "recoilPitch": 4, "recoilYaw": 0.9, "adsFov": 50, "scopeZoom": 1 }
     },
     {
-      "id": "W-MAT49", "name": "Tiểu liên MAT-49", "origin": "captured", "ammoType": "9x19",
-      "availableFrom": 1949, "rarity": "rare", "fireMode": "auto", "sourceId": "",
-      "stats": { "damage": 22, "rpm": 600, "mag": 32, "reloadSec": 2.6, "reserve": 96, "range": 90,
-                 "hipSpread": 3, "adsSpread": 1.2, "recoilPitch": 0.8, "recoilYaw": 0.5, "adsFov": 58, "scopeZoom": 1 }
+      "id": "W-MOSIN",
+      "name": "Mosin-Nagant M91/30",
+      "origin": "Soviet Union",
+      "ammoType": "7.62x54R",
+      "availableFrom": 1891,
+      "rarity": "common",
+      "fireMode": "single",
+      "stats": {
+        "damage": 55,
+        "rpm": 25,
+        "mag": 5,
+        "reloadSec": 3.5,
+        "reserve": 30,
+        "range": 150,
+        "hipSpread": 3.0,
+        "adsSpread": 0.3,
+        "recoilPitch": 3.5,
+        "recoilYaw": 0.5,
+        "adsFov": 45,
+        "scopeZoom": 1.0
+      },
+      "sourceId": "Quân đội Việt Minh trang bị từ viện trợ Liên Xô, sử dụng trong chiến dịch Điện Biên Phủ 1954"
     },
     {
-      "id": "W-TYPE50", "name": "Tiểu liên Kiểu 50", "origin": "aid", "ammoType": "7.62x25",
-      "availableFrom": 1951, "rarity": "rare", "fireMode": "auto", "sourceId": "",
-      "stats": { "damage": 20, "rpm": 900, "mag": 35, "reloadSec": 2.8, "reserve": 105, "range": 80,
-                 "hipSpread": 3.5, "adsSpread": 1.5, "recoilPitch": 0.7, "recoilYaw": 0.6, "adsFov": 58, "scopeZoom": 1 }
+      "id": "W-MOSIN-SCOPE",
+      "name": "Mosin-Nagant M91/30 PU (ống ngắm)",
+      "origin": "Soviet Union",
+      "ammoType": "7.62x54R",
+      "availableFrom": 1931,
+      "rarity": "legendary",
+      "fireMode": "single",
+      "stats": {
+        "damage": 75,
+        "rpm": 22,
+        "mag": 5,
+        "reloadSec": 3.6,
+        "reserve": 20,
+        "range": 250,
+        "hipSpread": 4.5,
+        "adsSpread": 0.05,
+        "recoilPitch": 4.0,
+        "recoilYaw": 0.6,
+        "adsFov": 25,
+        "scopeZoom": 4.0
+      },
+      "sourceId": "Biến thể bắn tỉa trang bị kính ngắm PU của súng trường Mosin-Nagant, viện trợ từ Liên Xô"
+    },
+    {
+      "id": "W-MAT49",
+      "name": "MAT-49",
+      "origin": "France",
+      "ammoType": "9x19",
+      "availableFrom": 1949,
+      "rarity": "rare",
+      "fireMode": "auto",
+      "stats": {
+        "damage": 25,
+        "rpm": 600,
+        "mag": 32,
+        "reloadSec": 2.8,
+        "reserve": 96,
+        "range": 50,
+        "hipSpread": 3.0,
+        "adsSpread": 1.0,
+        "recoilPitch": 0.9,
+        "recoilYaw": 0.5,
+        "adsFov": 55,
+        "scopeZoom": 1.0
+      },
+      "sourceId": "Quân đội Pháp trang bị chính (Armée française), Việt Minh thu giữ làm chiến lợi phẩm và sử dụng phổ biến"
+    },
+    {
+      "id": "W-TYPE50",
+      "name": "Tiểu liên Kiểu 50 (Type 50)",
+      "origin": "China",
+      "ammoType": "7.62x25",
+      "availableFrom": 1950,
+      "rarity": "rare",
+      "fireMode": "auto",
+      "stats": {
+        "damage": 22,
+        "rpm": 900,
+        "mag": 35,
+        "reloadSec": 2.8,
+        "reserve": 105,
+        "range": 60,
+        "hipSpread": 3.5,
+        "adsSpread": 1.2,
+        "recoilPitch": 0.8,
+        "recoilYaw": 0.6,
+        "adsFov": 55,
+        "scopeZoom": 1.0
+      },
+      "sourceId": "Viện trợ Trung Quốc, sản xuất dựa trên PPSh-41 của Liên Xô, trang bị cho Quân đội Nhân dân Việt Nam"
+    },
+    {
+      "id": "W-MAS36",
+      "name": "MAS-36",
+      "origin": "France",
+      "ammoType": "7.5x54",
+      "availableFrom": 1936,
+      "rarity": "uncommon",
+      "fireMode": "single",
+      "stats": {
+        "damage": 50,
+        "rpm": 28,
+        "mag": 5,
+        "reloadSec": 3.2,
+        "reserve": 30,
+        "range": 140,
+        "hipSpread": 2.8,
+        "adsSpread": 0.25,
+        "recoilPitch": 3.2,
+        "recoilYaw": 0.5,
+        "adsFov": 48,
+        "scopeZoom": 1.0
+      },
+      "sourceId": "Súng trường tiêu chuẩn của Quân đội Pháp (Armée française), Việt Minh thu được làm chiến lợi phẩm và sử dụng"
+    },
+    {
+      "id": "W-BAZOOKA",
+      "name": "Bazooka M9A1",
+      "origin": "United States",
+      "ammoType": "60mm Rocket",
+      "availableFrom": 1944,
+      "rarity": "legendary",
+      "fireMode": "single",
+      "stats": {
+        "damage": 150,
+        "rpm": 8,
+        "mag": 1,
+        "reloadSec": 4.5,
+        "reserve": 6,
+        "range": 120,
+        "hipSpread": 5.0,
+        "adsSpread": 1.5,
+        "recoilPitch": 5.0,
+        "recoilYaw": 1.0,
+        "adsFov": 50,
+        "scopeZoom": 1.0
+      },
+      "sourceId": "Súng chống tăng của Mỹ viện trợ cho Pháp, Việt Minh thu được từ chiến lợi phẩm để công phá lô cốt và xe tăng"
     }
   ]
 }
