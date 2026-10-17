@@ -15,6 +15,21 @@ namespace DBP.Tests
     /// Chạy scene thật cho T17, T22, T31.
     public class NewSystemsPlayTests
     {
+        System.IDisposable rankingProfileScope;
+        string rankingTestFolder;
+        [UnitySetUp] public IEnumerator IsolateRankingStore()
+        {
+            rankingTestFolder = System.IO.Path.Combine(Application.temporaryCachePath,"t57-compat-"+System.Guid.NewGuid().ToString("N"));
+            rankingProfileScope = DBP.Upgrades.ProfileService.UseTemporaryStore(System.IO.Path.Combine(rankingTestFolder,"profiles.json"));
+            yield return null;
+        }
+        [UnityTearDown] public IEnumerator RestoreRankingStore()
+        {
+            yield return SceneManager.LoadSceneAsync("MainMenu");yield return null;
+            rankingProfileScope.Dispose();
+            if(System.IO.Directory.Exists(rankingTestFolder))System.IO.Directory.Delete(rankingTestFolder,true);
+        }
+
         /// Giao diện giả trả lời ngay một đáp án (đúng hoặc sai).
         class AutoAnswerView : IQuizView
         {

@@ -5,6 +5,7 @@ using DBP.Interaction;
 using DBP.Missions;
 using DBP.Player;
 using DBP.Quiz;
+using DBP.Ranking;
 using DBP.Upgrades;
 using DBP.Weapons;
 using UnityEngine;
@@ -16,10 +17,10 @@ using UnityEngine.UI;
 using W = DBP.UI.UIWidgets;
 namespace DBP.UI
 {
-    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results }
+    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard }
 
     /// Runtime Canvas UI leaves authored mission scenes and shared player prefabs intact.
-    public sealed class CampaignUI : MonoBehaviour
+    public sealed partial class CampaignUI : MonoBehaviour
     {
         public static CampaignUI Current { get; private set; }
         public static readonly string[] Scenes = { "M1_HimLam", "M2_GiuDocLap", "M3_DoiED", "M4_LongHao", "M5_ChieuMungBay" };
@@ -37,7 +38,6 @@ namespace DBP.UI
         WeaponController weapons;
         Interactor interactor;
         bool ownsLock, loading;
-        double pauseStart;
         int profilePage;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -107,12 +107,12 @@ namespace DBP.UI
         void Show(CampaignScreen screen)
         {
             ScreenState = screen;
+            if (mission) mission.SetRankingExclusion("tutorial",screen == CampaignScreen.Tutorial);
             bool lockNow = mission && screen != CampaignScreen.Gameplay;
-            if (lockNow && !ownsLock) { InputLock.Push(); ownsLock = true; pauseStart = Time.realtimeSinceStartupAsDouble; Time.timeScale = 0; }
+            if (lockNow && !ownsLock) { InputLock.Push(); ownsLock = true; Time.timeScale = 0; }
             if (!lockNow && ownsLock)
             {
                 InputLock.Pop(); ownsLock = false; Time.timeScale = 1;
-                if (mission.Attempt.Outcome == MissionOutcome.None) mission.Attempt.BattleStart += Time.realtimeSinceStartupAsDouble - pauseStart;
             }
             if (screen == CampaignScreen.Gameplay && !InputLock.Locked) FirstPersonController.LockCursor(); else FirstPersonController.UnlockCursor();
             ClearPage();
@@ -133,6 +133,7 @@ namespace DBP.UI
                 case CampaignScreen.Gameplay: Hud(); break;
                 case CampaignScreen.Pause: Pause(); break;
                 case CampaignScreen.Results: Results(); break;
+                case CampaignScreen.Leaderboard: LeaderboardPage(); break;
             }
         }
         void Guard(Action action)
@@ -167,7 +168,8 @@ namespace DBP.UI
                 W.Button(page, "NextProfiles", "→", 450, 656, 80, 44, () => { profilePage++; Show(CampaignScreen.Menu); }, (profilePage + 1) * 4 < profiles.Count);
             }
             W.Button(page, "NewProfile", "+ Tạo hồ sơ mới", 88, 730, 442, 58, () => Show(CampaignScreen.CreateProfile));
-            W.Label(page, "MissionsHeading", "CHỌN NHIỆM VỤ", 604, 260, 900, 48, 24, W.Gold);
+            W.Label(page, "MissionsHeading", "CHỌN NHIỆM VỤ", 604, 260, 570, 48, 24, W.Gold);
+            W.Button(page,"OpenLeaderboard","Bảng xếp hạng",1190,260,346,48,()=>OpenLeaderboard(false));
             for (int i = 0; i < 5; i++)
             {
                 int index = i; bool unlocked = ProfileService.HasProfile && ProfileService.IsUnlocked("M" + (i + 1));
@@ -294,12 +296,14 @@ namespace DBP.UI
             W.Label(page, "Title", attempt.Outcome == MissionOutcome.Won ? "Hoàn thành nhiệm vụ" : attempt.Outcome == MissionOutcome.Lost ? "Nhiệm vụ thất bại" : "Đã bỏ dở nhiệm vụ", 160, 128, 1300, 80, 48);
             W.Label(page, "ResultMission", mission.Title, 160, 219, 1250, 52, 28, W.Gold);
             W.Panel(page, "ResultCard", 160, 302, 1280, 302);
+            W.Button(page,"ResultLeaderboard","Bảng xếp hạng",1060,229,380,52,()=>OpenLeaderboard(true));
             W.Label(page, "KnowledgeResult", $"ĐIỂM KIẾN THỨC\n{KnowledgeScore.Total(attempt.Answers)}", 192, 324, 550, 116, 34, W.Gold);
             W.Label(page, "ResolveResult", $"QUYẾT TÂM HIỆN CÓ\n{ProfileService.Data.resolve}", 830, 324, 550, 116, 34, W.Gold);
             W.Label(page, "Stats", $"Hạ địch: {attempt.Kills}   •   Phá lô cốt: {attempt.BunkersDestroyed}   •   Đẩy lùi: {attempt.WavesRepelled} đợt\nSát thương nhận: {attempt.DamageTaken:0}   •   Thời gian: {Math.Max(0, attempt.CompletionSeconds):0.0}s\nTrả lời đúng: {attempt.Answers.Count(a => a.outcome == QuizOutcome.Correct)} / {attempt.Answers.Count}", 192, 454, 1210, 132, 25);
             bool unsaved = attempt.Outcome == MissionOutcome.Won && !string.IsNullOrEmpty(mission.ProgressSaveError);
-            W.Label(page, "ResultNote", unsaved ? "Chưa lưu được tiến độ. Hãy thử lưu lại trước khi rời màn." : attempt.Outcome == MissionOutcome.Won ? "Đã lưu tiến độ mở màn. Điểm kiến thức không dùng để mua nâng cấp." : "Lượt này không nhận Quyết Tâm và không được xếp hạng.", 160, 628, unsaved ? 880 : 1280, 60, 23);
-            if (unsaved) W.Button(page, "RetrySave", "Thử lưu lại", 1060, 630, 380, 64, () => { mission.TrySaveProgress(); Show(CampaignScreen.Results); });
+            W.Label(page, "ResultNote", unsaved ? "Chưa lưu được tiến độ. Hãy thử lưu lại trước khi rời màn." : attempt.Outcome == MissionOutcome.Won ? "Đã lưu tiến độ mở màn. Điểm kiến thức không dùng để mua nâng cấp." : "Lượt này không nhận Quyết Tâm và không được xếp hạng.", 160, 628, unsaved ? 880 : 1280, 40, 21);
+            if (unsaved) W.Button(page, "RetrySave", "Thử lưu lại", 1060, 630, 380, 42, () => { mission.TrySaveProgress(); Show(CampaignScreen.Results); });
+            RankingResultStatus(attempt);
             W.Button(page, "Replay", "Chơi lại từ hầm", 160, 734, 600, 68, () => ReturnToMenu(true));
             W.Button(page, "ResultMenu", "Về menu / Chọn màn", 800, 734, 640, 68, () => ReturnToMenu(false));
         }

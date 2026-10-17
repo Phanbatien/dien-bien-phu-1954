@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using DBP.Core;
 using DBP.Quiz;
+using DBP.Ranking;
 using DBP.Upgrades;
 using UnityEngine;
 using UnityEngine.Events;
@@ -19,6 +20,8 @@ namespace DBP.Missions
         public static event Action<Attempt> Ended;
 
         [SerializeField] string missionId = "M1";
+        [Tooltip("Nhóm độ khó xếp hạng; chiến dịch hiện tại dùng cấp 1.")]
+        [Range(1,5)] [SerializeField] int rankingDifficulty = 1;
         [SerializeField] string missionTitle = "Mở màn Him Lam";
         [Tooltip("Màn được mở khi thắng (BR-32). Trống = màn cuối.")]
         [SerializeField] string nextMissionId = "M2";
@@ -69,6 +72,10 @@ namespace DBP.Missions
             Time.timeScale = 1f;
             InputLock.ResetAll();
             Attempt = new Attempt(missionId, Guid.NewGuid().GetHashCode()); // lượt mới, seed mới (BR-33)
+            double now = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingClock.Begin(now);
+            Attempt.RankingClock.Exclude("deployment",now);
+            LeaderboardService.Capture(Attempt, rankingDifficulty);
         }
 
         void OnEnable()
@@ -94,6 +101,7 @@ namespace DBP.Missions
         {
             if (!player) Debug.LogError($"[Mission {missionId}] Chưa gán người chơi.");
             Attempt.BattleStart = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingClock.Include("deployment",Attempt.BattleStart);
             if (!sequential)
                 foreach (var o in objectives) o.Activate(this);
         }
@@ -138,6 +146,7 @@ namespace DBP.Missions
         {
             if (!Attempt.Settle(outcome)) return;
             Attempt.BattleEnd = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingMilliseconds = Attempt.RankingClock.Stop(Attempt.BattleEnd);
             if (player) Attempt.DamageTaken = player.TotalDamageTaken;
 
             if (outcome == MissionOutcome.Won)
@@ -147,7 +156,15 @@ namespace DBP.Missions
             }
             else if (outcome == MissionOutcome.Lost) onLost.Invoke();
 
+            LeaderboardService.Complete(Attempt);
             Ended?.Invoke(Attempt);
+        }
+
+        // Mandatory bunker/cinematic flows can exclude named intervals; quiz/pause must not.
+        public void SetRankingExclusion(string reason, bool excluded)
+        {
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (excluded) Attempt.RankingClock.Exclude(reason,now); else Attempt.RankingClock.Include(reason,now);
         }
 
         public bool TrySaveProgress()

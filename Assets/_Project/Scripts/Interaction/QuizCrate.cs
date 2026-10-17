@@ -1,6 +1,7 @@
 using System;
 using DBP.Missions;
 using DBP.Quiz;
+using DBP.Ranking;
 using DBP.Weapons;
 using UnityEngine;
 
@@ -92,6 +93,7 @@ namespace DBP.Interaction
         public bool countsForPity = true;
 
         bool used, locked;
+        readonly string auditId = Guid.NewGuid().ToString("N");
 
         public string Prompt => countsForPity ? $"Giữ E: mở hòm ({rarity})" : $"Giữ E: nhặt súng rơi ({rarity})";
         public float HoldSeconds => 1f;
@@ -115,6 +117,7 @@ namespace DBP.Interaction
             crate.rewardAmmo = reward.ammo;
             crate.rewardGrenades = reward.grenades;
             crate.countsForPity = isCrate;
+            crate.Audit("offered",default,0,0,null);
             return crate;
         }
 
@@ -182,8 +185,22 @@ namespace DBP.Interaction
             if (dropped != null || leftoverAmmo > 0 || leftoverGrenades > 0)
                 LootPile.At(transform).Add(dropped, leftoverType, leftoverAmmo, leftoverGrenades);
 
+            Audit("resolved",result,leftoverAmmo,leftoverGrenades,dropped?.Def.id);
+
             // Đã mở: tối màu đi (Khôi thay bằng hoạt ảnh mở nắp).
             if (TryGetComponent<Renderer>(out var r)) r.material.color = r.material.color * 0.4f;
+        }
+        // Audit only: no change to reward selection, inventory grants or shared signatures.
+        void Audit(string phase, QuizResult result, int leftoverAmmo, int leftoverGrenades, string displacedWeapon)
+        {
+            var attempt = MissionController.Current?.Attempt;
+            if (attempt == null || attempt.Outcome != MissionOutcome.None) return;
+            bool fullReward = phase == "offered" || result.outcome == QuizOutcome.Correct;
+            attempt.Rewards.Add(new RewardAudit { phase = phase, sourceId = auditId, position = transform.position,
+                isCrate = countsForPity, rarity = (int)rarity, weaponId = fullReward ? rewardWeaponId : null,
+                ammoType = fullReward ? rewardAmmoType : fallbackAmmoType, ammo = fullReward ? rewardAmmo : fallbackAmmo,
+                grenades = fullReward ? rewardGrenades : 0, leftoverAmmo = leftoverAmmo, leftoverGrenades = leftoverGrenades,
+                displacedWeaponId = displacedWeapon, questionId = result.questionId, outcome = result.outcome });
         }
     }
 }
