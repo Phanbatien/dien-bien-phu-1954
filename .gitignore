@@ -48,3 +48,10 @@ build.log
 .codex/
 AgentScripts/
 AGENTS.md
+
+# Unity Pipeline local automation settings and generated build assets
+/ProjectSettings/Packages/com.unity.pipeline/
+/Assets/Settings/Pipeline/
+/Assets/Settings/Pipeline.meta
+.unity-pipeline-port
+.unity-pipeline-runtime-port

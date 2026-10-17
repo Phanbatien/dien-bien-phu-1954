@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using DBP.Interaction;
 using DBP.Quiz;
+using DBP.Ranking;
 
 namespace DBP.Missions
 {
@@ -21,6 +22,11 @@ namespace DBP.Missions
         public int WavesRepelled;
         public float DamageTaken;
         public double BattleStart, BattleEnd;
+        public readonly RankingClock RankingClock = new RankingClock();
+        public long RankingMilliseconds = -1;
+        public RankedResult RankingResult;
+        public string RankingSaveError;
+        public readonly List<RewardAudit> Rewards = new List<RewardAudit>();
 
         /// false khi lượt gặp lỗi thiếu câu (BR-31): vẫn thắng được nhưng không lên bảng.
         public bool RankEligible = true;
@@ -35,7 +41,7 @@ namespace DBP.Missions
         public bool SaveFailed;
 
         public MissionOutcome Outcome { get; private set; } = MissionOutcome.None;
-        public double CompletionSeconds => BattleEnd - BattleStart;
+        public double CompletionSeconds => RankingMilliseconds >= 0 ? RankingMilliseconds / 1000d : BattleEnd - BattleStart;
 
         public Attempt(string missionId, int seed)
         {

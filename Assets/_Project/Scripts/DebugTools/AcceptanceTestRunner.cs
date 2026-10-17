@@ -153,19 +153,20 @@ namespace DBP.DebugTools
         /// TH-10: Hai thành tích bằng 3 chỉ số đầu nhưng sát thương khác → ít sát thương xếp trên (BR-24).
         void CheckTH10()
         {
-            // Kiểm tra thứ tự so sánh BR-24: kills → bunkers → waves → damageTaken (ít hơn = tốt hơn)
-            var a1 = new Attempt("M1", 1); a1.Kills = 5; a1.BunkersDestroyed = 2; a1.WavesRepelled = 1; a1.DamageTaken = 30f;
-            var a2 = new Attempt("M1", 2); a2.Kills = 5; a2.BunkersDestroyed = 2; a2.WavesRepelled = 1; a2.DamageTaken = 50f;
-            // a1 xếp trên a2 vì ít sát thương hơn
-            int cmp = a1.DamageTaken.CompareTo(a2.DamageTaken); // -1 → a1 ít hơn → a1 tốt hơn
-            if (cmp < 0) Pass("TH-10"); else Fail("TH-10", "Sát thương so sánh ngược chiều");
+            var a = new DBP.Ranking.RankedResult { kills = 5, bunkers = 2, waves = 1, damage = 30, milliseconds = 20000 };
+            var b = a.Copy(); b.damage = 50; b.milliseconds = 10000;
+            if (DBP.Ranking.Leaderboard.CombatCompare(a,b) < 0) Pass("TH-10"); else Fail("TH-10","Thứ tự sát thương không đúng BR-24");
         }
 
-        /// TH-11: Hai thành tích bằng mọi tiêu chí → đồng hạng; thời điểm gửi không quyết định (BR-24, BR-25).
+        /// TH-11: Đồng hạng 1, 1, 3; mã hồ sơ chỉ ổn định dòng.
         void CheckTH11()
         {
-            // Theo BR-24: thứ tự hiển thị ổn định bằng mã hồ sơ (không dùng thời điểm gửi)
-            Pass("TH-11"); // Được xác nhận bởi thiết kế (leaderboard sort dùng profileId)
+            var a = new DBP.Ranking.RankedResult { profileId = "a", kills = 5 };
+            var b = a.Copy(); b.profileId = "b";
+            var c = a.Copy(); c.profileId = "c"; c.kills = 4;
+            var rows = DBP.Ranking.Leaderboard.Rank(new[]{b,c,a},false);
+            if (rows[0].rank == 1 && rows[1].rank == 1 && rows[2].rank == 3 && rows[0].result.profileId == "a" && rows[1].result.profileId == "b") Pass("TH-11");
+            else Fail("TH-11","Đồng hạng hoặc thứ tự dòng không đúng BR-24");
         }
 
         /// TH-12: Đúng trong hầm rồi thoát → không cộng Quyết Tâm (BR-33, BR-34).

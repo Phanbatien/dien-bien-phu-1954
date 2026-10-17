@@ -16,6 +16,7 @@ namespace DBP.Upgrades
             public List<ProfileData> profiles = new List<ProfileData>();
         }
         readonly string path;
+        public string StoragePath => path;
         Document document;
         public bool Exists => File.Exists(path);
         public bool RecoveredBackup { get; private set; }

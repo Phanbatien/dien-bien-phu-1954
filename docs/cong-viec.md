@@ -107,7 +107,7 @@ Tiêu chí điểm: **Ý tưởng** 20% · **KT** 30% · **Gameplay** 20% · **U
 | ✅ | T54 | Môi trường Màn 4 Trong lòng hào | Bạn (Trưởng nhóm) *(nhận từ Khôi)* | xong 07/10 (sớm; lịch cũ 16/10 sáng → 17/10 sáng) | Cao | M | Mê cung hào + 4 đoạn hào để chiếm | Chạy hết màn ≥60 FPS | T46 | Đồ họa | - |
 | ☐ | T55 | Model MAT-49 + Kiểu 50 (tay + hoạt ảnh) | Lê Nguyễn Đình Khôi | 15/10 chiều → 16/10 sáng | Cao | M | 2 model + anim bắn/nạp | Gắn vào T21 | T16 | Đồ họa | - |
 | ☐ | T56 | 25 câu Màn 4 (có câu cấp 4–5) | Thiên Trí | 15/10 sáng → 15/10 chiều | Cao | M | Câu cấp 4–5 đủ cho hòm hiếm/rất hiếm | Validate đủ câu mỗi độ hiếm | T10 | Ý tưởng | BR-28 |
-| ☐ | T57 | Bảng xếp hạng tại máy (5 tiêu chí, đồng hạng 1-1-3) + UI | Trần Hoàng Long | 14/10 sáng → 14/10 chiều | Cao | M | 2 bảng: chiến đấu và kiến thức; chỉ lượt thắng; giữ thành tích tốt nhất mỗi hồ sơ | PL-A dòng 10–11 qua unit test | T19,T27 | UI, Điểm cộng | BR-24,25 |
+| ☑ | T57 | Bảng xếp hạng tại máy (5 tiêu chí, đồng hạng 1-1-3) + UI | Trần Hoàng Long | 14/10 sáng → 14/10 chiều | Cao | M | 2 bảng: chiến đấu và kiến thức; chỉ lượt thắng; giữ thành tích tốt nhất mỗi hồ sơ | Đạt 15/10: PL-A 10–11; EditMode 98/98, PlayMode 22/22; đã xem UI | T19,T27 | UI, Điểm cộng | BR-24,25 |
 
 ### ★ Checkpoint 5 (hết 17/10 sáng): Màn 3, 4 chơi trọn vẹn; có bảng xếp hạng tại máy.
 - [ ] Cả nhóm chơi bản mới nhất trên `develop`, ghi lỗi; chưa đạt thì dồn sang buổi kế tiếp, không bỏ mốc.
