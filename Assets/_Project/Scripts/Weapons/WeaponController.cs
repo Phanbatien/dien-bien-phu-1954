@@ -37,6 +37,7 @@ namespace DBP.Weapons
                               && cam && cam.fieldOfView < baseFov * 0.6f;
 
         float baseFov = 70f, nextShotAt, reloadEndsAt, reloadDuration = 1f;
+        int audioVariation;
 
         void Start()
         {
@@ -94,7 +95,8 @@ namespace DBP.Weapons
             if (weapon.CanFire) Fire(weapon);
             else
             {
-                Play(dryClip);
+                if (dryClip) Play(dryClip);
+                else CampaignAudio.Effect("mechanic_dry", transform.position, false);
                 nextShotAt = Time.time + 0.25f;
                 if (weapon.CanReload) StartReload(weapon);
             }
@@ -106,7 +108,11 @@ namespace DBP.Weapons
             if (keyboard.digit1Key.wasPressedThisFrame) Inventory.Switch(0);
             else if (keyboard.digit2Key.wasPressedThisFrame) Inventory.Switch(1);
             else if (Mathf.Abs(mouse.scroll.ReadValue().y) > 0.01f) Inventory.Next();
-            if (Inventory.CurrentIndex != before) CancelReload();
+            if (Inventory.CurrentIndex != before)
+            {
+                CancelReload();
+                CampaignAudio.Effect("mechanic_switch", transform.position, false);
+            }
         }
 
         void UpdateAim(Weapon weapon)
@@ -145,7 +151,9 @@ namespace DBP.Weapons
 
             float recoilScale = IsAiming ? 0.6f : 1f;
             if (body) body.AddRecoil(stats.recoilPitch * recoilScale, Random.Range(-1f, 1f) * stats.recoilYaw * recoilScale);
-            Play(fireClip);
+            var approvedClip = AudioCatalog.Weapon(weapon.Def.id, audioVariation++);
+            if (approvedClip) CampaignAudio.Play(approvedClip, transform.position, false);
+            else Play(fireClip);
             Fired?.Invoke();
         }
 

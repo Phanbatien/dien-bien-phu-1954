@@ -26,6 +26,7 @@ namespace DBP.Core
             if (Time.time >= next)
             {
                 flash.intensity = peak;
+                CampaignAudio.Effect("distant_explosion", transform.position, false, .65f);
                 next = Time.time + gap + Random.Range(0f, 3f);
             }
             else

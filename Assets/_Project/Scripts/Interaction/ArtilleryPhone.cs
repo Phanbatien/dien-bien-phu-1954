@@ -96,6 +96,8 @@ namespace DBP.Interaction
                 ? targetPosition.position 
                 : (targetHealth != null ? targetHealth.transform.position : transform.position);
 
+            CampaignAudio.Effect("cannon_generic", strikePos);
+
             if (artilleryStrikePrefab != null)
             {
                 Instantiate(artilleryStrikePrefab, strikePos, Quaternion.identity);

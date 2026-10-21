@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using DBP.Core;
 namespace DBP.UI
 {
     internal static class UIWidgets
@@ -39,7 +40,7 @@ namespace DBP.UI
             var button = image.gameObject.AddComponent<Button>(); button.targetGraphic = image; button.interactable = enabled;
             var colors = button.colors; colors.highlightedColor = new Color(1.15f, 1.15f, 1.05f); colors.disabledColor = new Color(.45f, .45f, .45f, .8f); button.colors = colors;
             var text = Label(image.transform, "Label", value, 14, 0, w - 28, h, 23); text.alignment = TextAnchor.MiddleCenter;
-            button.onClick.AddListener(click); return button;
+            button.onClick.AddListener(() => { CampaignAudio.Interface("ui_click"); click(); }); return button;
         }
         public static InputField Input(Transform parent, string name, string placeholder, float x, float y, float w)
         {

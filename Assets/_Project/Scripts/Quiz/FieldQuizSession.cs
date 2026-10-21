@@ -108,6 +108,8 @@ namespace DBP.Quiz
                 outcome = outcome,
             };
             View.Hide();
+            if (outcome == QuizOutcome.Timeout) CampaignAudio.Interface("ui_timeout");
+            else if (outcome == QuizOutcome.Correct) CampaignAudio.Interface("ui_reward");
             onResolved?.Invoke(result); // phát thưởng một lần, trong lúc thế giới còn đứng yên
             onResolved = null;
             Answered?.Invoke(result);

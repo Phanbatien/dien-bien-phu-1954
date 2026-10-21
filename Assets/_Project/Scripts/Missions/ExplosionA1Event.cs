@@ -116,6 +116,7 @@ namespace DBP.Missions
                 else
                     AudioSource.PlayClipAtPoint(explosionSound, blastPosition);
             }
+            else CampaignAudio.Effect("explosion_01", blastPosition);
 
             // 3. Rung chuyển màn hình góc nhìn người chơi
             StartCoroutine(DoCameraShake());

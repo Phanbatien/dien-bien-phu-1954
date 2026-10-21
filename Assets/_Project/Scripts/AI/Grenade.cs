@@ -62,6 +62,7 @@ namespace DBP.AI
                 // Phát âm thanh ở điểm nổ độc lập với GameObject (sẽ bị Destroy ngay sau)
                 AudioSource.PlayClipAtPoint(explosionClip, transform.position);
             }
+            else CampaignAudio.Effect("explosion_02", transform.position);
 
             // Tìm mọi IDamageable trong bán kính
             var hits = Physics.OverlapSphere(transform.position, blastRadius, damageMask, QueryTriggerInteraction.Ignore);
