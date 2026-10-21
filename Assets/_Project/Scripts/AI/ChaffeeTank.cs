@@ -60,6 +60,7 @@ namespace DBP.AI
         bool dead;
 
         public Health Health => health;
+        AudioSource engineSound;
         public bool IsDead => dead;
         public IReadOnlyList<SoldierAI> Escorts => escorts;
         public IReadOnlyList<Transform> Waypoints => waypoints;
@@ -87,6 +88,7 @@ namespace DBP.AI
 
         void Start()
         {
+            if (!dead) engineSound = CampaignAudio.AttachLoop("TankEngine", "tank_engine_loop", transform);
             var pGo = GameObject.FindGameObjectWithTag("Player");
             if (pGo) player = pGo.transform;
 
@@ -242,6 +244,7 @@ namespace DBP.AI
             {
                 audioSource.PlayOneShot(fireClip);
             }
+            else CampaignAudio.Effect("cannon_generic", origin);
 
             if (muzzleFlashPrefab && muzzle)
             {
@@ -278,6 +281,7 @@ namespace DBP.AI
         {
             if (dead) return;
             dead = true;
+            if (engineSound) engineSound.Stop();
 
             // Dừng di chuyển
             if (agent != null && agent.enabled)
@@ -300,6 +304,7 @@ namespace DBP.AI
             {
                 audioSource.PlayOneShot(destructionClip);
             }
+            else CampaignAudio.Effect("explosion_04", transform.position);
 
             // Tắt va chạm để không chặn đường di chuyển sau khi nổ
             foreach (var col in GetComponentsInChildren<Collider>())

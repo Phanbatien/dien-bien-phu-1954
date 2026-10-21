@@ -175,6 +175,7 @@ namespace DBP.Missions
                 ProfileService.OnMissionWon(nextMissionId);
                 ProgressSaveError = null;
                 Attempt.SaveFailed = false;
+                CampaignAudio.Interface("ui_saved");
                 return true;
             }
             catch (IOException error) { ProgressSaveError = error.Message; }

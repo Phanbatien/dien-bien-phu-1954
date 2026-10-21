@@ -129,6 +129,7 @@ namespace DBP.AI
 
             if (audioSource && destructionClip)
                 AudioSource.PlayClipAtPoint(destructionClip, transform.position);
+            else CampaignAudio.Effect("explosion_01", transform.position);
 
             foreach (var go in toDisableOnDestroyed)
                 if (go) go.SetActive(false);
