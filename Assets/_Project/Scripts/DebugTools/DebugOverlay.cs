@@ -17,7 +17,7 @@ namespace DBP.DebugTools
         WeaponController weapons;
         Interactor interactor;
         Health health;
-        bool paused;
+        bool paused, ownsResultLock;
         float fps;
         GUIStyle big;
 
@@ -33,13 +33,18 @@ namespace DBP.DebugTools
             MissionController.Ended += OnEnded;
         }
 
-        void OnDestroy() => MissionController.Ended -= OnEnded;
+        void OnDestroy()
+        {
+            MissionController.Ended -= OnEnded;
+            if (paused) InputLock.Pop();
+            if (ownsResultLock) InputLock.Pop();
+        }
 
         void OnEnded(Attempt attempt)
         {
             if (UI.CampaignUI.Current) return;
             if (paused) SetPaused(false);
-            InputLock.Push();
+            if (!ownsResultLock) { InputLock.Push(); ownsResultLock = true; }
             FirstPersonController.UnlockCursor();
         }
 

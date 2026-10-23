@@ -90,13 +90,14 @@ namespace DBP.AI
             if (!muzzle || Time.time < nextFireAt) return;
 
             var dir = muzzle.forward;
+            if (muzzleFlashPrefab) Destroy(Instantiate(muzzleFlashPrefab, muzzle.position, muzzle.rotation), .1f);
+            else CombatEffects.Muzzle(muzzle.position, muzzle.rotation, 1.3f);
             if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore))
             {
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
                 dmg?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
 
-                if (muzzleFlashPrefab)
-                    Destroy(Instantiate(muzzleFlashPrefab, muzzle.position, muzzle.rotation), 0.1f);
+                CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
             }
 
             if (audioSource && fireClip) audioSource.PlayOneShot(fireClip);
@@ -126,6 +127,7 @@ namespace DBP.AI
 
             if (destructionPrefab)
                 Destroy(Instantiate(destructionPrefab, transform.position, Quaternion.identity), 5f);
+            else CombatEffects.Explosion(transform.position, 2f);
 
             if (audioSource && destructionClip)
                 AudioSource.PlayClipAtPoint(destructionClip, transform.position);

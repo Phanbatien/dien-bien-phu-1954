@@ -102,6 +102,7 @@ namespace DBP.Interaction
             {
                 Instantiate(artilleryStrikePrefab, strikePos, Quaternion.identity);
             }
+            else CombatEffects.Explosion(strikePos, 2.5f);
 
             if (targetHealth != null)
             {

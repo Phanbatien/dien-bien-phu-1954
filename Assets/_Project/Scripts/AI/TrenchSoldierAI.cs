@@ -354,6 +354,7 @@ namespace DBP.AI
 
             if (animator) animator.SetTrigger(AnimShoot);
             PlaySound(fireClip);
+            CombatEffects.Muzzle(muzzle.position, muzzle.rotation);
 
             // Bắn raycast có độ tản mát
             var spread = Random.insideUnitCircle * bulletSpread;
@@ -363,6 +364,7 @@ namespace DBP.AI
 
             if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore))
             {
+                CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var damageable = hit.collider.GetComponentInParent<IDamageable>();
                 damageable?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
             }

@@ -15,7 +15,7 @@ namespace DBP.Weapons
         [SerializeField] FirstPersonController body;
         [SerializeField] string startingWeaponId = "W-MOSIN";
         [SerializeField] LayerMask hitMask = ~0;
-        [Tooltip("Hiệu ứng trúng đích (T67 – Long). Bỏ trống thì không sinh.")]
+        [Tooltip("Hiệu ứng trúng đích ghi đè. Bỏ trống dùng hiệu ứng T67.")]
         [SerializeField] GameObject impactPrefab;
         [Tooltip("Mô hình súng góc nhìn thứ nhất (T16 – Khôi). Ẩn khi soi ống ngắm.")]
         [SerializeField] GameObject viewModel;
@@ -140,12 +140,14 @@ namespace DBP.Weapons
             var r = Random.insideUnitCircle * spread;
             var origin = cam.transform.position;
             var direction = cam.transform.rotation * (Quaternion.Euler(r.x, r.y, 0f) * Vector3.forward);
+            if (!Scoped) CombatEffects.Muzzle(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, cam.transform.rotation);
 
             if (Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore))
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(stats.damage, DamageType.Bullet, hit.point);
                 if (impactPrefab) Destroy(Instantiate(impactPrefab, hit.point, Quaternion.LookRotation(hit.normal)), 5f);
+                else CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 Hit?.Invoke(hit);
             }
 

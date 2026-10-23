@@ -250,11 +250,13 @@ namespace DBP.AI
             {
                 Instantiate(muzzleFlashPrefab, muzzle.position, muzzle.rotation);
             }
+            else CombatEffects.Muzzle(origin, muzzle ? muzzle.rotation : transform.rotation, 2f);
 
             Vector3 aimDir = player ? (player.position + Vector3.up * 0.5f - origin).normalized : (turret ? turret.forward : transform.forward);
 
             if (Physics.Raycast(origin, aimDir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore))
             {
+                CombatEffects.Explosion(hit.point, 1.5f);
                 // Sát thương trúng đích
                 var directTarget = hit.collider.GetComponentInParent<IDamageable>();
                 directTarget?.TakeDamage(fireDamage, DamageType.Explosive, hit.point);
@@ -299,6 +301,7 @@ namespace DBP.AI
             {
                 Instantiate(destructionPrefab, transform.position, transform.rotation);
             }
+            else CombatEffects.Explosion(transform.position, 2.5f);
 
             if (audioSource != null && destructionClip != null)
             {

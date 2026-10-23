@@ -55,6 +55,7 @@ namespace DBP.AI
             // VFX
             if (explosionPrefab)
                 Destroy(Instantiate(explosionPrefab, transform.position, Quaternion.identity), 5f);
+            else CombatEffects.Explosion(transform.position, 1f);
 
             // SFX
             if (explosionClip)

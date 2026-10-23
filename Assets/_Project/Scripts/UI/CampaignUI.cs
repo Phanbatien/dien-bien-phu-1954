@@ -237,7 +237,7 @@ namespace DBP.UI
         public void Deploy()
         {
             if (ScreenState != CampaignScreen.Preparation || loading || !ProfileService.HasProfile || !ProfileService.IsUnlocked("M" + (SelectedMission + 1))) return;
-            loading = true; Time.timeScale = 1; SceneManager.LoadScene(Scenes[SelectedMission]);
+            loading = SceneTransition.Load(Scenes[SelectedMission]);
         }
         void Tutorial()
         {
@@ -313,7 +313,7 @@ namespace DBP.UI
             loading = true;
             if (mission.Attempt.Outcome == MissionOutcome.None) mission.Abandon();
             pendingPreparation = prepareAgain ? Array.IndexOf(Scenes, SceneManager.GetActiveScene().name) : -1;
-            Time.timeScale = 1; SceneManager.LoadScene("MainMenu");
+            if (!SceneTransition.Load("MainMenu")) loading = false;
         }
     }
 }

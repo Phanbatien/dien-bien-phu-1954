@@ -165,6 +165,7 @@ namespace DBP.AI
                 var flash = Instantiate(muzzleFlashPrefab, muzzle.position, muzzle.rotation);
                 Destroy(flash, 0.1f);
             }
+            else CombatEffects.Muzzle(muzzle.position, muzzle.rotation);
 
             // Raycast bắn trúng mục tiêu với độ lệch tản mát
             var spread = UnityEngine.Random.insideUnitCircle * bulletSpread;
@@ -174,6 +175,7 @@ namespace DBP.AI
 
             if (Physics.Raycast(muzzle.position, dir, out var hit, engageRange + 5f, sightMask, QueryTriggerInteraction.Ignore))
             {
+                CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
             }
