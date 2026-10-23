@@ -70,7 +70,7 @@ namespace DBP.Missions
         {
             Current = this;
             Time.timeScale = 1f;
-            InputLock.ResetAll();
+            if (!SceneTransition.IsTransitioning) InputLock.ResetAll();
             Attempt = new Attempt(missionId, Guid.NewGuid().GetHashCode()); // lượt mới, seed mới (BR-33)
             double now = Time.realtimeSinceStartupAsDouble;
             Attempt.RankingClock.Begin(now);
@@ -172,10 +172,15 @@ namespace DBP.Missions
             if (Attempt.Outcome != MissionOutcome.Won) return false;
             try
             {
+                if (ProfileService.HasProfile && string.IsNullOrEmpty(nextMissionId)) ProfileService.Save();
                 ProfileService.OnMissionWon(nextMissionId);
                 ProgressSaveError = null;
                 Attempt.SaveFailed = false;
-                CampaignAudio.Interface("ui_saved");
+                if (ProfileService.HasProfile)
+                {
+                    CampaignAudio.Interface("ui_saved");
+                    DBP.UI.CampaignNotices.Show("Đã lưu tiến độ nhiệm vụ trên máy.");
+                }
                 return true;
             }
             catch (IOException error) { ProgressSaveError = error.Message; }
@@ -188,14 +193,12 @@ namespace DBP.Missions
         // ponytail: nạp lại scene màn; khi có hầm chuẩn bị (T25) thì chuyển về scene hầm của màn.
         public void Restart()
         {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneTransition.Load(SceneManager.GetActiveScene().name);
         }
 
         public void LoadNext()
         {
-            Time.timeScale = 1f;
-            if (!string.IsNullOrEmpty(nextSceneName)) SceneManager.LoadScene(nextSceneName);
+            if (!string.IsNullOrEmpty(nextSceneName)) SceneTransition.Load(nextSceneName);
         }
 
         public bool PlayerInside(Collider zone)

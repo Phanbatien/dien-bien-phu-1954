@@ -113,6 +113,9 @@ namespace DBP.Quiz
             onResolved?.Invoke(result); // phát thưởng một lần, trong lúc thế giới còn đứng yên
             onResolved = null;
             Answered?.Invoke(result);
+            if (outcome == QuizOutcome.Timeout) DBP.UI.CampaignNotices.Show("Hết giờ — câu hỏi đã kết thúc.");
+            else if (outcome == QuizOutcome.Correct)
+                DBP.UI.CampaignNotices.Show($"Trả lời đúng · +{KnowledgeScore.Calculate(result.level, QuizForm.Field, result.outcome, result.remaining, result.timeLimit)} điểm kiến thức");
             freeze.Resume(() => IsOpen = false);
         }
     }

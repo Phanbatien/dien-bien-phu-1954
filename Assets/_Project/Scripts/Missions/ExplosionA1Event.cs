@@ -107,6 +107,7 @@ namespace DBP.Missions
                 var vfx = Instantiate(explosionVFXPrefab, blastPosition, Quaternion.identity);
                 Destroy(vfx, 8f);
             }
+            else CombatEffects.Explosion(blastPosition, 3f);
 
             // 2. Phát âm thanh nổ SFX
             if (explosionSound)

@@ -158,6 +158,7 @@ namespace DBP.Interaction
             Weapon dropped = null;
             string leftoverType = fallbackAmmoType;
             int leftoverAmmo, leftoverGrenades = 0;
+            bool itemsGranted = false;
 
             if (result.outcome == QuizOutcome.Correct)
             {
@@ -169,13 +170,19 @@ namespace DBP.Interaction
                     dropped = give.Dropped;
                     leftoverType = def.ammoType;
                     leftoverAmmo = give.LeftoverAmmo;
+                    itemsGranted = !give.ConvertedToAmmo || rewardAmmo > leftoverAmmo;
                 }
                 else if (rewardAmmo > 0)
                 {
                     leftoverType = rewardAmmoType;
                     leftoverAmmo = inventory.AddAmmo(rewardAmmoType, rewardAmmo);
+                    itemsGranted = rewardAmmo > leftoverAmmo;
                 }
-                if (rewardGrenades > 0) leftoverGrenades = inventory.AddGrenades(rewardGrenades);
+                if (rewardGrenades > 0)
+                {
+                    leftoverGrenades = inventory.AddGrenades(rewardGrenades);
+                    itemsGranted |= rewardGrenades > leftoverGrenades;
+                }
             }
             else
             {
@@ -186,6 +193,10 @@ namespace DBP.Interaction
                 LootPile.At(transform).Add(dropped, leftoverType, leftoverAmmo, leftoverGrenades);
 
             Audit("resolved",result,leftoverAmmo,leftoverGrenades,dropped?.Def.id);
+            if (result.outcome == QuizOutcome.Correct && (itemsGranted || leftoverAmmo > 0 || leftoverGrenades > 0 || dropped != null))
+                DBP.UI.CampaignNotices.Show(leftoverAmmo > 0 || leftoverGrenades > 0 || dropped != null
+                    ? "Phần thưởng hòm: kiểm tra hành trang và vật phẩm dư bên cạnh."
+                    : "Đã nhận phần thưởng hòm vào hành trang.");
 
             // Đã mở: tối màu đi (Khôi thay bằng hoạt ảnh mở nắp).
             if (TryGetComponent<Renderer>(out var r)) r.material.color = r.material.color * 0.4f;

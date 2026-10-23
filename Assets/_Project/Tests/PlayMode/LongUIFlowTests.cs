@@ -26,7 +26,13 @@ namespace DBP.Tests
         float originalVolume;
         static T Find<T>(string name) where T : Component => Object.FindObjectsByType<T>(FindObjectsSortMode.None).First(c => c.name == name);
         static void Click(string name) { var b = Find<Button>(name); Assert.IsTrue(b.interactable, name); b.onClick.Invoke(); }
-        static IEnumerator Frames() { yield return null; yield return null; yield return null; }
+        static IEnumerator Frames()
+        {
+            yield return null; yield return null; yield return null;
+            float deadline = Time.realtimeSinceStartup + 10;
+            while (SceneTransition.IsTransitioning && Time.realtimeSinceStartup < deadline) yield return null;
+            Assert.IsFalse(SceneTransition.IsTransitioning, "Scene transition must finish.");
+        }
         [UnitySetUp] public IEnumerator Setup()
         {
             folder = Path.Combine(Application.temporaryCachePath, "long-ui-" + Guid.NewGuid().ToString("N"));

@@ -219,6 +219,7 @@ namespace DBP.AI
 
             if (animator) animator.SetTrigger(AnimShoot);
             Play(fireClip);
+            CombatEffects.Muzzle(muzzle.position, muzzle.rotation);
 
             // Tia raycast với độ lệch ngẫu nhiên nhỏ (lính bắn không chuẩn)
             var spread = Random.insideUnitCircle * bulletSpread;
@@ -227,6 +228,7 @@ namespace DBP.AI
 
             if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore))
             {
+                CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
                 dmg?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
             }

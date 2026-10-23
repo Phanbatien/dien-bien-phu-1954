@@ -14,6 +14,8 @@ namespace DBP.Core
         readonly AudioSource[] voices = new AudioSource[VoiceLimit];
         readonly AudioSource[] ui = new AudioSource[2];
         int nextVoice, nextUI;
+        AudioSource musicSource;
+        float duckUntil;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Install()
@@ -44,8 +46,8 @@ namespace DBP.Core
             var music = AudioCatalog.Music(gameObject.scene.name);
             if (music)
             {
-                Loop("MissionMusic", music, transform, false, 1f);
-                Loop("AirplaneAmbience", AudioCatalog.Clip("airplane_loop"), transform, false, .7f);
+                musicSource = Loop("MissionMusic", music, transform, false, 1f);
+                Loop("AirplaneAmbience", AudioCatalog.Clip("airplane_loop"), transform, false, 1f);
             }
         }
         AudioSource Source(string name, Transform parent, bool interfaceSound)
@@ -56,6 +58,7 @@ namespace DBP.Core
             source.playOnAwake = false; source.ignoreListenerPause = interfaceSound;
             source.dopplerLevel = 0; source.minDistance = 4; source.maxDistance = 130;
             source.rolloffMode = AudioRolloffMode.Linear;
+            source.priority = interfaceSound ? 32 : 128;
             if (!interfaceSound) world.Add(source);
             return source;
         }
@@ -63,7 +66,8 @@ namespace DBP.Core
         {
             if (!clip) return null;
             var source = Source(name, parent, false);
-            source.clip = clip; source.loop = true; source.volume = volume;
+            source.clip = clip; source.loop = true; source.volume = Mathf.Clamp01(volume) * AudioMix.Gain(clip.name);
+            source.priority = positional ? 160 : 220;
             source.spatialBlend = positional ? 1f : 0f;
             source.Play();
             if (WorldPaused) source.Pause();
@@ -76,6 +80,11 @@ namespace DBP.Core
         }
         void LateUpdate()
         {
+            if (musicSource)
+            {
+                float target = AudioMix.Gain(musicSource.clip.name) * (Time.unscaledTime < duckUntil ? .55f : 1f);
+                musicSource.volume = Mathf.MoveTowards(musicSource.volume, target, Time.unscaledDeltaTime * .8f);
+            }
             // WorldFreeze already pauses the listener and fades it back in. Do not
             // pause individual voices then: they must resume during its transition.
             bool paused = Time.timeScale <= 0f && !WorldFreeze.IsFrozen;
@@ -99,7 +108,10 @@ namespace DBP.Core
             var source = current.voices[current.nextVoice];
             current.nextVoice = (current.nextVoice + 1) % VoiceLimit;
             source.Stop(); source.transform.position = position;
-            source.clip = clip; source.loop = false; source.volume = volume;
+            source.clip = clip; source.loop = false; source.volume = Mathf.Clamp01(volume) * AudioMix.Gain(clip.name);
+            bool combat = AudioMix.IsCombat(clip.name);
+            source.priority = combat ? 64 : 128;
+            if (combat) current.duckUntil = Time.unscaledTime + .45f;
             source.spatialBlend = positional ? 1f : 0f; source.pitch = 1f;
             source.Play();
             return source;
@@ -114,7 +126,7 @@ namespace DBP.Core
             if (!clip || !current) return null;
             var source = current.ui[current.nextUI];
             current.nextUI = (current.nextUI + 1) % current.ui.Length;
-            source.Stop(); source.clip = clip; source.volume = 1f; source.Play();
+            source.Stop(); source.clip = clip; source.volume = AudioMix.Gain(clip.name); source.Play();
             return source;
         }
     }
