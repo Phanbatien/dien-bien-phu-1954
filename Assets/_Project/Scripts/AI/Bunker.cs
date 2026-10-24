@@ -92,7 +92,9 @@ namespace DBP.AI
             var dir = muzzle.forward;
             if (muzzleFlashPrefab) Destroy(Instantiate(muzzleFlashPrefab, muzzle.position, muzzle.rotation), .1f);
             else CombatEffects.Muzzle(muzzle.position, muzzle.rotation, 1.3f);
-            if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(muzzle.position, dir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore);
+            CombatEffects.Tracer(muzzle.position, struck ? hit.point : muzzle.position + dir * (fireRange), true);
+            if (struck)
             {
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
                 dmg?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);

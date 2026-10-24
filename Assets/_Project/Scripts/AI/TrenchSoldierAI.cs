@@ -362,7 +362,11 @@ namespace DBP.AI
             var dir = (targetPos - muzzle.position).normalized;
             dir = Quaternion.Euler(spread.x, spread.y, 0f) * dir;
 
-            if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore);
+
+            CombatEffects.Tracer(muzzle.position, struck ? hit.point : muzzle.position + dir * (fireRange), true);
+
+            if (struck)
             {
                 CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var damageable = hit.collider.GetComponentInParent<IDamageable>();

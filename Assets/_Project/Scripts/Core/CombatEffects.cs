@@ -8,10 +8,19 @@ namespace DBP.Core
     public sealed class CombatEffects : MonoBehaviour
     {
         public static CombatEffects Current { get; private set; }
+        /// Vật liệu hạt mềm dùng chung (khói, lửa, pháo sáng của BattlefieldAmbience).
+        public static Material SoftMaterial { get { var fx = Ensure(); return fx ? fx.material : null; } }
         readonly ParticleSystem[][] pools = new ParticleSystem[5][];
         readonly int[] next = new int[5];
         Material material;
         Texture2D texture;
+        // Đường đạn (T44): vệt sáng bay từ nòng tới điểm trúng, để người chơi luôn thấy hỏa lực đến từ đâu
+        const int TracerCount = 32;
+        const float TracerSpeed = 320f, TracerLength = 5f;
+        readonly LineRenderer[] tracers = new LineRenderer[TracerCount];
+        readonly Vector3[] tracerFrom = new Vector3[TracerCount], tracerTo = new Vector3[TracerCount];
+        readonly float[] tracerAge = new float[TracerCount];
+        int nextTracer;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         static void Install()
@@ -70,6 +79,31 @@ namespace DBP.Core
                     pools[kind][i] = p;
                 }
             }
+            for (int i = 0; i < TracerCount; i++)
+            {
+                var go = new GameObject("Tracer" + i); go.transform.SetParent(transform, false);
+                var line = go.AddComponent<LineRenderer>();
+                line.sharedMaterial = material; line.useWorldSpace = true; line.positionCount = 2;
+                line.shadowCastingMode = ShadowCastingMode.Off; line.receiveShadows = false;
+                line.textureMode = LineTextureMode.Stretch; line.numCapVertices = 2;
+                line.widthCurve = new AnimationCurve(new Keyframe(0, .015f), new Keyframe(1, .05f));
+                line.enabled = false;
+                tracers[i] = line;
+            }
+        }
+        void Update()
+        {
+            for (int i = 0; i < TracerCount; i++)
+            {
+                var line = tracers[i]; if (!line.enabled) continue;
+                tracerAge[i] += Time.deltaTime;
+                Vector3 path = tracerTo[i] - tracerFrom[i]; float total = path.magnitude;
+                float head = tracerAge[i] * TracerSpeed;
+                if (total < .01f || head - TracerLength >= total) { line.enabled = false; continue; }
+                Vector3 dir = path / total;
+                line.SetPosition(0, tracerFrom[i] + dir * Mathf.Max(0, head - TracerLength));
+                line.SetPosition(1, tracerFrom[i] + dir * Mathf.Min(total, head));
+            }
         }
         void Burst(int kind, Vector3 position, Quaternion rotation, int count, float size, float life, float speed, Color tint)
         {
@@ -96,6 +130,18 @@ namespace DBP.Core
             fx.Burst(metal ? 2 : 1, position + normal * .025f, rotation, metal ? 8 : 5,
                 metal ? .055f : .25f, metal ? .25f : .55f, metal ? 3 : .6f,
                 metal ? new Color(1, .75f, .3f, 1) : new Color(.48f, .4f, .3f, .65f));
+        }
+        /// Vệt đạn từ nòng tới điểm trúng (hoặc tới tầm bắn nếu trượt). Màu đỏ cam cho địch, vàng cho ta.
+        public static void Tracer(Vector3 from, Vector3 to, bool enemy = true)
+        {
+            var fx = Ensure(); if (!fx || !fx.enabled) return;
+            int i = fx.nextTracer++ % TracerCount;
+            var line = fx.tracers[i];
+            fx.tracerFrom[i] = from; fx.tracerTo[i] = to; fx.tracerAge[i] = 0;
+            var tint = enemy ? new Color(1, .42f, .18f, 1) : new Color(1, .85f, .45f, 1);
+            line.startColor = new Color(tint.r, tint.g, tint.b, 0); line.endColor = tint;
+            line.SetPosition(0, from); line.SetPosition(1, from);
+            line.enabled = true;
         }
         public static bool IsMetal(Collider target)
         {

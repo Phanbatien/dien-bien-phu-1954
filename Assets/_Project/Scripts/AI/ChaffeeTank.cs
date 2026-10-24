@@ -254,7 +254,11 @@ namespace DBP.AI
 
             Vector3 aimDir = player ? (player.position + Vector3.up * 0.5f - origin).normalized : (turret ? turret.forward : transform.forward);
 
-            if (Physics.Raycast(origin, aimDir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(origin, aimDir, out var hit, fireRange, fireMask, QueryTriggerInteraction.Ignore);
+
+            CombatEffects.Tracer(origin, struck ? hit.point : origin + aimDir * (fireRange), true);
+
+            if (struck)
             {
                 CombatEffects.Explosion(hit.point, 1.5f);
                 // Sát thương trúng đích

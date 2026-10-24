@@ -142,7 +142,11 @@ namespace DBP.Weapons
             var direction = cam.transform.rotation * (Quaternion.Euler(r.x, r.y, 0f) * Vector3.forward);
             if (!Scoped) CombatEffects.Muzzle(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, cam.transform.rotation);
 
-            if (Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore);
+
+            CombatEffects.Tracer(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, struck ? hit.point : origin + direction * (stats.range), false);
+
+            if (struck)
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
                 target?.TakeDamage(stats.damage, weapon.Def.Damage, hit.point);
