@@ -27,6 +27,11 @@ namespace DBP.Player
         public string[] collapsedBones = { "head", "upper_leg.L", "upper_leg.R" };
         public float collapsedScale = 0.001f;
 
+        [Header("Tay gọn: ẩn thân lính, chỉ vẽ cẳng tay + bàn tay ôm súng")]
+        public bool simpleArms = true;
+        public Color sleeveColor = new Color(0.33f, 0.36f, 0.24f);
+        public Color skinColor = new Color(0.72f, 0.55f, 0.42f);
+
         [Header("Vị trí trên màn hình (không gian camera)")]
         public Vector3 rifleInCamera = new Vector3(0.16f, -0.2f, 0.62f);
 
@@ -118,6 +123,60 @@ namespace DBP.Player
 
             HideTorsoAndLegs();
             PlaceRifleInView();
+            if (simpleArms) BuildSimpleArms();
+        }
+
+        Transform simpleRoot;
+
+        /// Thân lính dựng sẵn bị nhàu khi nhìn sát camera. Ẩn cả thân, dựng hai cẳng tay đơn giản:
+        /// tay phải ở báng (chỗ cầm cò), tay trái đỡ ốp lót phía trước, cùi chỏ chĩa về hai góc dưới màn hình.
+        void BuildSimpleArms()
+        {
+            if (simpleRoot || !rifle || !transform.parent) return;
+            foreach (var skin in GetComponentsInChildren<SkinnedMeshRenderer>(true)) skin.enabled = false;
+            var cam = transform.parent;
+            simpleRoot = new GameObject("SimpleArms").transform;
+            simpleRoot.SetParent(rifle.parent ? rifle.parent : transform, false);
+            var sleeve = ArmMaterial("ViewModelSleeve", sleeveColor);
+            var skinMat = ArmMaterial("ViewModelSkin", skinColor);
+            Vector3 rightHand = rifle.position;
+            Vector3 leftHand = rifle.position + cam.forward * 0.32f + cam.up * 0.02f;
+            Limb(rightHand, cam.TransformPoint(new Vector3(0.34f, -0.46f, 0.18f)), sleeve, skinMat);
+            Limb(leftHand, cam.TransformPoint(new Vector3(-0.2f, -0.5f, 0.42f)), sleeve, skinMat);
+        }
+
+        void Limb(Vector3 hand, Vector3 elbow, Material sleeve, Material skinMat)
+        {
+            var dir = elbow - hand;
+            var arm = GameObject.CreatePrimitive(PrimitiveType.Capsule);
+            arm.name = "CangTay";
+            Destroy(arm.GetComponent<Collider>());
+            arm.transform.SetParent(simpleRoot, false);
+            arm.transform.position = hand + dir * 0.5f;
+            arm.transform.rotation = Quaternion.FromToRotation(Vector3.up, dir.normalized);
+            arm.transform.localScale = new Vector3(0.085f, dir.magnitude * 0.5f + 0.04f, 0.085f);
+            arm.GetComponent<Renderer>().sharedMaterial = sleeve;
+            var palm = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            palm.name = "BanTay";
+            Destroy(palm.GetComponent<Collider>());
+            palm.transform.SetParent(simpleRoot, false);
+            palm.transform.position = hand;
+            palm.transform.rotation = arm.transform.rotation;
+            palm.transform.localScale = new Vector3(0.075f, 0.1f, 0.065f);
+            palm.GetComponent<Renderer>().sharedMaterial = skinMat;
+            foreach (var r in new[] { arm.GetComponent<Renderer>(), palm.GetComponent<Renderer>() })
+            {
+                r.shadowCastingMode = ShadowCastingMode.Off;
+                r.receiveShadows = false;
+            }
+        }
+
+        static Material ArmMaterial(string name, Color color)
+        {
+            var mat = new Material(Shader.Find("Universal Render Pipeline/Lit")) { name = name };
+            mat.SetColor("_BaseColor", color);
+            mat.SetFloat("_Smoothness", 0.15f);
+            return mat;
         }
 
         /// Thân và chân cùng một mesh với tay. Camera nằm trong đầu, nên nếu vẽ thân thì cả màn hình bị che.

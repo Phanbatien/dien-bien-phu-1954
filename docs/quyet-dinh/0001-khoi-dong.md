@@ -2,7 +2,19 @@
 
 - **Thời gian:** sáng Thứ 5, 08/10/2026 · khoảng 75 phút
 - **Chủ trì:** Trưởng nhóm · **Thư ký:** (chọn đầu buổi), ghi vào cột "Nhóm chốt"
-- **Trạng thái:** CHƯA HỌP. Sau buổi họp, sửa dòng này thành "Đã chốt 08/10" và commit lên `develop`.
+- **Trạng thái:** Chốt theo đề xuất ngày 24/10/2026. Nhóm không họp đủ mặt nên áp dụng toàn bộ cột "Đề xuất" / "Mặc định" bên dưới; code và tài liệu đã cài theo đúng các giá trị này. Thành viên nào muốn đổi một quyết định thì ghi vào cột "Nhóm chốt" và báo trưởng nhóm.
+
+## Kết quả áp dụng (24/10/2026)
+
+| Mục | Đã áp dụng |
+|---|---|
+| Phân vai | Theo [ke-hoach.md](../ke-hoach.md), đủ 75 việc, không cắt việc nào; việc còn lại của thành viên được trưởng nhóm làm thay ngày 23–24/10 và ghi đồng tác giả trong commit |
+| Git | Nhánh `feature/Txx-...` → PR vào `develop`; `main` bảo vệ, cần 1 người duyệt |
+| Phụ lục B | Giữ toàn bộ cột "Mặc định": 2 súng, vũ khí không mang sang màn sau, nâng cấp 4 nhánh × 3 cấp giá 100/200/300, câu hầm 3–5 câu không giới hạn giờ, hết máu là thua |
+| Chiến sĩ hư cấu | Người chơi là "một chiến sĩ vô danh"; nhật ký Màn 1 và vô tuyến Màn 3 là nhân vật/đơn vị hư cấu ([cot-truyen.md](../cot-truyen.md)) |
+| Bảng xếp hạng online | Máy khách có hàng chờ gửi + thử lại (T62); chưa chọn dịch vụ máy chủ, game chạy ngoại tuyến |
+| Nội dung lịch sử | 125 câu theo màn + 21 câu chiến dịch dùng chung, mỗi câu có nguồn; nhân vật thật chỉ trong cốt truyện và câu hỏi; không máu me |
+| Báo cáo, video | [bao-cao.md](../bao-cao.md), slide và video trong `docs/nop-bai/`; kịch bản demo [demo.md](../demo.md) |
 
 ## Trước buổi họp, mỗi người làm sẵn (khoảng 30 phút)
 

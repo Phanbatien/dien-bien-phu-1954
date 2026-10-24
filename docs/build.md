@@ -53,3 +53,4 @@ Mục tiêu: **≥ 60 FPS trên máy yếu nhất nhóm**, ở Màn 4 và Màn 5
 | Ngày | Máy | Màn | FPS | Ghi chú |
 |---|---|---|---|---|
 | 07/10/2026 | Ryzen 9 7945HX · RTX 4060 Laptop · 32 GB (máy trưởng nhóm) | M1 · M2 · M3 · M4 · M5 · Sandbox | 1191 · 1224 · 1182 · 1155 · 1203 · 1209 (trung bình) | Bản greybox, 1280×720, tắt VSync. **Chưa đại diện**: phải đo lại trên máy yếu nhất khi có model thật (17–18/10) |
+| 24/10/2026 | Ryzen 9 7945HX · RTX 4060 Laptop · 32 GB (máy trưởng nhóm) | Menu · M1 · M2 · M3 · M4 · M5 · Sandbox · Hầm | 2558 · 531 · 852 · 841 · 712 · 852 · 970 · 1050 (trung bình); khung chậm nhất 2 · 4 · 12 · 14 · 17 · 7 · 11 · 12 ms | **Bản nộp đầy đủ nội dung**: model lính, AI, môi trường, khói lửa, hậu kỳ màu. Thấp nhất 531 FPS, khung chậm nhất 17 ms (M4). Các thành viên chạy lại lệnh `-perf-probe` trên máy mình và thêm dòng vào bảng này |
