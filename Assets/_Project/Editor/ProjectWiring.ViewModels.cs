@@ -46,8 +46,8 @@ namespace DBP.EditorTools
             var cuff = LoadOrMakeMat("VmCoTay", new Color(0.30f, 0.32f, 0.21f));
             var handR = SaveMesh("TayPhai", RightHand());
             var handL = SaveMesh("TayTrai", LeftHand());
-            var tube = SaveMesh("OngTay", Tube(0.044f, 0.062f, 8));
-            var ring = SaveMesh("CoTay", Tube(0.05f, 0.05f, 8));
+            var tube = SaveMesh("OngTay", Sleeve());
+            var ring = SaveMesh("CoTay", Tube(0.05f, 0.05f, 16));
 
             foreach (var gun in Guns)
             {
@@ -72,7 +72,7 @@ namespace DBP.EditorTools
                 // Tay phải: ôm báng, cẳng tay chạy về góc dưới phải màn hình
                 Limb(root.transform, "TayPhai", Vector3.zero, new Vector3(0.20f, -0.30f, -0.32f), handR, tube, ring, skin, sleeve, cuff, new Vector3(0.03f, -0.045f, -0.05f));
                 // Tay trái: đỡ ốp lót, cẳng tay về góc dưới trái
-                Limb(root.transform, "TayTrai", fore, fore + new Vector3(-0.22f, -0.30f, -0.22f), handL, tube, ring, skin, sleeve, cuff, new Vector3(0f, -0.055f, -0.03f));
+                Limb(root.transform, "TayTrai", fore + new Vector3(0.015f, 0.012f, 0f), fore + new Vector3(-0.2f, -0.29f, -0.22f), handL, tube, ring, skin, sleeve, cuff, new Vector3(0f, -0.055f, -0.03f));
 
                 UrpMaterialUtility.Apply(root);
                 foreach (var r in root.GetComponentsInChildren<Renderer>(true)) { r.shadowCastingMode = ShadowCastingMode.Off; r.receiveShadows = false; }
@@ -93,7 +93,7 @@ namespace DBP.EditorTools
         {
             var limb = new GameObject(name).transform;
             limb.SetParent(root, false);
-            Part(limb, "BanTay", handMesh, skin, hand, Quaternion.identity, Vector3.one * 1.2f); // to hơn thật một chút cho dễ nhìn
+            Part(limb, "BanTay", handMesh, skin, hand, Quaternion.identity, Vector3.one * 1.15f); // to hơn thật một chút cho dễ nhìn
             var wrist = hand + wristOffset * 1.2f;
             var dir = elbow - wrist;
             var rot = Quaternion.LookRotation(dir.normalized, Vector3.up);
@@ -120,67 +120,49 @@ namespace DBP.EditorTools
             return mesh;
         }
 
-        // ───────── Khối dựng tay (mặt phẳng, đúng phong cách low-poly) ─────────
-
-        sealed class MeshBuilder
-        {
-            readonly List<Vector3> v = new List<Vector3>();
-            readonly List<int> t = new List<int>();
-            static Mesh cube;
-
-            /// Hộp vát góc nhẹ: đủ mềm để đọc là ngón tay, vẫn phẳng mặt.
-            public MeshBuilder Box(Vector3 center, Vector3 size, Vector3 euler)
-            {
-                if (!cube) { var tmp = GameObject.CreatePrimitive(PrimitiveType.Cube); cube = tmp.GetComponent<MeshFilter>().sharedMesh; Object.DestroyImmediate(tmp); }
-                var m = Matrix4x4.TRS(center, Quaternion.Euler(euler), size);
-                int o = v.Count;
-                foreach (var p in cube.vertices) v.Add(m.MultiplyPoint3x4(p));
-                foreach (var i in cube.triangles) t.Add(o + i);
-                return this;
-            }
-
-            public Mesh Build()
-            {
-                var mesh = new Mesh();
-                mesh.SetVertices(v); mesh.SetTriangles(t, 0);
-                mesh.RecalculateNormals(); mesh.RecalculateBounds();
-                return mesh;
-            }
-        }
-
-        /// Tay phải cầm báng: gốc là tâm báng, +Z hướng nòng, +X sang phải.
+        /// Tay phải cầm báng: gốc là tâm báng, +Z hướng nòng, +X sang phải. Ngón là chuỗi viên nang ôm quanh báng.
         static Mesh RightHand()
         {
-            var m = new MeshBuilder();
-            m.Box(new Vector3(0.036f, -0.012f, -0.012f), new Vector3(0.026f, 0.082f, 0.078f), new Vector3(0, 0, -6)); // lòng bàn tay phía phải báng
-            // Bốn ngón cuộn qua trước báng sang trái (mỗi ngón 2 đốt)
-            for (int i = 0; i < 4; i++)
+            var m = new PartsMesh(1);
+            m.Ellipsoid(new Vector3(0.036f, -0.008f, -0.006f), new Vector3(0.034f, 0.09f, 0.085f), Quaternion.Euler(0, 0, -8), 0); // lòng + mu bàn tay
+            m.Capsule(new Vector3(0.03f, 0.022f, 0.026f), new Vector3(0.03f, -0.04f, 0.03f), 0.013f, 0);                         // hàng khớp ngón
+            for (int i = 0; i < 3; i++) // ngón giữa, áp út, út cuộn qua trước báng sang trái
             {
-                float y = 0.012f - i * 0.019f - (i == 3 ? 0.002f : 0f);
-                float w = i == 3 ? 0.014f : 0.017f;
-                if (i > 0) m.Box(new Vector3(0.012f, y, 0.032f), new Vector3(0.05f, w, 0.022f), new Vector3(0, -12, 0));
-                if (i > 0) m.Box(new Vector3(-0.024f, y, 0.016f), new Vector3(0.022f, w, 0.03f), new Vector3(0, 35, 0));
+                float y = 0.002f - i * 0.02f, r = i == 2 ? 0.0085f : 0.0098f;
+                m.Chain(r, 0, new Vector3(0.028f, y, 0.032f), new Vector3(0.006f, y, 0.047f), new Vector3(-0.022f, y, 0.034f), new Vector3(-0.032f, y - 0.002f, 0.01f));
             }
-            m.Box(new Vector3(0.01f, 0.03f, 0.055f), new Vector3(0.017f, 0.017f, 0.055f), new Vector3(-8, -10, 0)); // ngón trỏ trên cò
-            m.Box(new Vector3(-0.012f, 0.042f, -0.006f), new Vector3(0.02f, 0.02f, 0.06f), new Vector3(0, 20, 0));  // ngón cái vắt qua báng
-            m.Box(new Vector3(0.032f, -0.04f, -0.05f), new Vector3(0.05f, 0.048f, 0.05f), new Vector3(0, 0, 0));   // cổ tay
-            return m.Build();
+            m.Chain(0.0095f, 0, new Vector3(0.026f, 0.022f, 0.034f), new Vector3(0.014f, 0.023f, 0.062f), new Vector3(0.004f, 0.014f, 0.082f)); // ngón trỏ trên cò
+            m.Chain(0.011f, 0, new Vector3(0.03f, 0.03f, -0.03f), new Vector3(0.004f, 0.046f, -0.006f), new Vector3(-0.02f, 0.042f, 0.012f));    // ngón cái vắt qua báng
+            m.Capsule(new Vector3(0.036f, -0.03f, -0.045f), new Vector3(0.036f, -0.05f, -0.085f), 0.027f, 0);                                 // cổ tay
+            return m.Build("TayPhai");
         }
 
-        /// Tay trái đỡ ốp lót: lòng bàn tay ngửa dưới ốp, ngón cuộn lên mặt trái, ngón cái mặt phải.
+        /// Tay trái đỡ ốp lót: lòng bàn tay ngửa dưới ốp, bốn ngón cuộn lên mặt trái, ngón cái mặt phải.
         static Mesh LeftHand()
         {
-            var m = new MeshBuilder();
-            m.Box(new Vector3(0, -0.04f, 0), new Vector3(0.078f, 0.024f, 0.085f), Vector3.zero);
+            var m = new PartsMesh(1);
+            m.Ellipsoid(new Vector3(0, -0.04f, 0), new Vector3(0.082f, 0.03f, 0.09f), Quaternion.identity, 0);
             for (int i = 0; i < 4; i++)
             {
-                float z = 0.03f - i * 0.02f;
-                m.Box(new Vector3(-0.044f, -0.022f, z), new Vector3(0.02f, 0.04f, 0.017f), new Vector3(0, 0, -12));
-                m.Box(new Vector3(-0.04f, 0.008f, z), new Vector3(0.018f, 0.028f, 0.016f), new Vector3(0, 0, 25));
+                float z = 0.03f - i * 0.02f, r = i == 3 ? 0.0085f : 0.0097f;
+                m.Chain(r, 0, new Vector3(-0.034f, -0.046f, z), new Vector3(-0.048f, -0.02f, z), new Vector3(-0.043f, 0.01f, z), new Vector3(-0.03f, 0.026f, z));
             }
-            m.Box(new Vector3(0.042f, -0.016f, 0.012f), new Vector3(0.02f, 0.046f, 0.05f), new Vector3(0, 0, 14)); // ngón cái
-            m.Box(new Vector3(0, -0.055f, -0.035f), new Vector3(0.05f, 0.046f, 0.05f), Vector3.zero);             // cổ tay
-            return m.Build();
+            m.Chain(0.011f, 0, new Vector3(0.034f, -0.046f, 0.0f), new Vector3(0.046f, -0.016f, 0.014f), new Vector3(0.036f, 0.012f, 0.024f));
+            m.Capsule(new Vector3(0, -0.05f, -0.035f), new Vector3(0, -0.07f, -0.08f), 0.027f, 0);
+            return m.Build("TayTrai");
+        }
+
+        /// Ống tay áo tròn trơn dọc +Z dài 1, phía cổ tay hẹp, phía khuỷu rộng.
+        static Mesh Sleeve()
+        {
+            var m = new PartsMesh(1);
+            for (int i = 0; i < 4; i++)
+            {
+                float t0 = i / 4f, t1 = (i + 1) / 4f;
+                m.Rod(new Vector3(0, 0, t0), new Vector3(0, 0, t1 + 0.01f), Mathf.Lerp(0.045f, 0.062f, t0 + 0.125f), 0);
+            }
+            m.Rod(new Vector3(0, 0, 0.42f), new Vector3(0, 0, 0.47f), 0.058f, 0); // nếp gấp tay áo
+            return m.Build("OngTay");
         }
 
         /// Ống tròn 8 cạnh dọc +Z dài 1 (co giãn theo Z để đặt chiều dài), mặt phẳng.

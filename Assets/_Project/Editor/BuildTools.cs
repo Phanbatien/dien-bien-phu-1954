@@ -45,7 +45,8 @@ namespace DBP.EditorTools
                 Debug.LogWarning($"[Build] Development build vẫn chạy dù còn lỗi nội dung. {report}");
             }
 
-            var scenes = EditorBuildSettings.scenes.Where(s => s.enabled).Select(s => s.path).ToArray();
+            // Bản nộp không kèm Sandbox (bản đồ thử nghiệm khối màu, chữ debug); bản Development vẫn có để chơi thử
+            var scenes = EditorBuildSettings.scenes.Where(s => s.enabled && !(release && s.path.EndsWith("/Sandbox.unity"))).Select(s => s.path).ToArray();
             if (scenes.Length == 0)
             {
                 Debug.LogError("[Build] Chưa có scene trong Build Settings. Chạy DBP → Greybox → Tạo scene còn thiếu.");
