@@ -93,10 +93,13 @@ namespace DBP.Interaction
         public bool countsForPity = true;
 
         bool used, locked;
+        string lockReason;
         readonly string auditId = Guid.NewGuid().ToString("N");
 
-        public string Prompt => countsForPity ? $"Giữ E: mở hòm ({rarity})" : $"Giữ E: nhặt súng rơi ({rarity})";
-        public float HoldSeconds => 1f;
+        public string Prompt => locked ? $"Hòm lỗi: {lockReason}"
+            : countsForPity ? $"Giữ E: mở hòm ({rarity})" : $"Giữ E: nhặt súng rơi ({rarity})";
+        public float HoldSeconds => locked ? 0f : 1f;
+        public bool Locked => locked;
         public bool Used => used;
 
         /// Tạo hòm hoặc súng rơi lúc chạy (CrateSpawner, WeaponDrop). Khôi thay khối hộp bằng prefab sau.
@@ -124,11 +127,17 @@ namespace DBP.Interaction
         public bool CanInteract(Interactor who)
         {
             var session = FieldQuizSession.Instance;
-            return !used && !locked && who.Weapons != null && session && !session.IsOpen;
+            // Hòm bị khóa vì thiếu câu vẫn cho nhìn thấy để báo lý do, không im lặng.
+            return !used && who.Weapons != null && session && (locked || !session.IsOpen);
         }
 
         public void Interact(Interactor who)
         {
+            if (locked)
+            {
+                DBP.UI.CampaignNotices.Show($"Hòm này không mở được: {lockReason}.");
+                return;
+            }
             var session = FieldQuizSession.Instance;
             var pity = countsForPity ? MissionController.Current?.Attempt.Pity : null;
             bool isPity = pity != null && pity.Pending;
@@ -146,7 +155,12 @@ namespace DBP.Interaction
             {
                 // Thiếu câu: khóa hòm lỗi trong lượt, không phát thưởng miễn phí, không hạ cấp (BR-31).
                 // Bảo hiểm đang chờ vẫn giữ cho hòm sau.
-                if (!session.IsOpen) locked = true;
+                if (!session.IsOpen)
+                {
+                    locked = true;
+                    lockReason = isPity ? "thiếu câu cấp 1 cho bảo hiểm" : $"thiếu câu hỏi cấp {min}–{max}";
+                    DBP.UI.CampaignNotices.Show($"Hòm này không mở được: {lockReason}.");
+                }
                 return;
             }
             used = true;

@@ -52,14 +52,30 @@ namespace DBP.Interaction
 
         public readonly List<QuizCrate> Spawned = new List<QuizCrate>();
 
+        /// Số điểm bị bỏ vì không có chỗ trống (để kiểm tra trong Editor/test).
+        public int RejectedPoints { get; private set; }
+
         void Start()
         {
             var mission = MissionController.Current;
             int seed = mission ? mission.Attempt.Seed : Environment.TickCount;
             var rng = new System.Random(seed);
+            int target = rng.Next(minCrates, maxCrates + 1);
 
-            foreach (int i in CrateRoll.PickPoints(rng, points.Count, minCrates, maxCrates))
+            // Duyệt các điểm theo thứ tự ngẫu nhiên của seed; điểm nào không đặt được (bị chôn, dính vật cản,
+            // quá dốc) thì bỏ qua và lấy điểm kế tiếp, tới khi đủ số hòm hoặc hết điểm.
+            foreach (int i in CrateRoll.PickPoints(rng, points.Count, points.Count, points.Count))
             {
+                if (Spawned.Count >= target) break;
+                var p = points[i];
+                if (!p) continue;
+                if (!CratePlacement.TryFindSpot(p.position, p.rotation, out var ground))
+                {
+                    RejectedPoints++;
+                    Debug.LogWarning($"[CrateSpawner] Bỏ điểm {p.name}: không có chỗ trống trên mặt đất trong bán kính 3 m.");
+                    continue;
+                }
+
                 var rarity = CrateRoll.RollRarity(rng, rarityWeights);
                 var options = rewards.FindAll(r => r.rarity == rarity);
                 if (options.Count == 0)
@@ -68,9 +84,10 @@ namespace DBP.Interaction
                     continue;
                 }
                 var reward = options[rng.Next(options.Count)];
-                var p = points[i];
-                Spawned.Add(QuizCrate.Spawn(p.position, p.rotation, reward, true, transform));
+                Spawned.Add(QuizCrate.Spawn(ground, p.rotation, reward, true, transform));
             }
+            if (Spawned.Count < minCrates)
+                Debug.LogWarning($"[CrateSpawner] Chỉ đặt được {Spawned.Count}/{minCrates} hòm: cần thêm điểm hợp lệ trong màn.");
         }
     }
 }

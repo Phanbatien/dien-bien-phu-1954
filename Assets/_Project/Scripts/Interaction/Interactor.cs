@@ -58,10 +58,18 @@ namespace DBP.Interaction
         IInteractable FindFocus()
         {
             if (!cam) return null;
-            if (!Physics.Raycast(cam.transform.position, cam.transform.forward, out var hit, range, mask, QueryTriggerInteraction.Ignore))
-                return null;
-            var interactable = hit.collider.GetComponentInParent<IInteractable>();
-            return interactable != null && interactable.CanInteract(this) ? interactable : null;
+            // Bụi cỏ, đá nhỏ không được che mất hòm; vật lớn (vách hào, tường, mặt đất) thì vẫn chắn.
+            var hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range, mask, QueryTriggerInteraction.Ignore);
+            System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
+            foreach (var hit in hits)
+            {
+                if (hit.collider.transform.IsChildOf(transform)) continue;
+                var interactable = hit.collider.GetComponentInParent<IInteractable>();
+                if (interactable != null) return interactable.CanInteract(this) ? interactable : null;
+                var size = hit.collider.bounds.size;
+                if (size.x > 1.2f || size.y > 1.2f || size.z > 1.2f) return null;
+            }
+            return null;
         }
     }
 }
