@@ -38,6 +38,8 @@ namespace DBP.Missions
         public UnityEvent onLost = new UnityEvent();
 
         public Attempt Attempt { get; private set; }
+        /// Buổi họp tác chiến của lượt này (null nếu vào màn không qua hầm, vd. Sandbox hoặc test).
+        public BunkerBriefing Briefing { get; private set; }
         public string ProgressSaveError { get; private set; }
         public string MissionId => missionId;
         public string Title => missionTitle;
@@ -72,6 +74,8 @@ namespace DBP.Missions
             Time.timeScale = 1f;
             if (!SceneTransition.IsTransitioning) InputLock.ResetAll();
             Attempt = new Attempt(missionId, Guid.NewGuid().GetHashCode()); // lượt mới, seed mới (BR-33)
+            Briefing = BunkerBriefing.Take(missionId); // câu đã trả lời trong hầm thuộc về lượt này (T25)
+            if (Briefing != null) Attempt.Answers.AddRange(Briefing.Results);
             double now = Time.realtimeSinceStartupAsDouble;
             Attempt.RankingClock.Begin(now);
             Attempt.RankingClock.Exclude("deployment",now);
@@ -151,6 +155,12 @@ namespace DBP.Missions
 
             if (outcome == MissionOutcome.Won)
             {
+                // Quyết toán Quyết Tâm chờ cùng lần lưu tiến độ khi thắng (BR-07, BR-34, BR-37)
+                if (Briefing != null)
+                {
+                    var data = ProfileService.Data;
+                    Attempt.ResolveGained = Briefing.Settle(ref data.resolve, data.rewardedQuestions);
+                }
                 TrySaveProgress();
                 onWon.Invoke();
             }

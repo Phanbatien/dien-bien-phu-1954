@@ -88,7 +88,7 @@ namespace DBP.Tests
                 InputSystem.QueueStateEvent(mouse, new MouseState { position = position });
                 yield return Frames();
                 Assert.AreEqual(CampaignScreen.Preparation, CampaignUI.Current.ScreenState, "Mouse release must open preparation.");
-                Click("Deploy"); yield return Frames(); Click("BeginMission"); yield return Frames();
+                CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames(); Click("BeginMission"); yield return Frames();
                 InputSystem.QueueStateEvent(keyboard, new KeyboardState(Key.Escape)); yield return Frames();
                 Assert.AreEqual(CampaignScreen.Pause, CampaignUI.Current.ScreenState);
                 Assert.IsTrue(InputLock.Locked); Assert.AreEqual(0f, Time.timeScale);
@@ -120,7 +120,7 @@ namespace DBP.Tests
             Assert.AreEqual(1100, ProfileService.Data.resolve); Assert.AreEqual(1, ProfileService.Data.upgrades.Count);
             Click("Buy0"); Click("Buy0"); Assert.AreEqual(600, ProfileService.Data.resolve);
             Assert.IsFalse(Find<Button>("Buy0").interactable);
-            Click("Buy1"); Click("Deploy"); yield return Frames();
+            Click("Buy1"); CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames();
             Assert.AreEqual("M1_HimLam", SceneManager.GetActiveScene().name);
             var weapons = Object.FindAnyObjectByType<WeaponController>();
             Assert.AreEqual(130, weapons.Inventory.ReservePercent); Assert.AreEqual(.9f, weapons.ReloadMultiplier, .001f);
@@ -129,7 +129,7 @@ namespace DBP.Tests
         }
         [UnityTest] public IEnumerator Tutorial_HudTracksDamageAmmoStamina_ResultsAndFreshReplay()
         {
-            Create("Mission test"); Click("Mission1"); Click("Deploy"); yield return Frames();
+            Create("Mission test"); Click("Mission1"); CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames();
             Assert.AreEqual(0, Time.timeScale); Click("BeginMission"); yield return Frames();
             Assert.IsFalse(InputLock.Locked); Assert.AreEqual(1, Time.timeScale);
             var mission = MissionController.Current; var attemptId = mission.Attempt.AttemptId;
@@ -147,13 +147,13 @@ namespace DBP.Tests
             Assert.AreEqual(CampaignScreen.Results, CampaignUI.Current.ScreenState);
             StringAssert.Contains("360", Find<Text>("KnowledgeResult").text); Assert.IsTrue(InputLock.Locked);
             Click("Replay"); yield return Frames(); Assert.AreEqual(CampaignScreen.Preparation, CampaignUI.Current.ScreenState);
-            Click("Deploy"); yield return Frames(); Assert.AreNotEqual(attemptId, MissionController.Current.Attempt.AttemptId);
-            Assert.IsEmpty(MissionController.Current.Attempt.Answers);
+            CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames(); Assert.AreNotEqual(attemptId, MissionController.Current.Attempt.AttemptId);
+            Assert.IsEmpty(MissionController.Current.Attempt.Answers.Where(a => !a.inBunker), "Lượt mới không mang câu ngoài trận của lượt cũ; câu trong hầm là của buổi họp mới (T25)");
         }
         [UnityTest] public IEnumerator WinningMission_UnlocksNextOnlyForActiveProfile()
         {
             Create("Winner"); string winner = ProfileService.Data.id; Create("Winner"); string other = ProfileService.Data.id;
-            Click("Profile_" + winner); Click("Mission1"); Click("Deploy"); yield return Frames(); Click("BeginMission");
+            Click("Profile_" + winner); Click("Mission1"); CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames(); Click("BeginMission");
             var mission = MissionController.Current;
             // Exercise the real controller's completion path without requiring a human to traverse the greybox.
             mission.Setup("M1", "Him Lam", "M2", "M2_GiuDocLap", mission.Player, new System.Collections.Generic.List<Objective>(), true);
@@ -164,7 +164,7 @@ namespace DBP.Tests
         }
         [UnityTest] public IEnumerator WinningMission_SaveFailureStillShowsResults_AndRetrySavesOnce()
         {
-            Create("Save failure"); Click("Mission1"); Click("Deploy"); yield return Frames(); Click("BeginMission");
+            Create("Save failure"); Click("Mission1"); CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy"); yield return Frames(); Click("BeginMission");
             var mission = MissionController.Current;
             int wins = 0; mission.onWon.AddListener(() => wins++);
             using (var locked = new FileStream(Path.Combine(folder, "profiles.json.tmp"), FileMode.Create, FileAccess.Write, FileShare.None))

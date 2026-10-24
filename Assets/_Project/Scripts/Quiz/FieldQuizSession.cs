@@ -44,6 +44,9 @@ namespace DBP.Quiz
         void Start()
         {
             if (Questions != null) return;
+            // Dùng chung bộ chọn với buổi họp trong hầm để không lặp câu trong cùng lượt (BR-31).
+            var briefed = MissionController.Current ? MissionController.Current.Briefing : null;
+            if (briefed != null) { Questions = briefed.Selector; return; }
             var errors = new List<string>();
             var all = QuestionBank.LoadAll(errors);
             foreach (var e in errors) Debug.LogError($"[Quiz] {e}");

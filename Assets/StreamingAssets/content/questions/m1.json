@@ -1,0 +1,1033 @@
+{
+  "questions": [
+    {
+      "id": "Q-M1-L1-001",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Chiến dịch Điện Biên Phủ bắt đầu nổ súng vào ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "7/5/1954"
+        },
+        {
+          "id": "b",
+          "text": "13/3/1954"
+        },
+        {
+          "id": "c",
+          "text": "20/11/1953"
+        },
+        {
+          "id": "d",
+          "text": "30/3/1954"
+        }
+      ],
+      "correct": "b",
+      "fact": "Chiều 13/3/1954 quân ta nổ súng mở màn Đợt 1, tiến công cụm cứ điểm Him Lam.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L1-002",
+      "missionId": "M1",
+      "eventId": "EVT-19531120",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Điện Biên Phủ nằm ở vùng nào của Việt Nam?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Việt Bắc"
+        },
+        {
+          "id": "b",
+          "text": "Tây Nguyên"
+        },
+        {
+          "id": "c",
+          "text": "Tây Bắc"
+        },
+        {
+          "id": "d",
+          "text": "Đồng bằng Bắc Bộ"
+        }
+      ],
+      "correct": "c",
+      "fact": "Điện Biên Phủ là lòng chảo Mường Thanh ở Tây Bắc; mục tiêu chiến dịch gồm giải phóng Tây Bắc.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L1-003",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Ai là Tổng Tư lệnh chỉ huy Chiến dịch Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Văn Tiến Dũng"
+        },
+        {
+          "id": "b",
+          "text": "Hoàng Văn Thái"
+        },
+        {
+          "id": "c",
+          "text": "Lê Trọng Tấn"
+        },
+        {
+          "id": "d",
+          "text": "Võ Nguyên Giáp"
+        }
+      ],
+      "correct": "d",
+      "fact": "Đại tướng Võ Nguyên Giáp chỉ huy chiến dịch và chọn Mường Phăng làm Sở chỉ huy.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOKONTUM",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L1-004",
+      "missionId": "M1",
+      "eventId": "EVT-19540507",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Chiến dịch Điện Biên Phủ kéo dài bao nhiêu ngày đêm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "56 ngày đêm"
+        },
+        {
+          "id": "b",
+          "text": "45 ngày đêm"
+        },
+        {
+          "id": "c",
+          "text": "66 ngày đêm"
+        },
+        {
+          "id": "d",
+          "text": "100 ngày đêm"
+        }
+      ],
+      "correct": "a",
+      "fact": "Từ 13/3 đến 7/5/1954, sau 56 ngày đêm ta đập tan tập đoàn cứ điểm.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L1-005",
+      "missionId": "M1",
+      "eventId": "EVT-19540116",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi",
+        "phaobinh"
+      ],
+      "stem": "Đợt kéo pháo đầu tiên (từ 16/1/1954), pháo được đưa lên núi bằng cách nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Xe tăng kéo"
+        },
+        {
+          "id": "b",
+          "text": "Bộ đội dùng sức người kéo"
+        },
+        {
+          "id": "c",
+          "text": "Máy bay vận tải chở"
+        },
+        {
+          "id": "d",
+          "text": "Tàu hỏa chở"
+        }
+      ],
+      "correct": "b",
+      "fact": "Từ 16/1/1954 bộ đội dùng sức người kéo pháo lên các sườn núi để giữ bí mật, bất ngờ.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L2-001",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Trận mở màn chiến dịch Điện Biên Phủ diễn ra ở cụm cứ điểm nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đồi A1"
+        },
+        {
+          "id": "b",
+          "text": "Him Lam"
+        },
+        {
+          "id": "c",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "d",
+          "text": "Mường Thanh"
+        }
+      ],
+      "correct": "b",
+      "fact": "Him Lam bị tiêu diệt ngay trong trận mở màn chiến dịch.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L2-002",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam",
+        "anhhung"
+      ],
+      "stem": "Liệt sĩ Phan Đình Giót nổi tiếng nhờ hành động nào ở Him Lam?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chèn bánh pháo cứu pháo"
+        },
+        {
+          "id": "b",
+          "text": "Dùng vai làm giá súng"
+        },
+        {
+          "id": "c",
+          "text": "Lấy thân lấp lỗ châu mai"
+        },
+        {
+          "id": "d",
+          "text": "Ôm bộc phá phá xe tăng"
+        }
+      ],
+      "correct": "c",
+      "fact": "Phan Đình Giót hy sinh thân mình lấp lỗ châu mai ở Him Lam, mở đường cho đồng đội xung phong.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L2-003",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Chiến dịch Điện Biên Phủ được chia thành mấy đợt?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2 đợt"
+        },
+        {
+          "id": "b",
+          "text": "4 đợt"
+        },
+        {
+          "id": "c",
+          "text": "5 đợt"
+        },
+        {
+          "id": "d",
+          "text": "3 đợt"
+        }
+      ],
+      "correct": "d",
+      "fact": "Đợt 1: 13-17/3; Đợt 2: 30/3-30/4; Đợt 3: 1-7/5/1954.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L2-004",
+      "missionId": "M1",
+      "eventId": "EVT-19540201",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi",
+        "anhhung"
+      ],
+      "stem": "Anh hùng Tô Vĩnh Diện được nhớ đến vì hành động nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Hy sinh thân mình để cứu pháo"
+        },
+        {
+          "id": "b",
+          "text": "Phá đồn Him Lam"
+        },
+        {
+          "id": "c",
+          "text": "Bắn rơi máy bay Pháp"
+        },
+        {
+          "id": "d",
+          "text": "Đào hầm bộc phá ở A1"
+        }
+      ],
+      "correct": "a",
+      "fact": "Trên đường kéo pháo, Tô Vĩnh Diện lao mình chèn bánh pháo để cứu pháo.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L2-005",
+      "missionId": "M1",
+      "eventId": "EVT-19540116",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "danCong"
+      ],
+      "stem": "Phương tiện thô sơ nào của dân công chở hàng ra mặt trận nổi tiếng nhất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Xe ngựa kéo"
+        },
+        {
+          "id": "b",
+          "text": "Xe đạp thồ"
+        },
+        {
+          "id": "c",
+          "text": "Thuyền độc mộc"
+        },
+        {
+          "id": "d",
+          "text": "Xe bò"
+        }
+      ],
+      "correct": "b",
+      "fact": "Dân công hỏa tuyến dùng xe đạp thồ, gùi, gánh để chuyển lương thực, đạn dược ra mặt trận.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-001",
+      "missionId": "M1",
+      "eventId": "EVT-19540126",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Ngày 26/1/1954, Bộ chỉ huy chuyển sang phương châm tác chiến nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đánh nhanh, thắng nhanh"
+        },
+        {
+          "id": "b",
+          "text": "Đánh chắc, tiến chắc"
+        },
+        {
+          "id": "c",
+          "text": "Trường kỳ kháng chiến"
+        },
+        {
+          "id": "d",
+          "text": "Vườn không nhà trống"
+        }
+      ],
+      "correct": "b",
+      "fact": "Phương châm đánh nhanh thắng nhanh được thay bằng đánh chắc tiến chắc; tối 26/1 pháo được kéo ra.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-002",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Pháp gọi cụm cứ điểm Him Lam bằng tên nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Gabrielle"
+        },
+        {
+          "id": "b",
+          "text": "Anne-Marie"
+        },
+        {
+          "id": "c",
+          "text": "Béatrice"
+        },
+        {
+          "id": "d",
+          "text": "Isabelle"
+        }
+      ],
+      "correct": "c",
+      "fact": "Tên Pháp: Him Lam = Béatrice, Độc Lập = Gabrielle, Bản Kéo = Anne-Marie, Hồng Cúm = Isabelle.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-003",
+      "missionId": "M1",
+      "eventId": "EVT-19531120",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Chiến dịch nhảy dù của Pháp xuống Điện Biên Phủ tháng 11/1953 mang mật danh gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Atlante"
+        },
+        {
+          "id": "b",
+          "text": "Lorraine"
+        },
+        {
+          "id": "c",
+          "text": "Vauban"
+        },
+        {
+          "id": "d",
+          "text": "Castor"
+        }
+      ],
+      "correct": "d",
+      "fact": "Ngày 20/11/1953 Pháp mở chiến dịch Castor, nhảy dù chiếm Điện Biên Phủ.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-004",
+      "missionId": "M1",
+      "eventId": "EVT-19531120",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Ai là Tổng chỉ huy quân Pháp ở Đông Dương, người dựng tập đoàn cứ điểm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Henri Navarre"
+        },
+        {
+          "id": "b",
+          "text": "Charles Piroth"
+        },
+        {
+          "id": "c",
+          "text": "Christian de Castries"
+        },
+        {
+          "id": "d",
+          "text": "Raoul Salan"
+        }
+      ],
+      "correct": "a",
+      "fact": "Navarre huy động quân dù đánh chiếm Điện Biên Phủ rồi xây thành tập đoàn cứ điểm.",
+      "source": {
+        "sourceId": "SRC-WEB-VIETTIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-005",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Sở chỉ huy Chiến dịch Điện Biên Phủ của ta đặt ở đâu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Him Lam"
+        },
+        {
+          "id": "b",
+          "text": "Mường Phăng"
+        },
+        {
+          "id": "c",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "d",
+          "text": "Mường Thanh"
+        }
+      ],
+      "correct": "b",
+      "fact": "Đại tướng Võ Nguyên Giáp chọn Mường Phăng làm Sở chỉ huy chiến dịch.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOKONTUM",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L3-006",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Him Lam thuộc phân khu nào của tập đoàn cứ điểm Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phân khu Nam"
+        },
+        {
+          "id": "b",
+          "text": "Phân khu Đông"
+        },
+        {
+          "id": "c",
+          "text": "Phân khu Bắc"
+        },
+        {
+          "id": "d",
+          "text": "Phân khu Tây"
+        }
+      ],
+      "correct": "c",
+      "fact": "Him Lam, Độc Lập, Bản Kéo là các cứ điểm phía Bắc; Đợt 1 phá vỡ cửa ngõ này.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L4-001",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Đại đoàn nào đảm nhiệm tiêu diệt cụm cứ điểm Him Lam?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đại đoàn 308"
+        },
+        {
+          "id": "b",
+          "text": "Đại đoàn 312"
+        },
+        {
+          "id": "c",
+          "text": "Đại đoàn 316"
+        },
+        {
+          "id": "d",
+          "text": "Đại đoàn 304"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháo binh chi viện Đại đoàn 312 tiêu diệt Him Lam; Đại đoàn 308 đánh Độc Lập.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L4-002",
+      "missionId": "M1",
+      "eventId": "EVT-19540114",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Hội nghị ngày 14/1/1954 phổ biến kế hoạch tác chiến với mật danh gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chiến dịch Quang Trung"
+        },
+        {
+          "id": "b",
+          "text": "Chiến dịch Lê Lợi"
+        },
+        {
+          "id": "c",
+          "text": "Chiến dịch Trần Đình"
+        },
+        {
+          "id": "d",
+          "text": "Chiến dịch Hoàng Hoa Thám"
+        }
+      ],
+      "correct": "c",
+      "fact": "Ngày 14/1/1954 Bộ Tư lệnh phổ biến kế hoạch mật danh Trần Đình, dự kiến nổ súng 25/1.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L4-003",
+      "missionId": "M1",
+      "eventId": "EVT-19540126",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi",
+        "phaobinh"
+      ],
+      "stem": "Tối 26/1/1954, ta làm gì với số pháo đã kéo lên núi?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Nổ súng bắn phá"
+        },
+        {
+          "id": "b",
+          "text": "Chôn giấu trong rừng"
+        },
+        {
+          "id": "c",
+          "text": "Chuyển sang Lào"
+        },
+        {
+          "id": "d",
+          "text": "Kéo pháo ra khỏi trận địa"
+        }
+      ],
+      "correct": "d",
+      "fact": "Tối 26/1 bộ đội kéo pháo ra để chuẩn bị lại theo phương châm đánh chắc tiến chắc.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L4-004",
+      "missionId": "M1",
+      "eventId": "EVT-19531120",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Pháp mở chiến dịch nhảy dù xuống Điện Biên Phủ vào ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "20/11/1953"
+        },
+        {
+          "id": "b",
+          "text": "13/3/1954"
+        },
+        {
+          "id": "c",
+          "text": "6/12/1953"
+        },
+        {
+          "id": "d",
+          "text": "26/1/1954"
+        }
+      ],
+      "correct": "a",
+      "fact": "Ngày 20/11/1953 Pháp nhảy dù chiếm lòng chảo Điện Biên Phủ rồi tăng quân xây cứ điểm.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L4-005",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Tập đoàn cứ điểm Điện Biên Phủ của Pháp gồm bao nhiêu cứ điểm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "25"
+        },
+        {
+          "id": "b",
+          "text": "49"
+        },
+        {
+          "id": "c",
+          "text": "36"
+        },
+        {
+          "id": "d",
+          "text": "59"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháp xây 49 cứ điểm, chia thành 8 cụm và 3 phân khu.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L5-001",
+      "missionId": "M1",
+      "eventId": "EVT-19540126",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Vì sao ta chuyển từ 'đánh nhanh thắng nhanh' sang 'đánh chắc tiến chắc'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ta thiếu dân công"
+        },
+        {
+          "id": "b",
+          "text": "Địch đã tăng cường, đánh nhanh dễ thất bại"
+        },
+        {
+          "id": "c",
+          "text": "Pháp đã xin đình chiến"
+        },
+        {
+          "id": "d",
+          "text": "Ta hết đạn pháo"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháp củng cố tập đoàn cứ điểm, nếu đánh nhanh có thể thất bại nên ta chuẩn bị lại chắc chắn hơn.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L5-002",
+      "missionId": "M1",
+      "eventId": "EVT-19531120",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Navarre chọn Điện Biên Phủ làm điểm chốt nhằm mục đích nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bảo vệ cảng Hải Phòng"
+        },
+        {
+          "id": "b",
+          "text": "Phong tỏa biên giới Trung Quốc"
+        },
+        {
+          "id": "c",
+          "text": "Chặn ta sang Thượng Lào, nhử chủ lực ta"
+        },
+        {
+          "id": "d",
+          "text": "Giữ đường ra biển"
+        }
+      ],
+      "correct": "c",
+      "fact": "Pháp muốn ngăn ta tiến sang Thượng Lào và nhử chủ lực ta vào trận có ưu thế hỏa lực, không quân.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L5-003",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phaobinh"
+      ],
+      "stem": "Trước giờ nổ súng, De Castries chủ quan vì cho rằng điều gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Quân ta thiếu lương thực"
+        },
+        {
+          "id": "b",
+          "text": "Quân ta không dám đánh đêm"
+        },
+        {
+          "id": "c",
+          "text": "Mùa mưa sẽ chặn cuộc tấn công"
+        },
+        {
+          "id": "d",
+          "text": "Pháo ta không thể đưa lên núi"
+        }
+      ],
+      "correct": "d",
+      "fact": "De Castries cho rằng núi rừng hiểm trở, không có đường nên pháo ta không thể tiếp cận.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M1-L5-004",
+      "missionId": "M1",
+      "eventId": "EVT-19540313",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "himlam"
+      ],
+      "stem": "Chiến thắng Him Lam tạo ra tác động nào cho các bước sau?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tạo đà phá cửa ngõ phía Bắc"
+        },
+        {
+          "id": "b",
+          "text": "Buộc Pháp ký hiệp định ngay"
+        },
+        {
+          "id": "c",
+          "text": "Kết thúc chiến dịch sớm"
+        },
+        {
+          "id": "d",
+          "text": "Chấm dứt tiếp tế đường không"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đánh chiếm Him Lam tạo đà tiến công các cứ điểm khác, mở đầu việc phá cửa ngõ phía Bắc.",
+      "source": {
+        "sourceId": "SRC-WEB-HANOITIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    }
+  ]
+}

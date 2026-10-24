@@ -890,6 +890,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.Missions.MissionController
   missionId: M5
+  rankingDifficulty: 1
   missionTitle: "Chi\u1EC1u m\xF9ng B\u1EA3y"
   nextMissionId: 
   nextSceneName: 
@@ -950,9 +951,9 @@ GameObject:
   - component: {fileID: 608014186}
   - component: {fileID: 608014185}
   - component: {fileID: 608014184}
-  - component: {fileID: 608014183}
   - component: {fileID: 608014182}
   - component: {fileID: 608014181}
+  - component: {fileID: 608014187}
   m_Layer: 0
   m_Name: GameSystems
   m_TagString: Untagged
@@ -984,18 +985,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ba356302f6ba25448927c1a58a45d9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.DebugTools.DebugOverlay
---- !u!114 &608014183
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608014180}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df2c91181e1099945a41d76ed3ae95c4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: DBP.Runtime::DBP.Quiz.DebugQuizView
 --- !u!114 &608014184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1039,6 +1028,25 @@ Transform:
   - {fileID: 1446887526}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &608014187
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608014180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 679ef4aead6f8b246b2d214db7be32b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: DBP.Runtime::DBP.Quiz.QuizPanel
+  font: {fileID: 0}
+  bodyFontSize: 34
+  answerFontSize: 30
+  shuffleOptions: 1
+  panelColor: {r: 0.1, g: 0.12, b: 0.09, a: 0.96}
+  barColor: {r: 0.85, g: 0.75, b: 0.3, a: 1}
+  barWarnColor: {r: 0.85, g: 0.25, b: 0.2, a: 1}
 --- !u!1 &683362622
 GameObject:
   m_ObjectHideFlags: 0

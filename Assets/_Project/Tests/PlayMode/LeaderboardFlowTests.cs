@@ -52,7 +52,7 @@ namespace DBP.Tests
         static IEnumerator Deploy()
         {
             yield return SceneManager.LoadSceneAsync("MainMenu");yield return Frames();
-            Click("Mission1");Click("Deploy");yield return Frames();Click("BeginMission");yield return Frames();
+            Click("Mission1");CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy");yield return Frames();Click("BeginMission");yield return Frames();
         }
         static void Win(MissionController mission) => mission.Setup("M1","Him Lam","M2","M2_GiuDocLap",mission.Player,new System.Collections.Generic.List<Objective>(),true);
         [UnityTest] public IEnumerator WinningRun_SavesLaunchProfileAndUpgrades_AndReturnsFromBoardToResults()
@@ -112,7 +112,7 @@ namespace DBP.Tests
         }
         [UnityTest] public IEnumerator Clock_ExcludesTutorialButIncludesPause_AndQuizFreeze()
         {
-            CreateProfile();yield return SceneManager.LoadSceneAsync("MainMenu");yield return Frames();Click("Mission1");Click("Deploy");yield return Frames();
+            CreateProfile();yield return SceneManager.LoadSceneAsync("MainMenu");yield return Frames();Click("Mission1");CampaignUI.Current.CompleteBriefingForTests(false); Click("Deploy");yield return Frames();
             yield return new WaitForSecondsRealtime(.12f);Click("BeginMission");yield return Frames();var mission=MissionController.Current;
             double before=Time.realtimeSinceStartupAsDouble;
             // The real pause screen must not change the ranking start time.

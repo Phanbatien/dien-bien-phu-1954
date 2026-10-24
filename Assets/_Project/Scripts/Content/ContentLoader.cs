@@ -53,6 +53,22 @@ namespace DBP.Content
     }
 
     [Serializable]
+    public class SourceEntry
+    {
+        public string id;
+        public string title;
+        public string publisher;
+        public string url;
+        public string kind;
+    }
+
+    [Serializable]
+    public class SourceFile
+    {
+        public SourceEntry[] sources;
+    }
+
+    [Serializable]
     public class QuestionFile
     {
         public Question[] questions;
