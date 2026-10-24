@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using DBP.Core;
 using DBP.Quiz;
+using DBP.Ranking;
 using DBP.Upgrades;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +20,8 @@ namespace DBP.Missions
         public static event Action<Attempt> Ended;
 
         [SerializeField] string missionId = "M1";
+        [Tooltip("Nhóm độ khó xếp hạng; chiến dịch hiện tại dùng cấp 1.")]
+        [Range(1,5)] [SerializeField] int rankingDifficulty = 1;
         [SerializeField] string missionTitle = "Mở màn Him Lam";
         [Tooltip("Màn được mở khi thắng (BR-32). Trống = màn cuối.")]
         [SerializeField] string nextMissionId = "M2";
@@ -26,11 +30,17 @@ namespace DBP.Missions
         [Tooltip("Mục tiêu bắt buộc. Sequential: làm lần lượt; không: làm theo thứ tự bất kỳ.")]
         [SerializeField] List<Objective> objectives = new List<Objective>();
         [SerializeField] bool sequential = true;
+        [Header("Súng rơi từ địch (BR-14) — chốt khi cân bằng")]
+        [Range(0f, 1f)] [SerializeField] float enemyDropChance = 0.08f;
+        [SerializeField] int maxEnemyDrops = 3;
 
         public UnityEvent onWon = new UnityEvent();
         public UnityEvent onLost = new UnityEvent();
 
         public Attempt Attempt { get; private set; }
+        /// Buổi họp tác chiến của lượt này (null nếu vào màn không qua hầm, vd. Sandbox hoặc test).
+        public BunkerBriefing Briefing { get; private set; }
+        public string ProgressSaveError { get; private set; }
         public string MissionId => missionId;
         public string Title => missionTitle;
         public string NextSceneName => nextSceneName;
@@ -62,8 +72,14 @@ namespace DBP.Missions
         {
             Current = this;
             Time.timeScale = 1f;
-            InputLock.ResetAll();
+            if (!SceneTransition.IsTransitioning) InputLock.ResetAll();
             Attempt = new Attempt(missionId, Guid.NewGuid().GetHashCode()); // lượt mới, seed mới (BR-33)
+            Briefing = BunkerBriefing.Take(missionId); // câu đã trả lời trong hầm thuộc về lượt này (T25)
+            if (Briefing != null) Attempt.Answers.AddRange(Briefing.Results);
+            double now = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingClock.Begin(now);
+            Attempt.RankingClock.Exclude("deployment",now);
+            LeaderboardService.Capture(Attempt, rankingDifficulty);
         }
 
         void OnEnable()
@@ -89,6 +105,7 @@ namespace DBP.Missions
         {
             if (!player) Debug.LogError($"[Mission {missionId}] Chưa gán người chơi.");
             Attempt.BattleStart = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingClock.Include("deployment",Attempt.BattleStart);
             if (!sequential)
                 foreach (var o in objectives) o.Activate(this);
         }
@@ -114,6 +131,18 @@ namespace DBP.Missions
             return all;
         }
 
+        public float EnemyDropChance => enemyDropChance;
+        public int MaxEnemyDrops => maxEnemyDrops;
+
+        /// Mỗi địch bị hạ chỉ xét rơi súng một lần; đạt giới hạn của màn thì không sinh thêm (BR-14).
+        public bool TryRollDrop()
+        {
+            if (Attempt.Outcome != MissionOutcome.None || Attempt.WeaponDrops >= maxEnemyDrops) return false;
+            if (Attempt.Rng.NextDouble() >= enemyDropChance) return false;
+            Attempt.WeaponDrops++;
+            return true;
+        }
+
         /// Chủ động kết thúc trước khi thắng (menu tạm dừng): bỏ dở, không lên bảng (BR-32, BR-33).
         public void Abandon() => End(MissionOutcome.Abandoned);
 
@@ -121,30 +150,65 @@ namespace DBP.Missions
         {
             if (!Attempt.Settle(outcome)) return;
             Attempt.BattleEnd = Time.realtimeSinceStartupAsDouble;
+            Attempt.RankingMilliseconds = Attempt.RankingClock.Stop(Attempt.BattleEnd);
             if (player) Attempt.DamageTaken = player.TotalDamageTaken;
 
             if (outcome == MissionOutcome.Won)
             {
-                ProfileService.OnMissionWon(nextMissionId);
+                // Quyết toán Quyết Tâm chờ cùng lần lưu tiến độ khi thắng (BR-07, BR-34, BR-37)
+                if (Briefing != null)
+                {
+                    var data = ProfileService.Data;
+                    Attempt.ResolveGained = Briefing.Settle(ref data.resolve, data.rewardedQuestions);
+                }
+                TrySaveProgress();
                 onWon.Invoke();
             }
             else if (outcome == MissionOutcome.Lost) onLost.Invoke();
 
+            LeaderboardService.Complete(Attempt);
             Ended?.Invoke(Attempt);
+        }
+
+        // Mandatory bunker/cinematic flows can exclude named intervals; quiz/pause must not.
+        public void SetRankingExclusion(string reason, bool excluded)
+        {
+            double now = Time.realtimeSinceStartupAsDouble;
+            if (excluded) Attempt.RankingClock.Exclude(reason,now); else Attempt.RankingClock.Include(reason,now);
+        }
+
+        public bool TrySaveProgress()
+        {
+            if (Attempt.Outcome != MissionOutcome.Won) return false;
+            try
+            {
+                if (ProfileService.HasProfile && string.IsNullOrEmpty(nextMissionId)) ProfileService.Save();
+                ProfileService.OnMissionWon(nextMissionId);
+                ProgressSaveError = null;
+                Attempt.SaveFailed = false;
+                if (ProfileService.HasProfile)
+                {
+                    CampaignAudio.Interface("ui_saved");
+                    DBP.UI.CampaignNotices.Show("Đã lưu tiến độ nhiệm vụ trên máy.");
+                }
+                return true;
+            }
+            catch (IOException error) { ProgressSaveError = error.Message; }
+            catch (UnauthorizedAccessException error) { ProgressSaveError = error.Message; }
+            Attempt.SaveFailed = true;
+            return false;
         }
 
         /// Chơi lại = lượt mới hoàn toàn (BR-33).
         // ponytail: nạp lại scene màn; khi có hầm chuẩn bị (T25) thì chuyển về scene hầm của màn.
         public void Restart()
         {
-            Time.timeScale = 1f;
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            SceneTransition.Load(SceneManager.GetActiveScene().name);
         }
 
         public void LoadNext()
         {
-            Time.timeScale = 1f;
-            if (!string.IsNullOrEmpty(nextSceneName)) SceneManager.LoadScene(nextSceneName);
+            if (!string.IsNullOrEmpty(nextSceneName)) SceneTransition.Load(nextSceneName);
         }
 
         public bool PlayerInside(Collider zone)

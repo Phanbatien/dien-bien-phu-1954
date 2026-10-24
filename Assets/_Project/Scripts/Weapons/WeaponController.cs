@@ -15,7 +15,7 @@ namespace DBP.Weapons
         [SerializeField] FirstPersonController body;
         [SerializeField] string startingWeaponId = "W-MOSIN";
         [SerializeField] LayerMask hitMask = ~0;
-        [Tooltip("Hiệu ứng trúng đích (T67 – Khôi). Bỏ trống thì không sinh.")]
+        [Tooltip("Hiệu ứng trúng đích ghi đè. Bỏ trống dùng hiệu ứng T67.")]
         [SerializeField] GameObject impactPrefab;
         [Tooltip("Mô hình súng góc nhìn thứ nhất (T16 – Khôi). Ẩn khi soi ống ngắm.")]
         [SerializeField] GameObject viewModel;
@@ -37,6 +37,7 @@ namespace DBP.Weapons
                               && cam && cam.fieldOfView < baseFov * 0.6f;
 
         float baseFov = 70f, nextShotAt, reloadEndsAt, reloadDuration = 1f;
+        int audioVariation;
 
         void Start()
         {
@@ -94,7 +95,8 @@ namespace DBP.Weapons
             if (weapon.CanFire) Fire(weapon);
             else
             {
-                Play(dryClip);
+                if (dryClip) Play(dryClip);
+                else CampaignAudio.Effect("mechanic_dry", transform.position, false);
                 nextShotAt = Time.time + 0.25f;
                 if (weapon.CanReload) StartReload(weapon);
             }
@@ -106,7 +108,11 @@ namespace DBP.Weapons
             if (keyboard.digit1Key.wasPressedThisFrame) Inventory.Switch(0);
             else if (keyboard.digit2Key.wasPressedThisFrame) Inventory.Switch(1);
             else if (Mathf.Abs(mouse.scroll.ReadValue().y) > 0.01f) Inventory.Next();
-            if (Inventory.CurrentIndex != before) CancelReload();
+            if (Inventory.CurrentIndex != before)
+            {
+                CancelReload();
+                CampaignAudio.Effect("mechanic_switch", transform.position, false);
+            }
         }
 
         void UpdateAim(Weapon weapon)
@@ -134,18 +140,26 @@ namespace DBP.Weapons
             var r = Random.insideUnitCircle * spread;
             var origin = cam.transform.position;
             var direction = cam.transform.rotation * (Quaternion.Euler(r.x, r.y, 0f) * Vector3.forward);
+            if (!Scoped) CombatEffects.Muzzle(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, cam.transform.rotation);
 
-            if (Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore);
+
+            CombatEffects.Tracer(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, struck ? hit.point : origin + direction * (stats.range), false);
+
+            if (struck)
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
-                target?.TakeDamage(stats.damage, DamageType.Bullet, hit.point);
+                target?.TakeDamage(stats.damage, weapon.Def.Damage, hit.point);
                 if (impactPrefab) Destroy(Instantiate(impactPrefab, hit.point, Quaternion.LookRotation(hit.normal)), 5f);
+                else CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 Hit?.Invoke(hit);
             }
 
             float recoilScale = IsAiming ? 0.6f : 1f;
             if (body) body.AddRecoil(stats.recoilPitch * recoilScale, Random.Range(-1f, 1f) * stats.recoilYaw * recoilScale);
-            Play(fireClip);
+            var approvedClip = AudioCatalog.Weapon(weapon.Def.id, audioVariation++);
+            if (approvedClip) CampaignAudio.Play(approvedClip, transform.position, false);
+            else Play(fireClip);
             Fired?.Invoke();
         }
 

@@ -4,6 +4,10 @@
 Ngày lập: 20/09/2026  
 Đối chiếu: `Business_rule_DBP1954.md`, `Business_rule_DBP1954_review_handoff.md`, `dien-bien-phu-1954-gdd-v5.md`.
 
+## Chốt áp dụng T57 — 15/10/2026
+
+Trong phạm vi bảng xếp hạng tại máy T57, dùng BR-24 và BR-25 làm chuẩn: năm tiêu chí chiến đấu theo thứ tự, đồng hạng 1–1–3, giữ lượt tốt nhất riêng mỗi hồ sơ và mỗi bảng, ngang bằng giữ bản đã lưu trước, chỉ nhận thắng hợp lệ và so trong cùng nhóm điều kiện. Chi tiết triển khai/nghiệm thu nằm ở `docs/t57-bang-xep-hang.md` trong repository. Xác nhận này không mở rộng sang T62 hoặc các đề xuất v2 khác; các thông số cân bằng vẫn cần chơi thử.
+
 ## Phạm vi và trạng thái
 
 - Đây là bản sửa độc lập, giữ mã BR-01–BR-30 và bổ sung BR-31–BR-40. Tài liệu gốc và GDD chưa được sửa.

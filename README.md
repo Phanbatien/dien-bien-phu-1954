@@ -80,19 +80,18 @@ dien-bien-phu-1954/
 | Thiên Trí | Quiz & Narrative | `Quiz/`, `StreamingAssets/content/questions/` |
 | Trần Hoàng Long | Audio / Data / UI | `UI/`, `Audio/`, lưu hồ sơ, Validate Content |
 
-## Trạng thái (cập nhật 07/10/2026)
+## Trạng thái (cập nhật 24/10/2026 · bản nộp v1.0)
 
-**Chơi được từ đầu đến cuối ở dạng greybox** (khối hộp): cả 5 màn đều có mục tiêu nối sẵn, thắng thì mở khóa màn sau.
-Kiểm tra tự động: **23/23 test qua** (20 EditMode + 3 PlayMode). Build Windows thành công.
+**Hoàn chỉnh 5 màn** với AI địch, mô hình lính có hoạt ảnh, môi trường và không khí chiến trường, 142 câu hỏi đã duyệt có nguồn, Hầm chữ A, mở đầu/kết thúc/Credits, bảng xếp hạng.
 
-| Đã có | Còn là bản tạm (ai thay) |
+- Kiểm tra tự động: **134/134 EditMode, 67/68 PlayMode đạt** (1 test cần Game view có focus, bỏ qua khi chạy dòng lệnh). Đối chiếu 17 tình huống nghiệm thu: [docs/kiem-thu-phu-luc-a.md](docs/kiem-thu-phu-luc-a.md).
+- Bản nộp build thành công, **Validate Content 0 lỗi**; FPS thấp nhất 531 trên máy trưởng nhóm ([docs/build.md](docs/build.md)).
+- 70/75 việc xong; 5 việc còn cần người thật: playtest với người ngoài nhóm (T37, T65, T68), đo FPS máy yếu nhất (T63), tập demo 2 lượt (T75). Xem [docs/cong-viec.md](docs/cong-viec.md).
+
+| Tài liệu nộp | |
 |---|---|
-| Đi/chạy/nhảy/bò, thể lực, ADS, độ giật, ống ngắm | Địch là hình nộm đứng yên → **AI của Đạt** (T07, T39, T52) |
-| Mosin, Mauser, MAT-49, Kiểu 50, Mosin ống ngắm (`weapons.json`) | Bộc phá, lựu đạn ném, xe tăng chạy → **Đạt** (T14, T15, T30, T45). Tạm dùng F9 |
-| Túi 2 súng, đổi súng, đạn tương thích, đồ để lại (BR-36) | Câu hỏi nháp 3 câu → **bộ chọn câu của Thiên Trí** (T17) |
-| Giữ E 1 s → thế giới đứng yên → đếm giờ thực → 0,5 s chuyển tiếp | Giao diện câu hỏi IMGUI → **UI của Thiên Trí** (T18) |
-| Luồng thắng/thua/bỏ dở/chơi lại, mở khóa màn (BR-32, BR-33) | HUD, menu, màn kết quả IMGUI → **UI của Long** (T27, T35, T36) |
-| Nâng cấp 4 nhánh × 3 cấp, áp dụng lúc xuất trận (BR-35) | Lưu hồ sơ bằng PlayerPrefs → **file JSON an toàn của Long** (T20) |
-| Ụ súng máy, cắm cờ kết thúc Màn 5 | Khối hộp, chưa có âm thanh → **Khôi, Long** |
-
-Chi tiết từng hệ thống và chỗ cắm vào: [docs/kien-truc.md](docs/kien-truc.md).
+| Báo cáo | [docs/bao-cao.md](docs/bao-cao.md) |
+| Slide | [docs/nop-bai/bao-cao.pptx](docs/nop-bai/bao-cao.pptx) |
+| Trailer 56 giây | [docs/nop-bai/trailer.mp4](docs/nop-bai/trailer.mp4) |
+| Kịch bản demo | [docs/demo.md](docs/demo.md) |
+| Cốt truyện | [docs/cot-truyen.md](docs/cot-truyen.md) |

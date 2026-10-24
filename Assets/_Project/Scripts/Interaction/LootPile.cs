@@ -25,9 +25,11 @@ namespace DBP.Interaction
             if (existing) return existing;
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             go.name = "LootPile";
-            go.transform.SetParent(anchor, false);
-            go.transform.localPosition = new Vector3(0f, 0.15f, 0.8f);
-            go.transform.localScale = new Vector3(0.6f, 0.3f, 0.4f);
+            // Con của điểm nhận nhưng giữ kích thước thật, kể cả khi điểm nhận bị co giãn (súng rơi dẹt).
+            go.transform.SetParent(anchor, true);
+            go.transform.position = anchor.position + anchor.forward * 0.9f + Vector3.up * 0.15f;
+            var s = anchor.lossyScale;
+            go.transform.localScale = new Vector3(0.6f / s.x, 0.3f / s.y, 0.4f / s.z);
             go.GetComponent<Renderer>().material.color = new Color(0.4f, 0.3f, 0.2f);
             return go.AddComponent<LootPile>();
         }

@@ -18,10 +18,14 @@ namespace DBP.Weapons
         public string rarity;
         [Tooltip("single = bắn phát một/khóa nòng, auto = liên thanh")]
         public string fireMode = "single";
+        [Tooltip("bullet (mặc định) · antitank (bazooka) · explosive. Lô cốt/xe tăng miễn nhiễm bullet (BR-20).")]
+        public string damageType = "bullet";
         public WeaponStats stats = new WeaponStats();
         public string sourceId;
 
         public bool Automatic => fireMode == "auto";
+        public DBP.Core.DamageType Damage => damageType == "antitank" ? DBP.Core.DamageType.AntiTank
+            : damageType == "explosive" ? DBP.Core.DamageType.Explosive : DBP.Core.DamageType.Bullet;
     }
 
     [Serializable]

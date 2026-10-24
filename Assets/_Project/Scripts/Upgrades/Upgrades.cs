@@ -5,7 +5,7 @@ namespace DBP.Upgrades
 {
     public enum UpgradeBranch { AmmoReserve, ReloadSpeed, Stamina, GrenadeCapacity }
 
-    public enum BuyResult { Ok, UnknownId, AlreadyOwned, MissingPrerequisite, NotEnoughResolve, NotInBunker }
+    public enum BuyResult { Ok, UnknownId, AlreadyOwned, MissingPrerequisite, NotEnoughResolve, NotInBunker, SaveFailed }
 
     [Serializable]
     public class UpgradeDef

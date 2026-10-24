@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/_Project/Scenes/MainMenu.unity
+    guid: 13ebcd684d5eea14198ec1a7a745579d
+  - enabled: 1
     path: Assets/_Project/Scenes/M1_HimLam.unity
     guid: 36447b22f58038d489925ffe5452e150
   - enabled: 1
@@ -23,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/_Project/Scenes/Sandbox.unity
     guid: 012c0066fb500c744adcdcd552844f9f
+  - enabled: 1
+    path: Assets/_Project/Scenes/Bunker_HamChuA.unity
+    guid: b020bda2a40e49e4fa5796c10492f828
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0

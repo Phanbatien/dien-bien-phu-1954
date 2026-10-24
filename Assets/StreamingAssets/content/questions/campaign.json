@@ -1,0 +1,781 @@
+{
+  "questions": [
+    {
+      "id": "Q-CAMP-L1-001",
+      "missionId": "CAMPAIGN",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Trận mở màn chiến dịch Điện Biên Phủ (13/3/1954) đánh vào cứ điểm nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Him Lam"
+        },
+        {
+          "id": "b",
+          "text": "Đồi A1"
+        },
+        {
+          "id": "c",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "d",
+          "text": "Mường Thanh"
+        }
+      ],
+      "correct": "a",
+      "fact": "Chiều 13/3/1954 quân ta tiến công cứ điểm Him Lam, mở màn chiến dịch.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L2-001",
+      "missionId": "CAMPAIGN",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Anh hùng nào lấy thân mình lấp lỗ châu mai ở Him Lam?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tô Vĩnh Diện"
+        },
+        {
+          "id": "b",
+          "text": "Phan Đình Giót"
+        },
+        {
+          "id": "c",
+          "text": "Bế Văn Đàn"
+        },
+        {
+          "id": "d",
+          "text": "Cù Chính Lan"
+        }
+      ],
+      "correct": "b",
+      "fact": "Phan Đình Giót hi sinh khi lấp lỗ châu mai lô cốt Him Lam.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L3-001",
+      "missionId": "CAMPAIGN",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Chiến dịch Điện Biên Phủ kết thúc thắng lợi vào ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "13/3/1954"
+        },
+        {
+          "id": "b",
+          "text": "30/3/1954"
+        },
+        {
+          "id": "c",
+          "text": "7/5/1954"
+        },
+        {
+          "id": "d",
+          "text": "21/7/1954"
+        }
+      ],
+      "correct": "c",
+      "fact": "Chiều 7/5/1954 ta đánh vào hầm chỉ huy, bắt sống De Castries.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L3-002",
+      "missionId": "CAMPAIGN",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Loại lựu pháo cỡ lớn nhất của pháo binh ta trong chiến dịch có cỡ nòng bao nhiêu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "75 mm"
+        },
+        {
+          "id": "b",
+          "text": "105 mm"
+        },
+        {
+          "id": "c",
+          "text": "155 mm"
+        },
+        {
+          "id": "d",
+          "text": "203 mm"
+        }
+      ],
+      "correct": "b",
+      "fact": "Lựu pháo 105 mm là hỏa lực mặt đất mạnh nhất của ta, được kéo bằng sức người vào trận địa.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L3-003",
+      "missionId": "CAMPAIGN",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Cụm cứ điểm nào là phân khu Nam của tập đoàn cứ điểm Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Him Lam"
+        },
+        {
+          "id": "b",
+          "text": "Độc Lập"
+        },
+        {
+          "id": "c",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "d",
+          "text": "Bản Kéo"
+        }
+      ],
+      "correct": "c",
+      "fact": "Phân khu Nam là cụm Hồng Cúm (Isabelle), có sân bay phụ.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L3-004",
+      "missionId": "CAMPAIGN",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Các đồi A1, C1, D1, E1 nằm ở phía nào của phân khu Trung tâm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phía Tây"
+        },
+        {
+          "id": "b",
+          "text": "Phía Đông"
+        },
+        {
+          "id": "c",
+          "text": "Phía Bắc"
+        },
+        {
+          "id": "d",
+          "text": "Phía Nam"
+        }
+      ],
+      "correct": "b",
+      "fact": "Dãy đồi phía Đông che chắn trung tâm Mường Thanh; Đợt 2 tập trung đánh vào đây.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L3-005",
+      "missionId": "CAMPAIGN",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Tướng chỉ huy quân Pháp ở Bắc Bộ, cấp trên trực tiếp của De Castries, là ai?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Henri Navarre"
+        },
+        {
+          "id": "b",
+          "text": "René Cogny"
+        },
+        {
+          "id": "c",
+          "text": "Raoul Salan"
+        },
+        {
+          "id": "d",
+          "text": "Charles Piroth"
+        }
+      ],
+      "correct": "b",
+      "fact": "Tướng René Cogny chỉ huy lực lượng Pháp ở Bắc Bộ, trực tiếp phụ trách Điện Biên Phủ.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-001",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Đội công binh đào đường hầm đặt khối bộc phá dưới đồi A1 mang phiên hiệu nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đội 83"
+        },
+        {
+          "id": "b",
+          "text": "Đội 36"
+        },
+        {
+          "id": "c",
+          "text": "Đội 209"
+        },
+        {
+          "id": "d",
+          "text": "Đội 351"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đội công binh 83 (M83) đào đường hầm dài khoảng 49 m vào lòng đồi A1.",
+      "source": {
+        "sourceId": "SRC-WEB-NHANDAN-A1",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-002",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Trong lúc bị vây, De Castries được Pháp phong lên cấp bậc nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đại tá"
+        },
+        {
+          "id": "b",
+          "text": "Thiếu tướng"
+        },
+        {
+          "id": "c",
+          "text": "Trung tướng"
+        },
+        {
+          "id": "d",
+          "text": "Thống chế"
+        }
+      ],
+      "correct": "b",
+      "fact": "Đại tá De Castries được phong Thiếu tướng ngay trong thời gian chiến dịch diễn ra.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-003",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Pháp đặt tên cho cứ điểm Bản Kéo là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Anne-Marie"
+        },
+        {
+          "id": "b",
+          "text": "Béatrice"
+        },
+        {
+          "id": "c",
+          "text": "Gabrielle"
+        },
+        {
+          "id": "d",
+          "text": "Isabelle"
+        }
+      ],
+      "correct": "a",
+      "fact": "Cứ điểm Bản Kéo có tên Anne-Marie; quân ngụy ở đây bức hàng trong Đợt 1.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-004",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Pháp đặt tên cho đồi C1 là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Éliane 1"
+        },
+        {
+          "id": "b",
+          "text": "Dominique 3"
+        },
+        {
+          "id": "c",
+          "text": "Huguette 1"
+        },
+        {
+          "id": "d",
+          "text": "Claudine 2"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đồi C1 là Éliane 1, đồi A1 là Éliane 2, cùng thuộc cụm đồi phía Đông.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-005",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Trận đánh cứ điểm Him Lam ngày 13/3/1954 bắt đầu lúc mấy giờ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "5 giờ sáng"
+        },
+        {
+          "id": "b",
+          "text": "12 giờ trưa"
+        },
+        {
+          "id": "c",
+          "text": "17 giờ 05 phút"
+        },
+        {
+          "id": "d",
+          "text": "23 giờ 30 phút"
+        }
+      ],
+      "correct": "c",
+      "fact": "17 giờ 05 phút ngày 13/3/1954 pháo ta bắn vào Him Lam; đến khuya ta làm chủ cứ điểm.",
+      "source": {
+        "sourceId": "SRC-WEB-VNEXPRESS",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-006",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Đơn vị bắt sống De Castries thuộc đại đoàn nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đại đoàn 308"
+        },
+        {
+          "id": "b",
+          "text": "Đại đoàn 312"
+        },
+        {
+          "id": "c",
+          "text": "Đại đoàn 316"
+        },
+        {
+          "id": "d",
+          "text": "Đại đoàn 351"
+        }
+      ],
+      "correct": "b",
+      "fact": "Đại đội của Tạ Quốc Luật thuộc Trung đoàn 209, Đại đoàn 312 bắt sống De Castries.",
+      "source": {
+        "sourceId": "SRC-WEB-HANOITIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-007",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Cụm Hồng Cúm cách trung tâm Mường Thanh khoảng bao xa về phía Nam?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Khoảng 1 km"
+        },
+        {
+          "id": "b",
+          "text": "Khoảng 5 km"
+        },
+        {
+          "id": "c",
+          "text": "Khoảng 15 km"
+        },
+        {
+          "id": "d",
+          "text": "Khoảng 30 km"
+        }
+      ],
+      "correct": "b",
+      "fact": "Hồng Cúm nằm cách trung tâm khoảng 5–6 km, tách biệt nên dễ bị cô lập.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L4-008",
+      "missionId": "CAMPAIGN",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Số lượt dân công phục vụ chiến dịch Điện Biên Phủ khoảng bao nhiêu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Khoảng 26.000"
+        },
+        {
+          "id": "b",
+          "text": "Khoảng 60.000"
+        },
+        {
+          "id": "c",
+          "text": "Khoảng 260.000"
+        },
+        {
+          "id": "d",
+          "text": "Khoảng 2.600.000"
+        }
+      ],
+      "correct": "c",
+      "fact": "Khoảng 260.000 lượt dân công đã vận chuyển lương thực, đạn dược ra mặt trận.",
+      "source": {
+        "sourceId": "SRC-WEB-VIETTIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-001",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Vì sao ta đặt pháo trong công sự trên sườn núi bao quanh lòng chảo?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Để pháo dễ di chuyển trên đồng bằng"
+        },
+        {
+          "id": "b",
+          "text": "Dễ ngụy trang, bắn thẳng xuống cứ điểm, địch khó phát hiện"
+        },
+        {
+          "id": "c",
+          "text": "Để gần sân bay của Pháp"
+        },
+        {
+          "id": "d",
+          "text": "Vì không có chỗ khác để đặt"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháo đặt trong hầm trên sườn núi vừa kín đáo vừa khống chế toàn bộ lòng chảo.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-002",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Vì sao quân Pháp không thể rút khỏi Điện Biên Phủ khi bị vây?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pháp không muốn rút"
+        },
+        {
+          "id": "b",
+          "text": "Đường bộ bị cắt, đường không bị pháo và cao xạ khống chế"
+        },
+        {
+          "id": "c",
+          "text": "Pháp chờ viện binh từ châu Âu"
+        },
+        {
+          "id": "d",
+          "text": "Thời tiết quá đẹp"
+        }
+      ],
+      "correct": "b",
+      "fact": "Tập đoàn cứ điểm nằm giữa núi rừng, chỉ còn đường hàng không, mà sân bay bị ta khống chế.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-003",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Phương châm 'đánh chắc, tiến chắc' thể hiện nguyên tắc chỉ đạo nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đánh nhanh bằng mọi giá"
+        },
+        {
+          "id": "b",
+          "text": "Chỉ đánh khi đã chuẩn bị kỹ và chắc thắng"
+        },
+        {
+          "id": "c",
+          "text": "Tránh giao chiến với địch"
+        },
+        {
+          "id": "d",
+          "text": "Dựa hoàn toàn vào viện trợ"
+        }
+      ],
+      "correct": "b",
+      "fact": "Ta chuẩn bị chu đáo, đánh từng bước chắc thắng thay vì liều đánh nhanh.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-004",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Vì sao Pháp từng tin Điện Biên Phủ là 'pháo đài bất khả xâm phạm'?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Vì ta không có bộ đội"
+        },
+        {
+          "id": "b",
+          "text": "Hỏa lực mạnh, công sự kiên cố, tin ta không đưa được pháo lớn vào"
+        },
+        {
+          "id": "c",
+          "text": "Vì có hiệp định bảo vệ"
+        },
+        {
+          "id": "d",
+          "text": "Vì nằm ở đồng bằng"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháp đánh giá thấp khả năng hậu cần và kéo pháo của ta.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-005",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Vì sao ta đánh từ cụm phía Bắc, rồi phía Đông, sau cùng mới tổng công kích?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Để kéo dài chiến dịch"
+        },
+        {
+          "id": "b",
+          "text": "Diệt các cụm vòng ngoài trước, siết dần vòng vây, cô lập trung tâm"
+        },
+        {
+          "id": "c",
+          "text": "Vì phía Bắc gần Hà Nội"
+        },
+        {
+          "id": "d",
+          "text": "Vì Pháp yêu cầu"
+        }
+      ],
+      "correct": "b",
+      "fact": "Đánh từng cụm giúp ta tập trung ưu thế, từng bước cô lập phân khu Trung tâm.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-CAMP-L5-006",
+      "missionId": "CAMPAIGN",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "stem": "Kiểm soát sân bay Mường Thanh tác động thế nào đến kết cục chiến dịch?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Không ảnh hưởng gì"
+        },
+        {
+          "id": "b",
+          "text": "Cắt nguồn tiếp viện chính, địch thiếu đạn, thuốc, lương thực rồi suy sụp"
+        },
+        {
+          "id": "c",
+          "text": "Giúp Pháp rút quân dễ hơn"
+        },
+        {
+          "id": "d",
+          "text": "Chỉ ảnh hưởng tới máy bay Mỹ"
+        }
+      ],
+      "correct": "b",
+      "fact": "Mất sân bay, Pháp chỉ còn thả dù, phần lớn hàng rơi vào trận địa ta.",
+      "source": {
+        "sourceId": "SRC-WEB-NHANDAN-PHONGKHONG",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Câu dùng chung, rà soát T68 ngày 24/10/2026"
+    }
+  ]
+}

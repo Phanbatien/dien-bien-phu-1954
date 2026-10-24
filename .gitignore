@@ -41,3 +41,17 @@ crashlytics-buildid.txt
 # Kết quả test/build chạy bằng dòng lệnh
 test-results*.xml
 build.log
+/[Ee]vidence/
+
+# Local agent configuration, skills, and helper scripts
+.agents/
+.codex/
+AgentScripts/
+AGENTS.md
+
+# Unity Pipeline local automation settings and generated build assets
+/ProjectSettings/Packages/com.unity.pipeline/
+/Assets/Settings/Pipeline/
+/Assets/Settings/Pipeline.meta
+.unity-pipeline-port
+.unity-pipeline-runtime-port

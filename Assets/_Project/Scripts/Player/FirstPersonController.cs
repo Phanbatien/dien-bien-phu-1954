@@ -52,6 +52,8 @@ namespace DBP.Player
         CharacterController controller;
         float pitch, yaw, verticalVelocity, staminaMultiplier = 1f;
         Vector2 recoil; // x = pitch lên, y = yaw
+        float footstepDistance;
+        int footstepVariation;
 
         void Awake()
         {
@@ -74,14 +76,19 @@ namespace DBP.Player
 
         void Start() => LockCursor();
 
+        /// Trạng thái chuột game yêu cầu gần nhất (Cursor.lockState không đổi được khi chạy không cửa sổ).
+        public static CursorLockMode RequestedLock { get; private set; }
+
         public static void LockCursor()
         {
+            RequestedLock = CursorLockMode.Locked;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
         public static void UnlockCursor()
         {
+            RequestedLock = CursorLockMode.None;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }
@@ -153,7 +160,24 @@ namespace DBP.Player
             }
             verticalVelocity += gravity * dt;
             velocity.y = verticalVelocity;
+            var beforeMove = transform.position;
             controller.Move(velocity * dt);
+            var displacement = transform.position - beforeMove;
+            displacement.y = 0f;
+            if (controller.isGrounded && input.sqrMagnitude > 0f)
+            {
+                footstepDistance += displacement.magnitude;
+                float stride = IsCrouching ? 1.1f : IsSprinting ? 2.2f : 1.7f;
+                if (footstepDistance >= stride)
+                {
+                    footstepDistance %= stride;
+                    string surface = "";
+                    if (Physics.Raycast(transform.position + Vector3.up * .2f, Vector3.down, out var ground, 2f, ~0, QueryTriggerInteraction.Ignore))
+                        surface = ground.collider.sharedMaterial ? ground.collider.sharedMaterial.name : ground.collider.name;
+                    CampaignAudio.Play(AudioCatalog.Step(surface, footstepVariation++), transform.position, false, IsCrouching ? .6f : 1f);
+                }
+            }
+            else if (!controller.isGrounded) footstepDistance = 0f;
 
             if (input.sqrMagnitude > 0f) Moved?.Invoke();
         }

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using DBP.Interaction;
 using DBP.Quiz;
+using DBP.Ranking;
 
 namespace DBP.Missions
 {
@@ -20,18 +22,34 @@ namespace DBP.Missions
         public int WavesRepelled;
         public float DamageTaken;
         public double BattleStart, BattleEnd;
+        public readonly RankingClock RankingClock = new RankingClock();
+        public long RankingMilliseconds = -1;
+        public RankedResult RankingResult;
+        public string RankingSaveError;
+        public readonly List<RewardAudit> Rewards = new List<RewardAudit>();
 
         /// false khi lượt gặp lỗi thiếu câu (BR-31): vẫn thắng được nhưng không lên bảng.
         public bool RankEligible = true;
         public readonly List<QuizResult> Answers = new List<QuizResult>();
 
+        /// Chuỗi sai của hòm (BR-16); lượt mới bắt đầu từ 0.
+        public readonly PityTracker Pity = new PityTracker();
+        /// Ngẫu nhiên của lượt (súng rơi…), suy ra từ seed để tái hiện khi kiểm tra (BR-13).
+        public readonly System.Random Rng;
+        public int WeaponDrops;
+        /// Ghi hồ sơ lỗi khi quyết toán: màn kết quả phải báo, không hiện "đã lưu" (BR-37).
+        public bool SaveFailed;
+        /// Quyết Tâm thực nhận khi thắng (từ câu đúng trong hầm chưa từng được thưởng).
+        public int ResolveGained;
+
         public MissionOutcome Outcome { get; private set; } = MissionOutcome.None;
-        public double CompletionSeconds => BattleEnd - BattleStart;
+        public double CompletionSeconds => RankingMilliseconds >= 0 ? RankingMilliseconds / 1000d : BattleEnd - BattleStart;
 
         public Attempt(string missionId, int seed)
         {
             MissionId = missionId;
             Seed = seed;
+            Rng = new System.Random(seed ^ 0x5EED);
         }
 
         /// Chốt kết quả đúng một lần (BR-32).
