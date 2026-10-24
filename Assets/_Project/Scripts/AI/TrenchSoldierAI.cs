@@ -222,10 +222,17 @@ namespace DBP.AI
 
             FaceTarget(player.position);
 
+            // Không thấy người chơi thì nấp lại, không bắn vào vách hào
+            if (!CanSeePlayer())
+            {
+                SetState(State.HaoCover);
+                return;
+            }
+
             if (Time.time >= nextFireAt)
             {
                 TryFire();
-                nextFireAt = Time.time + fireInterval;
+                nextFireAt = Time.time + fireInterval * Random.Range(0.8f, 1.2f) * OfficerLeader.BonusAt(transform.position);
                 currentBurstCount++;
 
                 // Bắn hết loạt (burstShots) thì nấp lại để tránh hỏa lực phản kích
