@@ -38,6 +38,8 @@ namespace DBP.EditorTools
             MoodVolume(root);
             Ridges(root, sceneName, center, radius);
             int craters = Craters(root, rng, keep, area);
+            int boards = PlaceTrenchFloor(root, area);
+            PlaceFlora(root, rng, keep, area);
             var smoke = new List<Transform>();
             var fire = new List<Transform>();
             int wrecks = WreckSites(root, rng, keep, area, smoke, fire);
@@ -61,7 +63,7 @@ namespace DBP.EditorTools
             ambience.firePoints = fire.ToArray();
             if (sceneName.StartsWith("M3")) root.gameObject.AddComponent<DBP.Missions.RadioChatter>(); // T47
             EnsurePlayerFarClip();
-            return $"núi, {craters} hố bom, {wrecks} xác pháo, {graves} mộ súng, {smoke.Count} cột khói, {fire.Count} đám cháy";
+            return $"núi, {boards} ván lót hào, tre cháy + chuối, {craters} hố bom, {wrecks} xác pháo, {graves} mộ súng, {smoke.Count} cột khói, {fire.Count} đám cháy";
         }
 
         // ───────────────────────── Ánh sáng & màu ─────────────────────────
