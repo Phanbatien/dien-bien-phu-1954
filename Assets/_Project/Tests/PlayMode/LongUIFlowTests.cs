@@ -66,6 +66,8 @@ namespace DBP.Tests
         }
         [UnityTest] public IEnumerator Menu_MouseInputAndEscapePause_WorkThroughInputSystem()
         {
+            // Chuột ảo chỉ tới UI khi Game view có focus; chạy -batchmode không có cửa sổ nên bỏ qua (chạy trong Editor vẫn kiểm tra)
+            if (Application.isBatchMode) Assert.Ignore("Cần Game view có focus — chạy trong Test Runner của Editor.");
             Create("Mouse test");
             var settings = InputSystem.settings;
             var oldBackground = settings.backgroundBehavior;

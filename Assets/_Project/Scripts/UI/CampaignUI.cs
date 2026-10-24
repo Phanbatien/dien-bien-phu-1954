@@ -116,9 +116,12 @@ namespace DBP.UI
             }
             if (screen == CampaignScreen.Gameplay && !InputLock.Locked) FirstPersonController.LockCursor(); else FirstPersonController.UnlockCursor();
             ClearPage();
+            // Hầm chữ A sau màn chuẩn bị: nền mờ để thấy ánh đèn dầu, bản đồ, điện đài
+            bool inBunker = screen == CampaignScreen.Preparation && !mission;
+            if (inBunker) BunkerBackdrop.Show(); else BunkerBackdrop.Hide();
             if (screen != CampaignScreen.Gameplay)
             {
-                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : W.Ink);
+                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : inBunker && BunkerBackdrop.Available ? new Color(.05f, .06f, .05f, .55f) : W.Ink);
                 shade.transform.SetAsFirstSibling();
                 W.Label(page, "Eyebrow", "ĐIỆN BIÊN PHỦ 1954     /     QUYẾT CHIẾN • QUYẾT THẮNG", 64, 28, 1450, 40, 18, W.Gold);
                 W.Panel(page, "Rule", 64, 88, 1472, 2, W.Gold);
@@ -160,6 +163,9 @@ namespace DBP.UI
                 var p = profiles[i]; bool active = ProfileService.HasProfile && p.id == ProfileService.Data.id;
                 W.Button(page, "Profile_" + p.id, (active ? "●  " : "") + ShortLabel(p.displayName, 18) + "\n" + ShortLabel(p.className, 12) + "  ·  #" + p.id.Substring(0, 6), 88, 330 + (i % 4) * 78, 442, 68,
                     () => Guard(() => { ProfileService.Repository.Select(p.id); AudioListener.volume = p.volume; Show(CampaignScreen.Menu); }));
+                // Tên dài toàn chữ rộng (W, M) vẫn nằm gọn 2 dòng trong nút
+                var profileLabel = page.Find("Profile_" + p.id).GetComponentInChildren<Text>();
+                profileLabel.fontSize = 19; profileLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
             }
             if (profiles.Count == 0) W.Label(page, "NoProfiles", "Chưa có hồ sơ.\nTạo hồ sơ để bắt đầu chiến dịch.", 88, 340, 420, 120, 26);
             if (profiles.Count > 4)

@@ -76,14 +76,19 @@ namespace DBP.Player
 
         void Start() => LockCursor();
 
+        /// Trạng thái chuột game yêu cầu gần nhất (Cursor.lockState không đổi được khi chạy không cửa sổ).
+        public static CursorLockMode RequestedLock { get; private set; }
+
         public static void LockCursor()
         {
+            RequestedLock = CursorLockMode.Locked;
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
         }
 
         public static void UnlockCursor()
         {
+            RequestedLock = CursorLockMode.None;
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
         }

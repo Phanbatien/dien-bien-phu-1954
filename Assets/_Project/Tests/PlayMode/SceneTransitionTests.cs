@@ -83,7 +83,9 @@ namespace DBP.Tests
             Assert.IsTrue(Load("M2_GiuDocLap")); yield return Finished(); yield return null;
             Assert.AreEqual(DBP.UI.CampaignScreen.Gameplay, DBP.UI.CampaignUI.Current.ScreenState);
             Assert.IsFalse(InputLock.Locked);
-            Assert.AreEqual(CursorLockMode.Locked, Cursor.lockState, "Gameplay cursor must lock after the transition releases input.");
+            // -batchmode không có cửa sổ nên Unity không khóa chuột thật; khi đó kiểm tra trạng thái game đã yêu cầu
+            var lockState = Application.isBatchMode ? DBP.Player.FirstPersonController.RequestedLock : Cursor.lockState;
+            Assert.AreEqual(CursorLockMode.Locked, lockState, "Gameplay cursor must lock after the transition releases input.");
         }
     }
 }
