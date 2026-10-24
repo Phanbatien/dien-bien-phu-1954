@@ -145,7 +145,7 @@ namespace DBP.Weapons
             if (Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore))
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
-                target?.TakeDamage(stats.damage, DamageType.Bullet, hit.point);
+                target?.TakeDamage(stats.damage, weapon.Def.Damage, hit.point);
                 if (impactPrefab) Destroy(Instantiate(impactPrefab, hit.point, Quaternion.LookRotation(hit.normal)), 5f);
                 else CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 Hit?.Invoke(hit);

@@ -27,6 +27,9 @@ namespace DBP.Tests
         {
             Time.timeScale = 1; InputLock.ResetAll();
             yield return SceneManager.LoadSceneAsync("Sandbox"); yield return null;
+            // Sandbox giờ có AI thật (lô cốt, xe tăng, lính bắn): tắt để chỉ đo hiệu ứng đang kiểm tra.
+            foreach (var h in Object.FindObjectsByType<DBP.Core.Health>(FindObjectsSortMode.None))
+                if (h.Kind != DBP.Core.TargetKind.Player) h.gameObject.SetActive(false);
         }
         [UnityTearDown] public IEnumerator Cleanup()
         {

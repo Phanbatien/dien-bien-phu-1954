@@ -173,7 +173,8 @@
         "scopeZoom": 1.0
       },
       "sourceId": "SRC-FALL-HELL",
-      "note": "Súng chống tăng của Mỹ viện trợ cho Pháp, Việt Minh thu được từ chiến lợi phẩm để công phá lô cốt và xe tăng"
+      "note": "Súng chống tăng của Mỹ viện trợ cho Pháp, Việt Minh thu được từ chiến lợi phẩm để công phá lô cốt và xe tăng",
+      "damageType": "antitank"
     }
   ]
 }
