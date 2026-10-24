@@ -50,6 +50,7 @@ namespace DBP.Quiz
         private int _current;
         private int _total;
 
+        private GUIStyle _correctStyle, _wrongStyle;
         private GUIStyle _titleStyle, _bodyStyle, _answerStyle, _factStyle, _buttonStyle, _progressStyle;
 
         public bool IsVisible { get { return _visible; } }
@@ -105,9 +106,11 @@ namespace DBP.Quiz
             _titleStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontSize = titleFontSize, fontStyle = FontStyle.Bold };
             _progressStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = titleFontSize - 4 };
             _bodyStyle = new GUIStyle(GUI.skin.label) { wordWrap = true, alignment = TextAnchor.UpperLeft, fontSize = bodyFontSize, fontStyle = FontStyle.Bold };
-            _answerStyle = new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleLeft, fontSize = answerFontSize, padding = new RectOffset(24, 24, 12, 12) };
+            _answerStyle = DBP.UI.UITheme.ImguiButton(new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleLeft, fontSize = answerFontSize, padding = new RectOffset(28, 28, 14, 14) }, DBP.UI.UITheme.Wood);
             _factStyle = new GUIStyle(GUI.skin.label) { wordWrap = true, alignment = TextAnchor.UpperLeft, fontSize = factFontSize, fontStyle = FontStyle.Italic };
-            _buttonStyle = new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter, fontSize = answerFontSize, fontStyle = FontStyle.Bold };
+            _correctStyle = DBP.UI.UITheme.ImguiButton(_answerStyle, DBP.UI.UITheme.Green);
+            _wrongStyle = DBP.UI.UITheme.ImguiButton(_answerStyle, DBP.UI.UITheme.Red);
+            _buttonStyle = DBP.UI.UITheme.ImguiButton(new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter, fontSize = answerFontSize, fontStyle = FontStyle.Bold }, DBP.UI.UITheme.Green);
 
             if (font != null)
             {
@@ -161,8 +164,12 @@ namespace DBP.Quiz
             float py = Mathf.Max(20f, (vh - panelH) * 0.5f);
 
             // Tờ giấy.
-            GUI.color = paperColor;
-            GUI.DrawTexture(new Rect(px, py, panelW, panelH), paperTexture != null ? paperTexture : Texture2D.whiteTexture, ScaleMode.StretchToFill);
+            if (paperTexture != null)
+            {
+                GUI.color = paperColor;
+                GUI.DrawTexture(new Rect(px, py, panelW, panelH), paperTexture, ScaleMode.StretchToFill);
+            }
+            else DBP.UI.UITheme.ImguiPanel(new Rect(px, py, panelW, panelH)); // khung gỗ + giấy da
 
             // Con dấu mờ ở góc phải dưới.
             if (stampTexture != null)
@@ -202,16 +209,17 @@ namespace DBP.Quiz
                 GUI.backgroundColor = Color.white;
                 GUI.enabled = !_answered;
 
+                var style = _answerStyle;
                 if (_answered)
                 {
                     bool isCorrect = _question.IsCorrectAnswer(opt.id);
                     bool isChosen = opt.id == _chosenId;
-                    if (isCorrect) GUI.backgroundColor = correctColor;
-                    else if (isChosen) GUI.backgroundColor = wrongColor;
+                    if (isCorrect) style = _correctStyle;        // đáp án đúng: xanh
+                    else if (isChosen) style = _wrongStyle;      // đã chọn sai: đỏ
                     GUI.enabled = true; // vẫn vẽ rõ chữ, chỉ không nhận bấm (xử lý bên dưới)
                 }
 
-                bool clicked = GUI.Button(new Rect(x, y, inner, answerH[i]), (i + 1) + ".  " + opt.text, _answerStyle);
+                bool clicked = GUI.Button(new Rect(x, y, inner, answerH[i]), (i + 1) + ".  " + opt.text, style);
                 if (clicked && !_answered) chosen = opt.id;
                 y += answerH[i] + 14f;
             }

@@ -78,9 +78,12 @@ namespace DBP.Quiz
             if (_bodyStyle != null) return;
 
             _bodyStyle = new GUIStyle(GUI.skin.label) { wordWrap = true, alignment = TextAnchor.UpperLeft, fontSize = bodyFontSize, fontStyle = FontStyle.Bold };
-            _answerStyle = new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleLeft, fontSize = answerFontSize, padding = new RectOffset(24, 24, 12, 12) };
+            _answerStyle = DBP.UI.UITheme.ImguiButton(new GUIStyle(GUI.skin.button) { wordWrap = true, alignment = TextAnchor.MiddleLeft, fontSize = answerFontSize, padding = new RectOffset(28, 28, 14, 14) }, DBP.UI.UITheme.Wood);
+            _bodyStyle.normal.textColor = DBP.UI.UITheme.Ink;
             _timerStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleRight, fontSize = 28, fontStyle = FontStyle.Bold };
-            _metaStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontSize = 22 };
+            _metaStyle = new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleLeft, fontSize = 22, fontStyle = FontStyle.Bold };
+            _metaStyle.normal.textColor = DBP.UI.UITheme.Heading;
+            _timerStyle.normal.textColor = DBP.UI.UITheme.Heading;
 
             if (font != null)
             {
@@ -121,8 +124,7 @@ namespace DBP.Quiz
             float px = (vw - panelW) * 0.5f;
             float py = Mathf.Max(20f, (vh - panelH) * 0.5f);
 
-            GUI.color = panelColor;
-            GUI.DrawTexture(new Rect(px, py, panelW, panelH), Texture2D.whiteTexture);
+            DBP.UI.UITheme.ImguiPanel(new Rect(px, py, panelW, panelH)); // khung gỗ + giấy da
 
             float frac = Mathf.Clamp01(_remaining / _limit);
             float x = px + 40f;
@@ -133,7 +135,7 @@ namespace DBP.Quiz
             GUI.Label(new Rect(x + inner * 0.5f, y, inner * 0.5f, 50f), "Còn " + Mathf.CeilToInt(_remaining) + " giây", _timerStyle);
             y += 50f;
 
-            GUI.color = new Color(1f, 1f, 1f, 0.15f);
+            GUI.color = new Color(0.25f, 0.16f, 0.08f, 0.55f);
             GUI.DrawTexture(new Rect(x, y, inner, 14f), Texture2D.whiteTexture);
             GUI.color = frac > 0.25f ? barColor : barWarnColor;
             GUI.DrawTexture(new Rect(x, y, inner * frac, 14f), Texture2D.whiteTexture);

@@ -49,9 +49,19 @@ namespace DBP.Tests
             {
                 var bounds = crate.GetComponentsInChildren<Collider>().Select(c => c.bounds).Aggregate((a, b) => { a.Encapsulate(b); return a; });
                 // Đứng cách hòm 1,4 m, nhìn vào tâm hòm
+                // Đứng ở chỗ người chơi đứng được thật (không lọt vào vách, hàng rào): thử 8 hướng quanh hòm
                 var away = player.transform.position - bounds.center; away.y = 0;
                 if (away.sqrMagnitude < 0.01f) away = Vector3.back;
                 var feet = bounds.center + away.normalized * 1.4f;
+                for (int k = 0; k < 8; k++)
+                {
+                    var dirK = Quaternion.Euler(0, k * 45f, 0) * away.normalized;
+                    var cand = bounds.center + dirK * 1.4f; cand.y = bounds.min.y;
+                    bool blocked = Physics.OverlapCapsule(cand + Vector3.up * 0.45f, cand + Vector3.up * 1.6f, 0.3f, ~0, QueryTriggerInteraction.Ignore)
+                        .Any(c => !c.transform.IsChildOf(player.transform));
+                    bool clearView = !Physics.Linecast(cand + Vector3.up * 1.6f, bounds.center, out var lh, ~0, QueryTriggerInteraction.Ignore) || lh.collider.GetComponentInParent<QuizCrate>() == crate;
+                    if (!blocked && clearView) { feet = cand; away = dirK; break; }
+                }
                 feet.y = bounds.min.y;
                 if (controller) controller.enabled = false;
                 player.transform.position = feet;
