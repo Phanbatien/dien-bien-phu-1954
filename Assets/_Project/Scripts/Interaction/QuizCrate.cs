@@ -230,8 +230,49 @@ namespace DBP.Interaction
                     ? "Phần thưởng hòm: kiểm tra hành trang và vật phẩm dư bên cạnh."
                     : "Đã nhận phần thưởng hòm vào hành trang.");
 
-            // Đã mở: tối màu đi (Khôi thay bằng hoạt ảnh mở nắp).
-            if (TryGetComponent<Renderer>(out var r)) r.material.color = r.material.color * 0.4f;
+            StartCoroutine(OpenEffect(result.outcome == QuizOutcome.Correct));
+        }
+
+        /// Hiệu ứng mở hòm: đúng thì bùng sáng màu độ hiếm, tia lửa và cột sáng bốc lên; sai thì bụi tung.
+        /// Xong thì hòm tối đi, quầng sáng tắt, để người chơi biết hòm đã dùng.
+        System.Collections.IEnumerator OpenEffect(bool correct)
+        {
+            var top = transform.position + Vector3.up * (transform.lossyScale.y * 0.5f + 0.05f);
+            var glow = GetComponentInChildren<Light>();
+            Color tint = glow ? glow.color : RarityRules.Color(rarity);
+            DBP.Core.CombatEffects.Impact(top, Vector3.up, false);
+            LineRenderer beam = null;
+            if (correct)
+            {
+                for (int i = 0; i < 3; i++) DBP.Core.CombatEffects.Impact(top + UnityEngine.Random.insideUnitSphere * 0.15f, Vector3.up, true);
+                var mat = DBP.Core.CombatEffects.SoftMaterial;
+                if (mat)
+                {
+                    beam = new GameObject("CotSang").AddComponent<LineRenderer>();
+                    beam.transform.SetParent(transform, true);
+                    beam.sharedMaterial = mat; beam.positionCount = 2; beam.useWorldSpace = true;
+                    beam.SetPosition(0, top); beam.SetPosition(1, top + Vector3.up * 1.6f);
+                    beam.widthCurve = new AnimationCurve(new Keyframe(0, 0.35f), new Keyframe(1, 0.05f));
+                    beam.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
+                }
+            }
+            for (float t = 0; t < 1.2f; t += Time.deltaTime)
+            {
+                float k = 1f - t / 1.2f;
+                if (glow) glow.intensity = correct ? 1.6f + 6f * k * k : 1.6f * k;
+                if (beam) { var c = tint; c.a = k * 0.8f; beam.startColor = c; c.a = 0; beam.endColor = c; }
+                yield return null;
+            }
+            if (beam) Destroy(beam.gameObject);
+            if (glow) glow.enabled = false;
+            var block = new MaterialPropertyBlock();
+            foreach (var r in GetComponentsInChildren<Renderer>())
+            {
+                if (r is LineRenderer) continue;
+                r.GetPropertyBlock(block);
+                block.SetColor("_BaseColor", new Color(0.35f, 0.35f, 0.35f));
+                r.SetPropertyBlock(block);
+            }
         }
         // Audit only: no change to reward selection, inventory grants or shared signatures.
         void Audit(string phase, QuizResult result, int leftoverAmmo, int leftoverGrenades, string displacedWeapon)

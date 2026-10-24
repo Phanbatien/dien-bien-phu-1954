@@ -32,6 +32,9 @@ namespace DBP.Tests
             Time.timeScale = 1f;
             yield return null;
 
+            // Chỉ kiểm tra hòm: tắt lính địch để không ai chạy ngang che tầm nhìn lúc dò
+            foreach (var h in Object.FindObjectsByType<Health>(FindObjectsSortMode.None))
+                if (h.Kind != TargetKind.Player) h.gameObject.SetActive(false);
             var player = GameObject.FindGameObjectWithTag("Player");
             var interactor = player.GetComponent<Interactor>();
             Assert.IsNotNull(interactor, "Người chơi thiếu Interactor");
@@ -61,7 +64,8 @@ namespace DBP.Tests
                 if (!ReferenceEquals(focus, crate))
                 {
                     failed++;
-                    var hit = Physics.Raycast(cam.transform.position, cam.transform.forward, out var h, 3f, ~0, QueryTriggerInteraction.Ignore) ? h.collider.name : "không trúng gì";
+                    var hit = string.Join(" → ", Physics.RaycastAll(cam.transform.position, cam.transform.forward, 3f, ~0, QueryTriggerInteraction.Ignore)
+                        .OrderBy(x => x.distance).Select(x => $"{x.collider.name}[{x.collider.GetType().Name} {x.distance:0.00}m, của người chơi={x.collider.transform.IsChildOf(player.transform)}]"));
                     report.AppendLine($"{crate.name} @ {bounds.center}: focus={focus}, tia trúng {hit}, CanInteract={crate.CanInteract(interactor)}");
                 }
                 else if (crate == crates[0] && !string.IsNullOrEmpty(System.Environment.GetEnvironmentVariable("SHOT_DIR")))

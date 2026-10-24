@@ -24,6 +24,8 @@ namespace DBP.Weapons
         [SerializeField] float adsLerpSpeed = 12f;
 
         public static event Action Fired;
+        /// Mỗi phát bắn của người chơi: điểm đầu và điểm cuối đường đạn (AI nghe tiếng súng, bị đạn sượt thì nấp).
+        public static event Action<Vector3, Vector3> ShotFired;
         public static event Action Reloaded;
         public event Action<RaycastHit> Hit;
 
@@ -145,6 +147,7 @@ namespace DBP.Weapons
             bool struck = Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore);
 
             CombatEffects.Tracer(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, struck ? hit.point : origin + direction * (stats.range), false);
+            ShotFired?.Invoke(origin, struck ? hit.point : origin + direction * stats.range);
 
             if (struck)
             {
