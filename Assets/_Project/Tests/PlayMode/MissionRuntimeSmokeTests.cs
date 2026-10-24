@@ -60,6 +60,24 @@ namespace DBP.Tests
                 RenderTexture.active = null;
             }
             Object.Destroy(camGo);
+            // Toàn cảnh từ camera người chơi (có hậu kỳ, núi xa, khói): nhìn trước rồi quay ngược lại
+            var main = Camera.main;
+            if (!main) yield break;
+            var start = main.transform.rotation;
+            for (int i = 0; i < 2; i++)
+            {
+                main.transform.rotation = Quaternion.Euler(-4f, start.eulerAngles.y + i * 180f, 0f);
+                main.targetTexture = rt;
+                main.Render();
+                RenderTexture.active = rt;
+                var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+                tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0);
+                tex.Apply();
+                File.WriteAllBytes(Path.Combine(dir, $"run_{scene}_wide{i}.png"), tex.EncodeToPNG());
+                RenderTexture.active = null;
+                main.targetTexture = null;
+            }
+            main.transform.rotation = start;
         }
     }
 }

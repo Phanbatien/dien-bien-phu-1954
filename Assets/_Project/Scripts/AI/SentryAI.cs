@@ -224,7 +224,9 @@ namespace DBP.AI
             if (audioSource && fireClip) audioSource.PlayOneShot(fireClip);
 
             var dir = (player.position + Vector3.up * 0.8f - muzzle.position).normalized;
-            if (Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(muzzle.position, dir, out var hit, fireRange, sightMask, QueryTriggerInteraction.Ignore);
+            CombatEffects.Tracer(muzzle.position, struck ? hit.point : muzzle.position + dir * (fireRange), true);
+            if (struck)
             {
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
                 dmg?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);

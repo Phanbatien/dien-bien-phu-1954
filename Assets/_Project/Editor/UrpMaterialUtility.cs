@@ -147,6 +147,7 @@ namespace DBP.EditorTools
             if (name == "Hidden/InternalErrorShader") return false;
             if (!mat.shader.isSupported) return false;
             if (name.StartsWith("Universal Render Pipeline/")) return true;
+            if (name.StartsWith("DBP/")) return true; // shader HLSL của dự án, viết sẵn cho URP
             if (name.StartsWith("Shader Graphs/"))
             {
                 for (int i = 0; i < mat.shader.passCount; i++)

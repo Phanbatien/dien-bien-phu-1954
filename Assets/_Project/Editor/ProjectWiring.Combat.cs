@@ -416,6 +416,7 @@ namespace DBP.EditorTools
             EnsureGrenadePrefab();
             EnsureSoldierController();
             EnsurePlayerGrenades();
+            EnsureSmgViewModel();
         }
 
         static Material LoadOrMakeMat(string name, Color color)

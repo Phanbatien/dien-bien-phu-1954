@@ -64,7 +64,9 @@ namespace DBP.Weapons
             var cam = Camera.main.transform;
             var r = Random.insideUnitCircle * spread;
             var dir = cam.rotation * (Quaternion.Euler(r.x, r.y, 0f) * Vector3.forward);
-            if (Physics.Raycast(cam.position, dir, out var hit, range, ~0, QueryTriggerInteraction.Ignore))
+            bool struck = Physics.Raycast(cam.position, dir, out var hit, range, ~0, QueryTriggerInteraction.Ignore);
+            CombatEffects.Tracer(cam.position + cam.forward * 1.2f - cam.up * .25f, struck ? hit.point : cam.position + dir * (range), false);
+            if (struck)
                 hit.collider.GetComponentInParent<IDamageable>()?.TakeDamage(damage, DamageType.Bullet, hit.point);
             user.Body.AddRecoil(recoilPitch, Random.Range(-0.3f, 0.3f));
             if (audioSource && fireClip) audioSource.PlayOneShot(fireClip);
