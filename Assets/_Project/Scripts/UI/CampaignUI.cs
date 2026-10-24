@@ -226,8 +226,9 @@ namespace DBP.UI
                 W.Button(page, "Buy" + b, current == 3 ? "ĐÃ ĐỦ 3 CẤP" : $"MUA CẤP {next} • {cost} ĐIỂM", x + 22, 600, 306, 60, () => Purchase(id), canBuy);
                 if (!canBuy && current < 3) W.Label(page, "Shortfall", $"Thiếu {cost - ProfileService.Data.resolve} điểm", x + 22, 568, 306, 30, 18, W.Gold);
             }
-            W.Button(page, "BackToMenu", "← Chọn nhiệm vụ", 64, 740, 440, 66, () => Show(CampaignScreen.Menu));
-            W.Button(page, "Deploy", "XUẤT TRẬN →", 1096, 740, 440, 66, Deploy);
+            BriefingSection();
+            W.Button(page, "BackToMenu", "← Chọn nhiệm vụ", 64, 740, 440, 66, () => { briefing = null; Show(CampaignScreen.Menu); });
+            W.Button(page, "Deploy", "XUẤT TRẬN →", 1096, 740, 440, 66, Deploy, BriefingReady);
         }
         public void Purchase(string upgradeId)
         {
@@ -237,6 +238,9 @@ namespace DBP.UI
         public void Deploy()
         {
             if (ScreenState != CampaignScreen.Preparation || loading || !ProfileService.HasProfile || !ProfileService.IsUnlocked("M" + (SelectedMission + 1))) return;
+            if (!BriefingReady) { if (status) status.text = "Hoàn thành họp tác chiến trước khi xuất trận (BR-06)."; return; }
+            briefing.Commit(); // giao câu đã trả lời và bộ chọn câu cho màn chơi (BR-31, BR-34)
+            briefing = null;
             loading = SceneTransition.Load(Scenes[SelectedMission]);
         }
         void Tutorial()

@@ -1,10 +1,29 @@
 {
   "weapons": [
     {
-      "id": "W-MAUSER", "name": "Mauser", "origin": "mixed", "ammoType": "7.92x57",
-      "availableFrom": 0, "rarity": "uncommon", "fireMode": "single", "sourceId": "",
-      "stats": { "damage": 85, "rpm": 35, "mag": 5, "reloadSec": 3.6, "reserve": 25, "range": 220,
-                 "hipSpread": 2.5, "adsSpread": 0.12, "recoilPitch": 4, "recoilYaw": 0.9, "adsFov": 50, "scopeZoom": 1 }
+      "id": "W-MAUSER",
+      "name": "Mauser",
+      "origin": "mixed",
+      "ammoType": "7.92x57",
+      "availableFrom": 1935,
+      "rarity": "uncommon",
+      "fireMode": "single",
+      "sourceId": "SRC-VNG-DBP",
+      "stats": {
+        "damage": 85,
+        "rpm": 35,
+        "mag": 5,
+        "reloadSec": 3.6,
+        "reserve": 25,
+        "range": 220,
+        "hipSpread": 2.5,
+        "adsSpread": 0.12,
+        "recoilPitch": 4,
+        "recoilYaw": 0.9,
+        "adsFov": 50,
+        "scopeZoom": 1
+      },
+      "note": "Súng trường Mauser (Kar98k 1935 và các biến thể) có trong kho vũ khí thu được và viện trợ của Việt Minh"
     },
     {
       "id": "W-MOSIN",
@@ -28,7 +47,8 @@
         "adsFov": 45,
         "scopeZoom": 1.0
       },
-      "sourceId": "Quân đội Việt Minh trang bị từ viện trợ Liên Xô, sử dụng trong chiến dịch Điện Biên Phủ 1954"
+      "sourceId": "SRC-VNG-DBP",
+      "note": "Quân đội Việt Minh trang bị từ viện trợ Liên Xô, sử dụng trong chiến dịch Điện Biên Phủ 1954"
     },
     {
       "id": "W-MOSIN-SCOPE",
@@ -52,7 +72,8 @@
         "adsFov": 25,
         "scopeZoom": 4.0
       },
-      "sourceId": "Biến thể bắn tỉa trang bị kính ngắm PU của súng trường Mosin-Nagant, viện trợ từ Liên Xô"
+      "sourceId": "SRC-VNG-DBP",
+      "note": "Biến thể bắn tỉa trang bị kính ngắm PU của súng trường Mosin-Nagant, viện trợ từ Liên Xô"
     },
     {
       "id": "W-MAT49",
@@ -76,7 +97,8 @@
         "adsFov": 55,
         "scopeZoom": 1.0
       },
-      "sourceId": "Quân đội Pháp trang bị chính (Armée française), Việt Minh thu giữ làm chiến lợi phẩm và sử dụng phổ biến"
+      "sourceId": "SRC-FALL-HELL",
+      "note": "Quân đội Pháp trang bị chính (Armée française), Việt Minh thu giữ làm chiến lợi phẩm và sử dụng phổ biến"
     },
     {
       "id": "W-TYPE50",
@@ -100,7 +122,8 @@
         "adsFov": 55,
         "scopeZoom": 1.0
       },
-      "sourceId": "Viện trợ Trung Quốc, sản xuất dựa trên PPSh-41 của Liên Xô, trang bị cho Quân đội Nhân dân Việt Nam"
+      "sourceId": "SRC-VNG-DBP",
+      "note": "Viện trợ Trung Quốc, sản xuất dựa trên PPSh-41 của Liên Xô, trang bị cho Quân đội Nhân dân Việt Nam"
     },
     {
       "id": "W-MAS36",
@@ -124,7 +147,8 @@
         "adsFov": 48,
         "scopeZoom": 1.0
       },
-      "sourceId": "Súng trường tiêu chuẩn của Quân đội Pháp (Armée française), Việt Minh thu được làm chiến lợi phẩm và sử dụng"
+      "sourceId": "SRC-FALL-HELL",
+      "note": "Súng trường tiêu chuẩn của Quân đội Pháp (Armée française), Việt Minh thu được làm chiến lợi phẩm và sử dụng"
     },
     {
       "id": "W-BAZOOKA",
@@ -148,7 +172,8 @@
         "adsFov": 50,
         "scopeZoom": 1.0
       },
-      "sourceId": "Súng chống tăng của Mỹ viện trợ cho Pháp, Việt Minh thu được từ chiến lợi phẩm để công phá lô cốt và xe tăng"
+      "sourceId": "SRC-FALL-HELL",
+      "note": "Súng chống tăng của Mỹ viện trợ cho Pháp, Việt Minh thu được từ chiến lợi phẩm để công phá lô cốt và xe tăng"
     }
   ]
 }

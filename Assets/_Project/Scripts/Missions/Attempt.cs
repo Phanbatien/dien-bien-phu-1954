@@ -39,6 +39,8 @@ namespace DBP.Missions
         public int WeaponDrops;
         /// Ghi hồ sơ lỗi khi quyết toán: màn kết quả phải báo, không hiện "đã lưu" (BR-37).
         public bool SaveFailed;
+        /// Quyết Tâm thực nhận khi thắng (từ câu đúng trong hầm chưa từng được thưởng).
+        public int ResolveGained;
 
         public MissionOutcome Outcome { get; private set; } = MissionOutcome.None;
         public double CompletionSeconds => RankingMilliseconds >= 0 ? RankingMilliseconds / 1000d : BattleEnd - BattleStart;

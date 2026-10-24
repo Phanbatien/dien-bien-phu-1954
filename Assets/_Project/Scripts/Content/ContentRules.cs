@@ -137,6 +137,18 @@ namespace DBP.Content
             return null;
         }
 
+        /// Mọi sourceId của câu hỏi và vũ khí phải có trong sources.json (BR-27: tham chiếu phải tồn tại).
+        public static void CheckSourceRefs(IList<Question> questions, IList<WeaponDef> weapons, ICollection<string> sourceIds, List<string> errors)
+        {
+            foreach (var q in questions)
+            {
+                var id = q.source?.sourceId;
+                if (!string.IsNullOrWhiteSpace(id) && !sourceIds.Contains(id)) errors.Add($"Câu {q.id}: nguồn \"{id}\" không có trong sources.json (BR-27)");
+            }
+            foreach (var w in weapons)
+                if (!string.IsNullOrWhiteSpace(w.sourceId) && !sourceIds.Contains(w.sourceId)) errors.Add($"Vũ khí {w.id}: nguồn \"{w.sourceId}\" không có trong sources.json (BR-27)");
+        }
+
         public static void CheckChance(float chance, string where, List<string> errors)
         {
             if (chance < 0f || chance > 1f) errors.Add($"{where}: tỉ lệ {chance} ngoài 0–1 (BR-14)");

@@ -1,0 +1,1029 @@
+{
+  "questions": [
+    {
+      "id": "Q-M2-L1-001",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Sau Him Lam, quân ta tiến công tiếp cứ điểm nào ở phía Bắc?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đồi A1"
+        },
+        {
+          "id": "b",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "c",
+          "text": "Độc Lập"
+        },
+        {
+          "id": "d",
+          "text": "Đồi C1"
+        }
+      ],
+      "correct": "c",
+      "fact": "Đợt 1 diệt gọn Him Lam và Độc Lập, bức hàng Bản Kéo.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L1-002",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Đợt 1 của chiến dịch kết thúc vào ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "14/3/1954"
+        },
+        {
+          "id": "b",
+          "text": "30/3/1954"
+        },
+        {
+          "id": "c",
+          "text": "7/5/1954"
+        },
+        {
+          "id": "d",
+          "text": "17/3/1954"
+        }
+      ],
+      "correct": "d",
+      "fact": "Đợt 1 diễn ra từ 13 đến 17/3/1954.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L1-003",
+      "missionId": "M2",
+      "eventId": "EVT-19540507",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Ai là chỉ huy tập đoàn cứ điểm Điện Biên Phủ của Pháp?",
+      "options": [
+        {
+          "id": "a",
+          "text": "De Castries"
+        },
+        {
+          "id": "b",
+          "text": "Navarre"
+        },
+        {
+          "id": "c",
+          "text": "Piroth"
+        },
+        {
+          "id": "d",
+          "text": "Salan"
+        }
+      ],
+      "correct": "a",
+      "fact": "Tướng Christian de Castries chỉ huy tập đoàn cứ điểm và bị bắt chiều 7/5/1954.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L1-004",
+      "missionId": "M2",
+      "eventId": "EVT-19540316",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Quân Pháp ở Điện Biên Phủ chủ yếu được tiếp tế bằng đường nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đường sông"
+        },
+        {
+          "id": "b",
+          "text": "Đường không"
+        },
+        {
+          "id": "c",
+          "text": "Đường biển"
+        },
+        {
+          "id": "d",
+          "text": "Đường sắt"
+        }
+      ],
+      "correct": "b",
+      "fact": "Điện Biên Phủ bị cô lập nên Pháp tiếp tế bằng máy bay, thả dù xuống lòng chảo.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L1-005",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "sanbay"
+      ],
+      "stem": "Sân bay lớn của Pháp ở trung tâm lòng chảo tên là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Nà Sản"
+        },
+        {
+          "id": "b",
+          "text": "Gia Lâm"
+        },
+        {
+          "id": "c",
+          "text": "Mường Thanh"
+        },
+        {
+          "id": "d",
+          "text": "Cát Bi"
+        }
+      ],
+      "correct": "c",
+      "fact": "Sân bay Mường Thanh bị hỏa lực của ta uy hiếp từ Đợt 1.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L2-001",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Chỉ huy pháo binh Pháp ở Điện Biên Phủ, bất lực trước pháo ta, là ai?",
+      "options": [
+        {
+          "id": "a",
+          "text": "De Castries"
+        },
+        {
+          "id": "b",
+          "text": "Navarre"
+        },
+        {
+          "id": "c",
+          "text": "Charles Piroth"
+        },
+        {
+          "id": "d",
+          "text": "René Cogny"
+        }
+      ],
+      "correct": "c",
+      "fact": "Piroth là Tư lệnh pháo binh Pháp ở Điện Biên Phủ.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L2-002",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Tập đoàn cứ điểm Điện Biên Phủ chia thành mấy phân khu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2 phân khu"
+        },
+        {
+          "id": "b",
+          "text": "4 phân khu"
+        },
+        {
+          "id": "c",
+          "text": "5 phân khu"
+        },
+        {
+          "id": "d",
+          "text": "3 phân khu"
+        }
+      ],
+      "correct": "d",
+      "fact": "Gồm phân khu Bắc, Trung tâm và Nam.",
+      "source": {
+        "sourceId": "SRC-WEB-LUATMINHKHUE",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L2-003",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Cứ điểm Bản Kéo bị ta xử lý theo cách nào trong Đợt 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bức hàng"
+        },
+        {
+          "id": "b",
+          "text": "Bỏ qua không đánh"
+        },
+        {
+          "id": "c",
+          "text": "Đánh bằng xe tăng"
+        },
+        {
+          "id": "d",
+          "text": "Pháp tự rút bằng máy bay"
+        }
+      ],
+      "correct": "a",
+      "fact": "Ta diệt Him Lam, Độc Lập và bức hàng Bản Kéo.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L2-004",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Cụm cứ điểm Hồng Cúm nằm ở phía nào của tập đoàn cứ điểm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phía Bắc"
+        },
+        {
+          "id": "b",
+          "text": "Phía Nam"
+        },
+        {
+          "id": "c",
+          "text": "Phía Đông"
+        },
+        {
+          "id": "d",
+          "text": "Phía Tây"
+        }
+      ],
+      "correct": "b",
+      "fact": "Hồng Cúm (Isabelle) là cụm cứ điểm phía Nam, có sân bay phụ.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L2-005",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phongkhong"
+      ],
+      "stem": "Pháo cao xạ của ta ở Điện Biên Phủ chủ yếu dùng để làm gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phá xe tăng"
+        },
+        {
+          "id": "b",
+          "text": "Bắn tỉa lính gác"
+        },
+        {
+          "id": "c",
+          "text": "Bắn máy bay địch"
+        },
+        {
+          "id": "d",
+          "text": "Phá hầm ngầm"
+        }
+      ],
+      "correct": "c",
+      "fact": "Lực lượng phòng không, pháo binh, bộ binh bắn rơi và phá hủy 62 máy bay của địch.",
+      "source": {
+        "sourceId": "SRC-WEB-NHANDAN-PHONGKHONG",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-001",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Pháp gọi cứ điểm Độc Lập bằng tên nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Béatrice"
+        },
+        {
+          "id": "b",
+          "text": "Anne-Marie"
+        },
+        {
+          "id": "c",
+          "text": "Gabrielle"
+        },
+        {
+          "id": "d",
+          "text": "Isabelle"
+        }
+      ],
+      "correct": "c",
+      "fact": "Độc Lập = Gabrielle; Him Lam = Béatrice; Bản Kéo = Anne-Marie.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-002",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Ngày 15/3/1954, Piroth kết thúc cuộc đời như thế nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Bị bắn tỉa"
+        },
+        {
+          "id": "b",
+          "text": "Bị bắt sống"
+        },
+        {
+          "id": "c",
+          "text": "Tử trận khi phản kích"
+        },
+        {
+          "id": "d",
+          "text": "Dùng lựu đạn tự sát"
+        }
+      ],
+      "correct": "d",
+      "fact": "Piroth tự sát bằng lựu đạn khi pháo Pháp bị pháo ta áp chế.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-003",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Đại đoàn nào tiêu diệt cụm cứ điểm Độc Lập?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đại đoàn 308"
+        },
+        {
+          "id": "b",
+          "text": "Đại đoàn 312"
+        },
+        {
+          "id": "c",
+          "text": "Đại đoàn 316"
+        },
+        {
+          "id": "d",
+          "text": "Đại đoàn 351"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đại đoàn 308 diệt Độc Lập, Đại đoàn 312 diệt Him Lam.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-004",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "xetang"
+      ],
+      "stem": "Xe tăng Chaffee mà Pháp dùng ở Điện Biên Phủ do nước nào sản xuất?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Anh"
+        },
+        {
+          "id": "b",
+          "text": "Mỹ"
+        },
+        {
+          "id": "c",
+          "text": "Liên Xô"
+        },
+        {
+          "id": "d",
+          "text": "Đức"
+        }
+      ],
+      "correct": "b",
+      "fact": "M24 Chaffee là xe tăng hạng nhẹ do Mỹ sản xuất, Pháp được viện trợ.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-005",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "sanbay"
+      ],
+      "stem": "Pháp có mấy sân bay ở tập đoàn cứ điểm Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1 sân bay"
+        },
+        {
+          "id": "b",
+          "text": "3 sân bay"
+        },
+        {
+          "id": "c",
+          "text": "2 sân bay"
+        },
+        {
+          "id": "d",
+          "text": "4 sân bay"
+        }
+      ],
+      "correct": "c",
+      "fact": "Hai sân bay là mấu chốt tiếp tế cho 49 cứ điểm.",
+      "source": {
+        "sourceId": "SRC-WEB-VIETTIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L3-006",
+      "missionId": "M2",
+      "eventId": "EVT-19540316",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Vì sao Pháp phải nhảy dù tăng viện sau Đợt 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Có sân bay mới"
+        },
+        {
+          "id": "b",
+          "text": "Đường sông rất thuận lợi"
+        },
+        {
+          "id": "c",
+          "text": "Có đường sắt tới nơi"
+        },
+        {
+          "id": "d",
+          "text": "Đường bộ bị cắt, chỉ còn đường không"
+        }
+      ],
+      "correct": "d",
+      "fact": "Tập đoàn cứ điểm bị cô lập giữa núi rừng, tăng viện chủ yếu bằng máy bay và nhảy dù.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L4-001",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phongkhong"
+      ],
+      "stem": "Đợt 1 ta phá hủy bao nhiêu máy bay của địch?",
+      "options": [
+        {
+          "id": "a",
+          "text": "12 chiếc"
+        },
+        {
+          "id": "b",
+          "text": "40 chiếc"
+        },
+        {
+          "id": "c",
+          "text": "25 chiếc"
+        },
+        {
+          "id": "d",
+          "text": "62 chiếc"
+        }
+      ],
+      "correct": "c",
+      "fact": "Đợt 1 phá hủy 25 máy bay; cả chiến dịch hạ 62 chiếc.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "draft",
+      "revision": 1,
+      "reviewNote": "Số máy bay phá hủy trong Đợt 1: nguồn khác ghi 12 chiếc"
+    },
+    {
+      "id": "Q-M2-L4-002",
+      "missionId": "M2",
+      "eventId": "EVT-19540316",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Ngày 16/3/1954, Pháp tăng viện bao nhiêu tiểu đoàn nhảy dù?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1 tiểu đoàn"
+        },
+        {
+          "id": "b",
+          "text": "2 tiểu đoàn"
+        },
+        {
+          "id": "c",
+          "text": "5 tiểu đoàn"
+        },
+        {
+          "id": "d",
+          "text": "3 tiểu đoàn"
+        }
+      ],
+      "correct": "d",
+      "fact": "Pháp thả 3 tiểu đoàn dù xuống tăng viện sau Đợt 1.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "draft",
+      "revision": 1,
+      "reviewNote": "Số tiểu đoàn dù tăng viện ngày 16/3 cần đối chiếu"
+    },
+    {
+      "id": "Q-M2-L4-003",
+      "missionId": "M2",
+      "eventId": "EVT-19540313",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "xetang"
+      ],
+      "stem": "Pháp có khoảng bao nhiêu xe tăng Chaffee ở Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "10 chiếc"
+        },
+        {
+          "id": "b",
+          "text": "3 chiếc"
+        },
+        {
+          "id": "c",
+          "text": "20 chiếc"
+        },
+        {
+          "id": "d",
+          "text": "40 chiếc"
+        }
+      ],
+      "correct": "a",
+      "fact": "Pháp có khoảng 10 xe tăng M24 Chaffee tại lòng chảo.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L4-004",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Trong Đợt 1, ta diệt và bắt sống trên bao nhiêu tên địch?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Trên 500 tên"
+        },
+        {
+          "id": "b",
+          "text": "Trên 2.000 tên"
+        },
+        {
+          "id": "c",
+          "text": "Trên 5.000 tên"
+        },
+        {
+          "id": "d",
+          "text": "Trên 10.000 tên"
+        }
+      ],
+      "correct": "b",
+      "fact": "Đợt 1 diệt và bắt sống trên 2.000 địch, phá hủy 25 máy bay.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L4-005",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Kết quả Đợt 1: ta xóa sổ bao nhiêu trung đoàn của địch?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2 trung đoàn"
+        },
+        {
+          "id": "b",
+          "text": "3 trung đoàn"
+        },
+        {
+          "id": "c",
+          "text": "1 trung đoàn"
+        },
+        {
+          "id": "d",
+          "text": "4 trung đoàn"
+        }
+      ],
+      "correct": "c",
+      "fact": "Đợt 1 xóa sổ 1 trung đoàn, phá vỡ cửa ngõ phía Bắc của tập đoàn cứ điểm.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "draft",
+      "revision": 1,
+      "reviewNote": "Số trung đoàn bị xóa sổ trong Đợt 1 cần đối chiếu"
+    },
+    {
+      "id": "Q-M2-L5-001",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phaobinh"
+      ],
+      "stem": "Vì sao pháo Pháp bị pháo ta áp đảo ngay Đợt 1?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pháo Pháp hết đạn ngày đầu"
+        },
+        {
+          "id": "b",
+          "text": "Pháp không có pháo binh"
+        },
+        {
+          "id": "c",
+          "text": "Pháo ta ở núi cao, giấu kín"
+        },
+        {
+          "id": "d",
+          "text": "Pháo ta nhiều gấp trăm lần"
+        }
+      ],
+      "correct": "c",
+      "fact": "Pháo ta đặt trên cao, che giấu tốt, bắn xuống lòng chảo; Pháp tin pháo ta không thể kéo lên núi.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L5-002",
+      "missionId": "M2",
+      "eventId": "EVT-19540315",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Việc Piroth tự sát cho thấy điều gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pháp thắng Đợt 1"
+        },
+        {
+          "id": "b",
+          "text": "Pháp xin đình chiến"
+        },
+        {
+          "id": "c",
+          "text": "Pháo ta bị phá hủy"
+        },
+        {
+          "id": "d",
+          "text": "Niềm tin vào pháo binh Pháp sụp đổ"
+        }
+      ],
+      "correct": "d",
+      "fact": "Piroth từng tin pháo Pháp áp đảo; sự bất lực của ông phản ánh niềm tin đó đã sụp đổ.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L5-003",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "doclap"
+      ],
+      "stem": "Kết quả Đợt 1 làm thay đổi thế trận như thế nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Phá cửa ngõ phía Bắc, uy hiếp sân bay"
+        },
+        {
+          "id": "b",
+          "text": "Pháp giành lại thế chủ động"
+        },
+        {
+          "id": "c",
+          "text": "Ta phải rút khỏi lòng chảo"
+        },
+        {
+          "id": "d",
+          "text": "Hai bên giữ nguyên thế trận"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đợt 1 phá vỡ cửa ngõ phía Bắc và uy hiếp sân bay Mường Thanh.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M2-L5-004",
+      "missionId": "M2",
+      "eventId": "EVT-19540317",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "sanbay"
+      ],
+      "stem": "Vì sao cầu hàng không của Pháp ngày càng khó khăn?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Pháp không cần tiếp tế nữa"
+        },
+        {
+          "id": "b",
+          "text": "Sân bay bị pháo và cao xạ ta uy hiếp"
+        },
+        {
+          "id": "c",
+          "text": "Ta chiếm sân bay ngay Đợt 1"
+        },
+        {
+          "id": "d",
+          "text": "Máy bay Pháp hết nhiên liệu"
+        }
+      ],
+      "correct": "b",
+      "fact": "Pháo và cao xạ ta uy hiếp sân bay, máy bay khó cất hạ cánh nên Pháp phải thả dù.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    }
+  ]
+}

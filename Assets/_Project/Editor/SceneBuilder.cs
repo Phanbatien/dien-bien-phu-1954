@@ -379,7 +379,7 @@ namespace DBP.EditorTools
             var session = systems.GetComponent<FieldQuizSession>();
             if (!session) session = systems.AddComponent<FieldQuizSession>();
             SetRef(session, "freeze", freeze);
-            if (!systems.GetComponent<DebugQuizView>()) systems.AddComponent<DebugQuizView>();
+            if (!systems.GetComponent<QuizPanel>()) systems.AddComponent<QuizPanel>(); // T18 (Thiên Trí)
             if (!systems.GetComponent<DBP.DebugTools.DebugOverlay>()) systems.AddComponent<DBP.DebugTools.DebugOverlay>();
             if (!systems.GetComponent<FogBackground>()) systems.AddComponent<FogBackground>();
             return systems;

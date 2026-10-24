@@ -58,6 +58,10 @@ namespace DBP.EditorTools
 
             // Câu hỏi
             var questions = QuestionBank.LoadAll(r.Errors);
+            if (ContentLoader.TryLoad<SourceFile>("sources.json", out var sf, out var serr))
+                ContentRules.CheckSourceRefs(questions, wf?.weapons ?? new WeaponDef[0],
+                    new HashSet<string>((sf.sources ?? new SourceEntry[0]).Select(s => s.id)), r.Errors);
+            else r.Errors.Add(serr);
             ContentRules.CheckQuestions(questions, r.Errors, r.Warnings);
             foreach (var budget in MissionBudget.Campaign) ContentRules.CheckBudget(questions, budget, r.Errors);
 

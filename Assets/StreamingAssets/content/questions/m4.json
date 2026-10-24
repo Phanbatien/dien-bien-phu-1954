@@ -1,0 +1,1029 @@
+{
+  "questions": [
+    {
+      "id": "Q-M4-L1-001",
+      "missionId": "M4",
+      "eventId": "EVT-19540501",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot3"
+      ],
+      "stem": "Đợt 3 của chiến dịch bắt đầu từ ngày nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "1/5/1954"
+        },
+        {
+          "id": "b",
+          "text": "13/3/1954"
+        },
+        {
+          "id": "c",
+          "text": "30/3/1954"
+        },
+        {
+          "id": "d",
+          "text": "7/5/1954"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đợt 3 diễn ra từ 1 đến 7/5/1954.",
+      "source": {
+        "sourceId": "SRC-WEB-THUVIENPHAPLUAT",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L1-002",
+      "missionId": "M4",
+      "eventId": "EVT-19540330",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "hao"
+      ],
+      "stem": "Chiến hào dùng để làm gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Cất giữ lương thực"
+        },
+        {
+          "id": "b",
+          "text": "Di chuyển, tiếp cận địch an toàn"
+        },
+        {
+          "id": "c",
+          "text": "Chứa máy bay"
+        },
+        {
+          "id": "d",
+          "text": "Làm sân bay"
+        }
+      ],
+      "correct": "b",
+      "fact": "Chiến hào là đường đào sâu cho bộ binh di chuyển, ẩn nấp, tiếp cận cứ điểm.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L1-003",
+      "missionId": "M4",
+      "eventId": "EVT-19540501",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot3"
+      ],
+      "stem": "Đợt 3 của chiến dịch kéo dài bao nhiêu ngày?",
+      "options": [
+        {
+          "id": "a",
+          "text": "3 ngày"
+        },
+        {
+          "id": "b",
+          "text": "10 ngày"
+        },
+        {
+          "id": "c",
+          "text": "7 ngày"
+        },
+        {
+          "id": "d",
+          "text": "14 ngày"
+        }
+      ],
+      "correct": "c",
+      "fact": "Đợt 3 từ 1 đến 7/5/1954, kết thúc bằng tổng công kích.",
+      "source": {
+        "sourceId": "SRC-WEB-THUVIENPHAPLUAT",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L1-004",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "danCong"
+      ],
+      "stem": "Dân công hỏa tuyến phục vụ chiến dịch bằng việc gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lái máy bay"
+        },
+        {
+          "id": "b",
+          "text": "Chỉ huy đại đoàn"
+        },
+        {
+          "id": "c",
+          "text": "Chế tạo xe tăng"
+        },
+        {
+          "id": "d",
+          "text": "Vận chuyển lương thực, đạn ra mặt trận"
+        }
+      ],
+      "correct": "d",
+      "fact": "Hậu phương chi viện sức người, sức của; dân công vận chuyển hậu cần ra mặt trận.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L1-005",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 1,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Chiến dịch Điện Biên Phủ thuộc cuộc kháng chiến chống kẻ thù nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Thực dân Pháp"
+        },
+        {
+          "id": "b",
+          "text": "Phát xít Nhật"
+        },
+        {
+          "id": "c",
+          "text": "Đế quốc Mỹ"
+        },
+        {
+          "id": "d",
+          "text": "Quân Thanh"
+        }
+      ],
+      "correct": "a",
+      "fact": "Đây là trận quyết chiến chiến lược của cuộc kháng chiến chống thực dân Pháp.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L2-001",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Quân Pháp ở Điện Biên Phủ gồm những lực lượng nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Lê dương, lính dù, lính thuộc địa"
+        },
+        {
+          "id": "b",
+          "text": "Chỉ quân Mỹ"
+        },
+        {
+          "id": "c",
+          "text": "Chỉ quân Đức"
+        },
+        {
+          "id": "d",
+          "text": "Chỉ quân Anh"
+        }
+      ],
+      "correct": "a",
+      "fact": "Tập đoàn cứ điểm có bộ binh Âu - Phi, lê dương, lính dù và lính bản xứ.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L2-002",
+      "missionId": "M4",
+      "eventId": "EVT-19540506",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "bocPha"
+      ],
+      "stem": "Bộc phá là loại vũ khí nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Loại pháo cao xạ"
+        },
+        {
+          "id": "b",
+          "text": "Khối thuốc nổ lớn phá công sự"
+        },
+        {
+          "id": "c",
+          "text": "Loại xe tăng"
+        },
+        {
+          "id": "d",
+          "text": "Loại súng bắn tỉa"
+        }
+      ],
+      "correct": "b",
+      "fact": "Bộc phá là thuốc nổ khối lớn dùng phá hầm, công sự kiên cố.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L2-003",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "sanbay"
+      ],
+      "stem": "Sân bay phụ của Pháp nằm ở cụm cứ điểm nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Him Lam"
+        },
+        {
+          "id": "b",
+          "text": "Bản Kéo"
+        },
+        {
+          "id": "c",
+          "text": "Hồng Cúm"
+        },
+        {
+          "id": "d",
+          "text": "Độc Lập"
+        }
+      ],
+      "correct": "c",
+      "fact": "Hồng Cúm ở phía Nam, có sân bay phụ của tập đoàn cứ điểm.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L2-004",
+      "missionId": "M4",
+      "eventId": "EVT-19540506",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot3"
+      ],
+      "stem": "Ngày 6/5/1954, ngoài pháo binh, ta dùng thêm loại hỏa lực nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Máy bay ném bom"
+        },
+        {
+          "id": "b",
+          "text": "Tàu chiến"
+        },
+        {
+          "id": "c",
+          "text": "Xe tăng hạng nặng"
+        },
+        {
+          "id": "d",
+          "text": "Hỏa tiễn"
+        }
+      ],
+      "correct": "d",
+      "fact": "17 giờ 6/5/1954 pháo binh và hỏa tiễn bắn dữ dội, mở đường cho bộ binh.",
+      "source": {
+        "sourceId": "SRC-WEB-THUVIENPHAPLUAT",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L2-005",
+      "missionId": "M4",
+      "eventId": "EVT-19540308",
+      "level": 2,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phaobinh"
+      ],
+      "stem": "Công binh mở đường để làm gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đưa pháo và hậu cần ra mặt trận"
+        },
+        {
+          "id": "b",
+          "text": "Xây sân bay"
+        },
+        {
+          "id": "c",
+          "text": "Dẫn nước vào hào"
+        },
+        {
+          "id": "d",
+          "text": "Xây sở chỉ huy Pháp"
+        }
+      ],
+      "correct": "a",
+      "fact": "Công binh mở 5 con đường dài 63 km để kéo pháo vào trận địa an toàn, bí mật.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-001",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Pháp gọi cụm cứ điểm Hồng Cúm là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Isabelle"
+        },
+        {
+          "id": "b",
+          "text": "Béatrice"
+        },
+        {
+          "id": "c",
+          "text": "Gabrielle"
+        },
+        {
+          "id": "d",
+          "text": "Éliane"
+        }
+      ],
+      "correct": "a",
+      "fact": "Hồng Cúm (Isabelle) là cụm cứ điểm phía Nam.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-002",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "sanbay"
+      ],
+      "stem": "Mỹ cho Pháp mượn loại máy bay vận tải nào có cả phi công?",
+      "options": [
+        {
+          "id": "a",
+          "text": "B-29"
+        },
+        {
+          "id": "b",
+          "text": "C-119"
+        },
+        {
+          "id": "c",
+          "text": "F-86"
+        },
+        {
+          "id": "d",
+          "text": "MiG-15"
+        }
+      ],
+      "correct": "b",
+      "fact": "Mỹ cho Pháp mượn 29 máy bay C-119 kèm phi công.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-003",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Tập đoàn cứ điểm Điện Biên Phủ gồm bao nhiêu cụm cứ điểm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "3 cụm"
+        },
+        {
+          "id": "b",
+          "text": "5 cụm"
+        },
+        {
+          "id": "c",
+          "text": "8 cụm"
+        },
+        {
+          "id": "d",
+          "text": "12 cụm"
+        }
+      ],
+      "correct": "c",
+      "fact": "49 cứ điểm chia thành 8 cụm và 3 phân khu.",
+      "source": {
+        "sourceId": "SRC-WEB-VIETTIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-004",
+      "missionId": "M4",
+      "eventId": "EVT-19531120",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chuanbi"
+      ],
+      "stem": "Navarre dự kiến giành lại thế chủ động trong bao lâu?",
+      "options": [
+        {
+          "id": "a",
+          "text": "6 tháng"
+        },
+        {
+          "id": "b",
+          "text": "3 năm"
+        },
+        {
+          "id": "c",
+          "text": "10 năm"
+        },
+        {
+          "id": "d",
+          "text": "18 tháng"
+        }
+      ],
+      "correct": "d",
+      "fact": "Kế hoạch Nava đặt mục tiêu tiêu diệt chủ lực ta, giành thế chủ động trong 18 tháng.",
+      "source": {
+        "sourceId": "SRC-WEB-VIETTIMES",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-005",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Quốc gia nào viện trợ máy bay cho Pháp tại Điện Biên Phủ?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Mỹ"
+        },
+        {
+          "id": "b",
+          "text": "Anh"
+        },
+        {
+          "id": "c",
+          "text": "Nhật"
+        },
+        {
+          "id": "d",
+          "text": "Ý"
+        }
+      ],
+      "correct": "a",
+      "fact": "Mỹ tăng viện máy bay oanh tạc, vận tải và lập cầu hàng không cho Pháp.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L3-006",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 3,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "hao"
+      ],
+      "stem": "Pháp bao quanh cứ điểm bằng vật cản nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tường thành đá"
+        },
+        {
+          "id": "b",
+          "text": "Dây thép gai và bãi mìn"
+        },
+        {
+          "id": "c",
+          "text": "Hào nước sâu"
+        },
+        {
+          "id": "d",
+          "text": "Pháo đài nổi"
+        }
+      ],
+      "correct": "b",
+      "fact": "Mỗi cứ điểm có hầm hào, nhiều lớp dây thép gai và bãi mìn.",
+      "source": {
+        "sourceId": "SRC-FALL-HELL",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L4-001",
+      "missionId": "M4",
+      "eventId": "EVT-19540504",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot3"
+      ],
+      "stem": "Ngày 4/5/1954, Pháp thả xuống Điện Biên Phủ lực lượng nào?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Tiểu đoàn dù dự bị cuối cùng"
+        },
+        {
+          "id": "b",
+          "text": "Đại đoàn thiết giáp"
+        },
+        {
+          "id": "c",
+          "text": "Tướng Navarre"
+        },
+        {
+          "id": "d",
+          "text": "Hàng viện trợ Mỹ"
+        }
+      ],
+      "correct": "a",
+      "fact": "Ngày 4/5/1954 Pháp thả tiểu đoàn dù dự bị cuối cùng xuống Điện Biên Phủ.",
+      "source": {
+        "sourceId": "SRC-WEB-VOH",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L4-002",
+      "missionId": "M4",
+      "eventId": "EVT-19540308",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "phaobinh"
+      ],
+      "stem": "Công binh mở mấy con đường (tổng 63 km) để đưa pháo vào trận địa?",
+      "options": [
+        {
+          "id": "a",
+          "text": "2 con đường"
+        },
+        {
+          "id": "b",
+          "text": "5 con đường"
+        },
+        {
+          "id": "c",
+          "text": "8 con đường"
+        },
+        {
+          "id": "d",
+          "text": "12 con đường"
+        }
+      ],
+      "correct": "b",
+      "fact": "Ba đêm 8-11/3 đưa 2 trung đoàn pháo vào chiếm lĩnh trận địa.",
+      "source": {
+        "sourceId": "SRC-WEB-THCL",
+        "page": ""
+      },
+      "status": "draft",
+      "revision": 1,
+      "reviewNote": "Số con đường và tổng chiều dài cần đối chiếu"
+    },
+    {
+      "id": "Q-M4-L4-003",
+      "missionId": "M4",
+      "eventId": "EVT-19540506",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot2"
+      ],
+      "stem": "Ta tiến công, phòng ngự trên đồi A1 suốt bao nhiêu ngày đêm?",
+      "options": [
+        {
+          "id": "a",
+          "text": "19 ngày đêm"
+        },
+        {
+          "id": "b",
+          "text": "56 ngày đêm"
+        },
+        {
+          "id": "c",
+          "text": "39 ngày đêm"
+        },
+        {
+          "id": "d",
+          "text": "7 ngày đêm"
+        }
+      ],
+      "correct": "c",
+      "fact": "Trận đồi A1 kéo dài 39 ngày đêm, loại 4 tiểu đoàn địch.",
+      "source": {
+        "sourceId": "SRC-WEB-NHANDAN-A1",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L4-004",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Đại đoàn trưởng Đại đoàn 312 trong chiến dịch là ai?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Vương Thừa Vũ"
+        },
+        {
+          "id": "b",
+          "text": "Lê Quảng Ba"
+        },
+        {
+          "id": "c",
+          "text": "Hoàng Văn Thái"
+        },
+        {
+          "id": "d",
+          "text": "Lê Trọng Tấn"
+        }
+      ],
+      "correct": "d",
+      "fact": "Lê Trọng Tấn chỉ huy Đại đoàn 312, đánh Him Lam và nhiều trận khác.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L4-005",
+      "missionId": "M4",
+      "eventId": "EVT-19540507",
+      "level": 4,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "dot3"
+      ],
+      "stem": "Ta thu giữ bao nhiêu ô tô của địch khi chiến dịch kết thúc?",
+      "options": [
+        {
+          "id": "a",
+          "text": "64 chiếc"
+        },
+        {
+          "id": "b",
+          "text": "26 chiếc"
+        },
+        {
+          "id": "c",
+          "text": "46 chiếc"
+        },
+        {
+          "id": "d",
+          "text": "100 chiếc"
+        }
+      ],
+      "correct": "a",
+      "fact": "Ngoài 62 máy bay bị hạ, ta thu 64 ô tô cùng vũ khí, đạn dược.",
+      "source": {
+        "sourceId": "SRC-WEB-BAOVANHOA",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L5-001",
+      "missionId": "M4",
+      "eventId": "EVT-19540330",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Điểm yếu của thế phòng thủ tập đoàn cứ điểm là gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Các cụm bị chia cắt, tiêu diệt từng phần"
+        },
+        {
+          "id": "b",
+          "text": "Có quá ít hầm hào"
+        },
+        {
+          "id": "c",
+          "text": "Không có sân bay"
+        },
+        {
+          "id": "d",
+          "text": "Không có pháo binh"
+        }
+      ],
+      "correct": "a",
+      "fact": "Các cụm cứ điểm bị cô lập, ta chia cắt và tiêu diệt từng cụm.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L5-002",
+      "missionId": "M4",
+      "eventId": "EVT-19540330",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "hao"
+      ],
+      "stem": "Mạng chiến hào vây lấn tạo lợi thế nào cho bộ binh ta?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Ngăn mưa vào trận địa"
+        },
+        {
+          "id": "b",
+          "text": "Xuất phát từ cự ly gần, giảm thương vong"
+        },
+        {
+          "id": "c",
+          "text": "Thay thế pháo binh"
+        },
+        {
+          "id": "d",
+          "text": "Thay thế dân công"
+        }
+      ],
+      "correct": "b",
+      "fact": "Hào vây lấn cho bộ binh tiếp cận sát cứ điểm, rút ngắn đường xung phong.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L5-003",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "danCong"
+      ],
+      "stem": "Vì sao nói chiến thắng này là thắng lợi của chiến tranh nhân dân?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Chủ yếu nhờ viện trợ nước ngoài"
+        },
+        {
+          "id": "b",
+          "text": "Chủ yếu nhờ không quân"
+        },
+        {
+          "id": "c",
+          "text": "Dân công, hậu phương tiếp sức rất lớn"
+        },
+        {
+          "id": "d",
+          "text": "Chủ yếu nhờ xe tăng"
+        }
+      ],
+      "correct": "c",
+      "fact": "Dân công và nhân dân hậu phương tiếp sức lớn về người và của cho tiền tuyến.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    },
+    {
+      "id": "Q-M4-L5-004",
+      "missionId": "M4",
+      "eventId": "EVT-19540313",
+      "level": 5,
+      "forms": [
+        "bunker",
+        "field"
+      ],
+      "sceneTags": [
+        "chiendich"
+      ],
+      "stem": "Đánh từng cụm một có ưu điểm gì?",
+      "options": [
+        {
+          "id": "a",
+          "text": "Đánh phân tán khắp nơi"
+        },
+        {
+          "id": "b",
+          "text": "Tránh cứ điểm mạnh nhất"
+        },
+        {
+          "id": "c",
+          "text": "Không cần pháo binh"
+        },
+        {
+          "id": "d",
+          "text": "Tập trung ưu thế lực lượng vào từng mục tiêu"
+        }
+      ],
+      "correct": "d",
+      "fact": "Ta tập trung lực lượng diệt từng cụm, từng cứ điểm thay vì dàn trải.",
+      "source": {
+        "sourceId": "SRC-VNG-DBP",
+        "page": ""
+      },
+      "status": "approved",
+      "revision": 1,
+      "reviewNote": "Rà soát T68 ngày 24/10/2026"
+    }
+  ]
+}
