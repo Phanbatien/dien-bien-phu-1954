@@ -94,7 +94,7 @@ namespace DBP.UI
                 "Lê Nguyễn Đình Khôi — Môi trường, mô hình\n" +
                 "Thiên Trí — Câu hỏi, tư liệu, cốt truyện\n" +
                 "Trần Hoàng Long — Giao diện, âm thanh, xếp hạng\n\n" +
-                "Tài nguyên: Unity Starter Assets, Polytope Studio, Simple Nature Pack, RSG, Defensive Props, Low Poly Weapon Series, tt-3d Low Poly War\n\n" +
+                "Tài nguyên: Unity Starter Assets, Polytope Studio, Simple Nature Pack, RSG, Defensive Props, Low Poly Weapon Series, tt-3d Low Poly War. Phông chữ Be Vietnam Pro (SIL OFL 1.1)\n\n" +
                 "Dự án học tập FPT University, 2026. Không dùng vào mục đích thương mại.", 88, 266, 470, 520, 21);
             W.Panel(page, "SourcePanel", 610, 200, 926, 600);
             W.Label(page, "SourceHeading", "NGUỒN TƯ LIỆU CÂU HỎI VÀ CỐT TRUYỆN", 634, 214, 880, 44, 24, W.Gold);
