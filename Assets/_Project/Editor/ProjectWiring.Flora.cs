@@ -38,6 +38,25 @@ namespace DBP.EditorTools
                 foreach (var i in src.triangles) subs[sub].Add(o + i);
             }
 
+            static Mesh capsule, sphere;
+
+            /// Viên nang từ a tới b (ngón tay, cổ tay): đầu tròn, không góc cạnh.
+            public void Capsule(Vector3 a, Vector3 b, float r, int sub)
+            {
+                if (!capsule) capsule = Prim(PrimitiveType.Capsule);
+                var d = b - a;
+                float len = d.magnitude + r * 2f;
+                Add(capsule, Matrix4x4.TRS((a + b) * 0.5f, Quaternion.FromToRotation(Vector3.up, d.normalized), new Vector3(r * 2, len * 0.5f, r * 2)), sub);
+            }
+
+            /// Chuỗi viên nang nối các khớp (ngón tay nhiều đốt).
+            public void Chain(float r, int sub, params Vector3[] joints)
+            {
+                for (int i = 0; i + 1 < joints.Length; i++) Capsule(joints[i], joints[i + 1], r * (1f - i * 0.08f), sub);
+            }
+
+            public void Ellipsoid(Vector3 c, Vector3 size, Quaternion rot, int sub) { if (!sphere) sphere = Prim(PrimitiveType.Sphere); Add(sphere, Matrix4x4.TRS(c, rot, size), sub); }
+
             public void Box(Vector3 c, Vector3 size, Quaternion rot, int sub) { if (!cube) cube = Prim(PrimitiveType.Cube); Add(cube, Matrix4x4.TRS(c, rot, size), sub); }
 
             /// Trụ từ a tới b, bán kính r.
