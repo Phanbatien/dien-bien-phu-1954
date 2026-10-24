@@ -80,6 +80,11 @@ namespace DBP.EditorTools
             // 9. NavMesh cho AI đi lại
             BakeNavMesh(sceneName);
             notes.Add("bake NavMesh");
+            if (sceneName.Length > 1 && sceneName[0] == 'M' && "12345".Contains(sceneName[1]))
+            {
+                int comrades = WireComrades();
+                if (comrades > 0) notes.Add($"{comrades} đồng đội bộ đội ta");
+            }
             return string.Join(", ", notes);
         }
 
