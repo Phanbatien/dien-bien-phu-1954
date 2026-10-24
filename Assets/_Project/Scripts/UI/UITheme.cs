@@ -18,6 +18,17 @@ namespace DBP.UI
         public static readonly Color Wood = new Color32(132, 84, 46, 255);
         public static readonly Color Gray = new Color32(120, 112, 100, 255);
 
+        // Phông Be Vietnam Pro (SIL OFL 1.1, Resources/Fonts): đủ dấu tiếng Việt, nét rõ ở cỡ nhỏ
+        static Font regular, semiBold, bold;
+        public static Font Regular => regular ? regular : regular = LoadFont("BeVietnamPro-Regular");
+        public static Font SemiBold => semiBold ? semiBold : semiBold = LoadFont("BeVietnamPro-SemiBold");
+        public static Font Bold => bold ? bold : bold = LoadFont("BeVietnamPro-Bold");
+        static Font LoadFont(string name)
+        {
+            var f = Resources.Load<Font>("Fonts/" + name);
+            return f ? f : Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        }
+
         /// Thang cỡ chữ duy nhất của game: mọi cỡ được làm tròn về một bậc để chữ đồng đều.
         public static int Size(int requested) =>
             requested >= 40 ? 44 : requested >= 30 ? 32 : requested >= 25 ? 26 : requested >= 21 ? 22 : 18;

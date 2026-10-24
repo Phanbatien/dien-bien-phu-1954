@@ -112,6 +112,12 @@ namespace DBP.Quiz
             _wrongStyle = DBP.UI.UITheme.ImguiButton(_answerStyle, DBP.UI.UITheme.Red);
             _buttonStyle = DBP.UI.UITheme.ImguiButton(new GUIStyle(GUI.skin.button) { alignment = TextAnchor.MiddleCenter, fontSize = answerFontSize, fontStyle = FontStyle.Bold }, DBP.UI.UITheme.Green);
 
+            // Phông chung của game (Be Vietnam Pro); gán font trong Inspector thì dùng font đó
+            _titleStyle.font = DBP.UI.UITheme.Bold; _progressStyle.font = DBP.UI.UITheme.SemiBold; _bodyStyle.font = DBP.UI.UITheme.SemiBold;
+            _answerStyle.font = DBP.UI.UITheme.SemiBold; _factStyle.font = DBP.UI.UITheme.Regular; _buttonStyle.font = DBP.UI.UITheme.Bold;
+            _correctStyle.font = _wrongStyle.font = DBP.UI.UITheme.SemiBold;
+            _titleStyle.fontStyle = _bodyStyle.fontStyle = _answerStyle.fontStyle = _buttonStyle.fontStyle = FontStyle.Normal;
+            _correctStyle.fontStyle = _wrongStyle.fontStyle = FontStyle.Normal;
             if (font != null)
             {
                 _titleStyle.font = font; _progressStyle.font = font; _bodyStyle.font = font;
