@@ -12,8 +12,6 @@ namespace DBP.UI
         public static readonly Color PanelColor = new Color32(33, 44, 39, 250);
         public static readonly Color Gold = UITheme.Gold;
         public static readonly Color Paper = UITheme.Cream;
-        static Font font;
-        static Font Font => font ? font : font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
         public static RectTransform Rect(Transform parent, string name, float x, float y, float w, float h)
         {
@@ -49,22 +47,22 @@ namespace DBP.UI
         public static Text Label(Transform parent, string name, string value, float x, float y, float w, float h, int size = 24, Color? color = null)
         {
             var text = Rect(parent, name, x, y, w, h).gameObject.AddComponent<Text>();
-            text.font = Font; text.fontSize = UITheme.Size(size); text.text = value;
+            text.font = UITheme.Regular; text.fontSize = UITheme.Size(size); text.text = value;
             text.supportRichText = false; text.raycastTarget = false; text.alignment = TextAnchor.MiddleLeft;
             text.horizontalOverflow = HorizontalWrapMode.Wrap; text.verticalOverflow = VerticalWrapMode.Truncate;
-            text.lineSpacing = 1.08f;
+            text.lineSpacing = 1f;
             if (h >= text.fontSize * 4f) text.alignment = TextAnchor.UpperLeft; // đoạn văn dài: canh lề trên
             bool accent = color.HasValue && color.Value == Gold;
             if (OnPaper(parent, text.rectTransform))
             {
                 // Trên giấy: mực nâu, tiêu đề đỏ nâu đậm
                 text.color = accent ? UITheme.Heading : color.HasValue && color.Value != Paper ? Darken(color.Value) : UITheme.Ink;
-                if (accent || text.fontSize >= 22) text.fontStyle = FontStyle.Bold;
+                text.font = accent || text.fontSize >= 26 ? UITheme.Bold : UITheme.SemiBold; // chữ trên giấy dày nét cho dễ đọc
             }
             else
             {
                 text.color = color ?? Paper;
-                if (accent || text.fontSize >= 32) text.fontStyle = FontStyle.Bold;
+                if (accent || text.fontSize >= 32) text.font = UITheme.Bold;
                 var shadow = text.gameObject.AddComponent<Shadow>();
                 bool small = text.fontSize <= 22;
                 shadow.effectColor = new Color(0, 0, 0, small ? .55f : .75f); shadow.effectDistance = small ? new Vector2(1, -1) : new Vector2(2, -2);
@@ -110,7 +108,7 @@ namespace DBP.UI
             colors.disabledColor = new Color(1f, 1f, 1f, .75f); button.colors = colors;
             var shadow = image.gameObject.AddComponent<Shadow>(); shadow.effectColor = new Color(0, 0, 0, .4f); shadow.effectDistance = new Vector2(3, -4);
             var text = Label(image.transform, "Label", value, 18, 0, w - 36, h, h >= 60 ? 24 : 22, UITheme.Cream); text.alignment = TextAnchor.MiddleCenter;
-            text.fontStyle = FontStyle.Bold;
+            text.font = UITheme.Bold; text.fontStyle = FontStyle.Normal;
             if (!enabled) text.color = new Color(.92f, .9f, .85f, .85f);
             button.onClick.AddListener(() => { CampaignAudio.Interface("ui_click"); click(); }); return button;
         }

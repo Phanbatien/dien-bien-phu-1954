@@ -85,6 +85,10 @@ namespace DBP.Quiz
             _metaStyle.normal.textColor = DBP.UI.UITheme.Heading;
             _timerStyle.normal.textColor = DBP.UI.UITheme.Heading;
 
+            // Phông chung của game (Be Vietnam Pro); gán font trong Inspector thì dùng font đó
+            _bodyStyle.font = DBP.UI.UITheme.SemiBold; _answerStyle.font = DBP.UI.UITheme.SemiBold;
+            _timerStyle.font = DBP.UI.UITheme.Bold; _metaStyle.font = DBP.UI.UITheme.Bold;
+            _bodyStyle.fontStyle = _answerStyle.fontStyle = _timerStyle.fontStyle = _metaStyle.fontStyle = FontStyle.Normal;
             if (font != null)
             {
                 _bodyStyle.font = font; _answerStyle.font = font; _timerStyle.font = font; _metaStyle.font = font;
