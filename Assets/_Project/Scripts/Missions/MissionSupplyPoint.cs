@@ -59,8 +59,15 @@ namespace DBP.Missions
                 case "Bazooka":
                     if (who.Weapons != null && who.Weapons.Inventory != null)
                     {
-                        who.Weapons.Inventory.AddAmmo("Bazooka", quantity);
-                        Debug.Log($"[MissionSupplyPoint] Trao {quantity} đạn Bazooka.");
+                        // BR-17: phương án chống tăng không qua câu hỏi phải gồm cả vũ khí lẫn đạn tương thích.
+                        var bazooka = DBP.Weapons.WeaponCatalog.Get("W-BAZOOKA");
+                        if (bazooka != null)
+                        {
+                            var give = who.Weapons.Inventory.GiveWeapon(bazooka, quantity);
+                            if (give.Dropped != null || give.LeftoverAmmo > 0)
+                                DBP.Interaction.LootPile.At(transform).Add(give.Dropped, bazooka.ammoType, give.LeftoverAmmo, 0);
+                            Debug.Log($"[MissionSupplyPoint] Trao súng Bazooka và {quantity} đạn.");
+                        }
                     }
                     else
                     {

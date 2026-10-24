@@ -24,6 +24,8 @@ namespace DBP.EditorTools
         static readonly List<(string name, Func<string, string> step)> Steps = new List<(string, Func<string, string>)>
         {
             ("Giao diện câu hỏi T18", WireQuizPanel),
+            ("AI & chiến đấu T07–T59, model T32–T33", WireCombat),
+            ("Vật liệu URP (không hồng tím)", WireUrpMaterials),
         };
 
         [MenuItem("DBP/Nối hệ thống vào scene")]
@@ -51,6 +53,15 @@ namespace DBP.EditorTools
         static T[] All<T>() where T : Component =>
             UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()
                 .SelectMany(g => g.GetComponentsInChildren<T>(true)).ToArray();
+
+        /// Đổi mọi vật liệu shader cũ (Standard…) sang URP bằng công cụ có sẵn của Khôi.
+        static string WireUrpMaterials(string sceneName)
+        {
+            foreach (var root in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects())
+                UrpMaterialUtility.Apply(root);
+            int bad = All<Renderer>().Sum(r => r.sharedMaterials.Count(m => m && (m.shader.name.StartsWith("Standard") || !m.shader.isSupported)));
+            return bad == 0 ? "mọi vật liệu đã là URP" : $"còn {bad} vật liệu chưa đổi được";
+        }
 
         /// T18: thay giao diện câu hỏi tạm (DebugQuizView) bằng QuizPanel của Thiên Trí.
         static string WireQuizPanel(string sceneName)

@@ -239,7 +239,9 @@ namespace DBP.AI
         {
             state = next;
             bool crouching = next == State.Suppress;
-            agent.height = crouching ? crouchHeight : standHeight;
+            // Nhóm phản kích có thể ra lệnh ngay khi đợt được bật, trước cả Awake của lính.
+            if (!agent) agent = GetComponent<NavMeshAgent>();
+            if (agent) agent.height = crouching ? crouchHeight : standHeight;
             if (animator) animator.SetBool(AnimCrouch, crouching);
         }
 

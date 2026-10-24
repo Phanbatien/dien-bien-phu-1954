@@ -25,7 +25,10 @@ namespace DBP.AI
         void Awake()
         {
             if (!cam) cam = Camera.main;
-            inventory = GetComponentInChildren<Inventory>();
+            // Inventory là lớp C# thường nằm trong WeaponController, không phải component.
+            var weapons = GetComponentInParent<WeaponController>();
+            if (!weapons) weapons = GetComponentInChildren<WeaponController>();
+            inventory = weapons != null ? weapons.Inventory : null;
         }
 
         void Update()
