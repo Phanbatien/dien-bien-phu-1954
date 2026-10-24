@@ -97,6 +97,9 @@ namespace DBP.EditorTools
                     ContentRules.CheckWeights(s.rarityWeights, at, r.Errors);
                     if (s.points.Count < 10 || s.points.Count > 15) r.Errors.Add($"{at}: cần 10–15 điểm đặt hòm, đang có {s.points.Count} (BR-13)");
                     if (s.points.Any(p => !p)) r.Errors.Add($"{at}: có điểm đặt hòm bị trống");
+                    var dup = s.points.Where(p => p).GroupBy(p => Vector3Int.RoundToInt(p.position * 2f)).Where(g => g.Count() > 1).ToList();
+                    if (dup.Count > 0)
+                        r.Warnings.Add($"{at}: {dup.Sum(g => g.Count())} điểm đặt hòm trùng vị trí ({string.Join(", ", dup.Select(g => string.Join("/", g.Select(p => p.name))))}). Hòm vẫn tự dời ra chỗ trống nhưng nên đặt lại điểm (BR-13).");
                     if (s.minCrates > s.maxCrates || s.maxCrates > s.points.Count) r.Errors.Add($"{at}: số hòm {s.minCrates}–{s.maxCrates} không hợp lệ");
                     for (int i = 0; i < 4 && s.rarityWeights != null && i < s.rarityWeights.Length; i++)
                         if (s.rarityWeights[i] > 0f && !s.rewards.Any(w => (int)w.rarity == i))
