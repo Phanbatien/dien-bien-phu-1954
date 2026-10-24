@@ -80,19 +80,18 @@ dien-bien-phu-1954/
 | Thiên Trí | Quiz & Narrative | `Quiz/`, `StreamingAssets/content/questions/` |
 | Trần Hoàng Long | Audio / Data / UI | `UI/`, `Audio/`, lưu hồ sơ, Validate Content |
 
-## Trạng thái (cập nhật 07/10/2026 · làm trong 2 tuần, nộp 21/10)
+## Trạng thái (cập nhật 24/10/2026 · bản nộp v1.0)
 
-**Cả 5 màn chơi được từ đầu đến cuối ở dạng greybox** (khối hộp), có mục tiêu, hòm ngẫu nhiên, điện thoại gọi pháo, súng rơi, lưu hồ sơ.
-Kiểm tra tự động: **46/46 test qua** (39 EditMode + 7 PlayMode). Build Development thành công; bản nộp đang bị **Validate Content** chặn đúng vì còn thiếu câu hỏi đã duyệt và nguồn vũ khí.
+**Hoàn chỉnh 5 màn** với AI địch, mô hình lính có hoạt ảnh, môi trường và không khí chiến trường, 142 câu hỏi đã duyệt có nguồn, Hầm chữ A, mở đầu/kết thúc/Credits, bảng xếp hạng.
 
-| Đã có | Còn là bản tạm (ai thay, việc nào) |
+- Kiểm tra tự động: **134/134 EditMode, 67/68 PlayMode đạt** (1 test cần Game view có focus, bỏ qua khi chạy dòng lệnh). Đối chiếu 17 tình huống nghiệm thu: [docs/kiem-thu-phu-luc-a.md](docs/kiem-thu-phu-luc-a.md).
+- Bản nộp build thành công, **Validate Content 0 lỗi**; FPS thấp nhất 531 trên máy trưởng nhóm ([docs/build.md](docs/build.md)).
+- 70/75 việc xong; 5 việc còn cần người thật: playtest với người ngoài nhóm (T37, T65, T68), đo FPS máy yếu nhất (T63), tập demo 2 lượt (T75). Xem [docs/cong-viec.md](docs/cong-viec.md).
+
+| Tài liệu nộp | |
 |---|---|
-| Đi/chạy/nhảy/bò, thể lực, ADS, độ giật, ống ngắm | Địch là hình nộm đứng yên → **AI của Đạt** (T07, T39, T52) |
-| 5 súng trong `weapons.json`, túi 2 súng, đồ để lại (BR-36) | Bộc phá, lựu đạn ném, xe tăng chạy → **Đạt** (T14, T15, T30, T45). Tạm dùng F9 |
-| Giữ E 1 s → thế giới đứng yên → đếm giờ thực → 0,5 s chuyển tiếp | Giao diện câu hỏi IMGUI → **UI của Thiên Trí** (T18, T25) |
-| Ngân hàng câu JSON + bộ chọn không lặp; hòm rút theo seed; bảo hiểm 3 lần sai; súng rơi | Mới có 3 câu nháp → **Thiên Trí viết câu** (T26, T42, T47, T56, T61) |
-| Điện thoại gọi pháo, ụ súng máy, cắm cờ Màn 5, mê cung hào Màn 4 | HUD, menu, màn kết quả IMGUI → **UI của Long** (T27, T35, T36) |
-| Lưu hồ sơ JSON an toàn (`.tmp` + `.bak`), nâng cấp 4 nhánh × 3 cấp | Khối hộp, chưa có âm thanh → **Khôi, Long** |
-| Validate Content (menu **DBP → Validate Content**), build + nén `.zip`, đo FPS (`-perf-probe`) | |
-
-Lịch 2 tuần và người phụ trách từng việc: [docs/ke-hoach.md](docs/ke-hoach.md) · chương trình họp: [docs/quyet-dinh/0001-khoi-dong.md](docs/quyet-dinh/0001-khoi-dong.md).
+| Báo cáo | [docs/bao-cao.md](docs/bao-cao.md) |
+| Slide | [docs/nop-bai/bao-cao.pptx](docs/nop-bai/bao-cao.pptx) |
+| Trailer 56 giây | [docs/nop-bai/trailer.mp4](docs/nop-bai/trailer.mp4) |
+| Kịch bản demo | [docs/demo.md](docs/demo.md) |
+| Cốt truyện | [docs/cot-truyen.md](docs/cot-truyen.md) |

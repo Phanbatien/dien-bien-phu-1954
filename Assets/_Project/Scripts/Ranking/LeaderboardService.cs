@@ -58,7 +58,7 @@ namespace DBP.Ranking
         {
             var result = attempt.RankingResult;
             if (result == null || result.outcome != MissionOutcome.Won || !result.eligible || string.IsNullOrWhiteSpace(result.profileId)) return false;
-            try { Open().Record(result); attempt.RankingSaveError = null; return true; }
+            try { Open().Record(result); attempt.RankingSaveError = null; ScoreOutboxSender.EnqueueIfConsented(result); return true; }
             catch (Exception e) when (e is IOException || e is InvalidDataException || e is UnauthorizedAccessException || e is ArgumentException)
             { attempt.RankingSaveError = e.Message; return false; }
         }

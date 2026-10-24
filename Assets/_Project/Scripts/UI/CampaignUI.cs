@@ -17,7 +17,7 @@ using UnityEngine.UI;
 using W = DBP.UI.UIWidgets;
 namespace DBP.UI
 {
-    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard }
+    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard, Story, Credits }
 
     /// Runtime Canvas UI leaves authored mission scenes and shared player prefabs intact.
     public sealed partial class CampaignUI : MonoBehaviour
@@ -91,6 +91,7 @@ namespace DBP.UI
         {
             if (ScreenState != CampaignScreen.Gameplay) FirstPersonController.UnlockCursor();
             if (ScreenState == CampaignScreen.Gameplay) RefreshHud();
+            TickStory();
             if (mission && mission.Attempt.Outcome == MissionOutcome.None && !WorldFreeze.IsFrozen && Keyboard.current != null && Keyboard.current.escapeKey.wasPressedThisFrame)
             {
                 if (ScreenState == CampaignScreen.Gameplay) Show(CampaignScreen.Pause);
@@ -116,9 +117,12 @@ namespace DBP.UI
             }
             if (screen == CampaignScreen.Gameplay && !InputLock.Locked) FirstPersonController.LockCursor(); else FirstPersonController.UnlockCursor();
             ClearPage();
+            // Hầm chữ A sau màn chuẩn bị: nền mờ để thấy ánh đèn dầu, bản đồ, điện đài
+            bool inBunker = screen == CampaignScreen.Preparation && !mission;
+            if (inBunker) BunkerBackdrop.Show(); else BunkerBackdrop.Hide();
             if (screen != CampaignScreen.Gameplay)
             {
-                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : W.Ink);
+                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : inBunker && BunkerBackdrop.Available ? new Color(.05f, .06f, .05f, .55f) : W.Ink);
                 shade.transform.SetAsFirstSibling();
                 W.Label(page, "Eyebrow", "ĐIỆN BIÊN PHỦ 1954     /     QUYẾT CHIẾN • QUYẾT THẮNG", 64, 28, 1450, 40, 18, W.Gold);
                 W.Panel(page, "Rule", 64, 88, 1472, 2, W.Gold);
@@ -134,6 +138,8 @@ namespace DBP.UI
                 case CampaignScreen.Pause: Pause(); break;
                 case CampaignScreen.Results: Results(); break;
                 case CampaignScreen.Leaderboard: LeaderboardPage(); break;
+                case CampaignScreen.Story: StoryPage(); break;
+                case CampaignScreen.Credits: CreditsPage(); break;
             }
         }
         void Guard(Action action)
@@ -160,6 +166,9 @@ namespace DBP.UI
                 var p = profiles[i]; bool active = ProfileService.HasProfile && p.id == ProfileService.Data.id;
                 W.Button(page, "Profile_" + p.id, (active ? "●  " : "") + ShortLabel(p.displayName, 18) + "\n" + ShortLabel(p.className, 12) + "  ·  #" + p.id.Substring(0, 6), 88, 330 + (i % 4) * 78, 442, 68,
                     () => Guard(() => { ProfileService.Repository.Select(p.id); AudioListener.volume = p.volume; Show(CampaignScreen.Menu); }));
+                // Tên dài toàn chữ rộng (W, M) vẫn nằm gọn 2 dòng trong nút
+                var profileLabel = page.Find("Profile_" + p.id).GetComponentInChildren<Text>();
+                profileLabel.fontSize = 19; profileLabel.horizontalOverflow = HorizontalWrapMode.Overflow;
             }
             if (profiles.Count == 0) W.Label(page, "NoProfiles", "Chưa có hồ sơ.\nTạo hồ sơ để bắt đầu chiến dịch.", 88, 340, 420, 120, 26);
             if (profiles.Count > 4)
@@ -184,6 +193,7 @@ namespace DBP.UI
                 W.Volume(page, ProfileService.Data.volume, 786, 742, value => Guard(() => { ProfileService.Repository.SetVolume(value); AudioListener.volume = value; }));
                 W.Label(page, "LocalOnly", "Không đồng ý vẫn chơi và lưu tại máy.", 604, 790, 900, 32, 20);
             }
+            StoryMenuButtons();
             if (ProfileService.Repository.RecoveredBackup) status.text = "Đã đọc bản sao lưu hồ sơ sau lỗi lưu trước đó.";
         }
         static string ShortLabel(string value, int length) => string.IsNullOrEmpty(value) ? "" : value.Length <= length ? value : value.Substring(0, length - 1) + "…";
@@ -250,6 +260,8 @@ namespace DBP.UI
             for (int i = 0; i < rows.Length; i++) W.Label(page, "Control" + i, rows[i], 200, 242 + i * 68, 1200, 58, 28);
             W.Label(page, "TutorialHint", "Theo mục tiêu trên HUD để tiến quân. ESC mở tạm dừng và hướng dẫn.\nKhi trả lời câu hỏi, chiến trường dừng nhưng đồng hồ câu hỏi vẫn chạy.", 200, 602, 1200, 100, 25, W.Gold);
             W.Button(page, "BeginMission", "ĐÃ RÕ • BẮT ĐẦU", 200, 736, 1200, 68, () => Show(CampaignScreen.Gameplay));
+            if (mission && mission.MissionId == "M1")
+                W.Button(page, "ReadDiary", "Đọc nhật ký trong hầm", 1060, 126, 340, 56, () => PlayStory(Diary, () => Show(CampaignScreen.Tutorial)));
         }
         void Hud()
         {
@@ -308,6 +320,8 @@ namespace DBP.UI
             W.Label(page, "ResultNote", unsaved ? "Chưa lưu được tiến độ. Hãy thử lưu lại trước khi rời màn." : attempt.Outcome == MissionOutcome.Won ? "Đã lưu tiến độ mở màn. Điểm kiến thức không dùng để mua nâng cấp." : "Lượt này không nhận Quyết Tâm và không được xếp hạng.", 160, 628, unsaved ? 880 : 1280, 40, 21);
             if (unsaved) W.Button(page, "RetrySave", "Thử lưu lại", 1060, 630, 380, 42, () => { mission.TrySaveProgress(); Show(CampaignScreen.Results); });
             RankingResultStatus(attempt);
+            if (attempt.Outcome == MissionOutcome.Won && mission.MissionId == "M5")
+                W.Button(page, "Epilogue", "Kết thúc chiến dịch →", 1060, 150, 380, 62, () => PlayStory(Epilogue, () => Show(CampaignScreen.Credits)));
             W.Button(page, "Replay", "Chơi lại từ hầm", 160, 734, 600, 68, () => ReturnToMenu(true));
             W.Button(page, "ResultMenu", "Về menu / Chọn màn", 800, 734, 640, 68, () => ReturnToMenu(false));
         }

@@ -59,6 +59,7 @@ namespace DBP.EditorTools
             ambience.flares = sceneName.StartsWith("M3");
             ambience.smokePoints = smoke.ToArray();
             ambience.firePoints = fire.ToArray();
+            if (sceneName.StartsWith("M3")) root.gameObject.AddComponent<DBP.Missions.RadioChatter>(); // T47
             EnsurePlayerFarClip();
             return $"núi, {craters} hố bom, {wrecks} xác pháo, {graves} mộ súng, {smoke.Count} cột khói, {fire.Count} đám cháy";
         }
