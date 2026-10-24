@@ -6,7 +6,12 @@ using UnityEngine.AI;
 
 namespace DBP.AI
 {
-    /// AI lính sau bao cát (T07 – Đạt; BR-20):
+    /// AI lính (T07 – Đạt; BR-20), nâng cấp chiến thuật 24/10:
+    ///   • Phát hiện → tìm chỗ nấp có tầm bắn (bao cát, mép hào) rồi mới bắn; mất tầm nhìn thì vòng sang chỗ khác (tạt sườn).
+    ///   • Chỉ bắn khi thấy người chơi; bắn từng loạt ngắn rồi thụp xuống; độ chuẩn theo khoảng cách, người chơi chạy hay đứng.
+    ///   • Nghe tiếng súng và báo đồng đội quanh mình; đạn sượt qua thì nấp; thấy lựu đạn thì chạy tránh.
+    ///   • Có sĩ quan gần thì bắn tốt hơn; sĩ quan gục thì hoảng loạn một lúc.
+    /// Trạng thái gốc:
     ///   Idle → Alerted (phát hiện tiếng động/tầm nhìn) → Shoot (bắn trả) → Suppress (nấp khi bị áp chế).
     /// Ba trạng thái kiểm tra được bằng clip quay 30 giây:
     ///   1. Đứng sau bao cát, lộ đầu bắn trả người chơi.
@@ -79,6 +84,19 @@ namespace DBP.AI
         public State CurrentState => state;
         public bool IsDead => dead;
         public bool IsCharging { get; set; }
+        /// Vị trí người chơi lính biết gần nhất (thấy hoặc nghe).
+        public Vector3 LastKnownTarget => lastKnown;
+
+        public static readonly System.Collections.Generic.List<SoldierAI> All = new System.Collections.Generic.List<SoldierAI>();
+
+        // Chiến thuật
+        Vector3 lastKnown;
+        Vector3 claimedSpot;
+        bool hasSpot, fleeing;
+        float lastSeenAt = -99f, acquiredAt = -99f, repositionAt, nextThinkAt, panicUntil;
+        int burstLeft = 3;
+        const float ReactionSec = 0.55f;   // thấy rồi mới bóp cò, công bằng với người chơi
+        const float LoseSightSec = 1.6f;   // không thấy quá lâu thì đổi chỗ
 
         // ── Khởi tạo ──────────────────────────────────────────────────────────────
         void Awake()
@@ -93,12 +111,18 @@ namespace DBP.AI
         {
             health.Damaged += OnDamaged;
             health.Died    += OnDied;
+            All.Add(this);
+            WeaponController.ShotFired += OnPlayerShot;
+            OfficerLeader.Fallen += OnOfficerFallen;
         }
 
         void OnDisable()
         {
             health.Damaged -= OnDamaged;
             health.Died    -= OnDied;
+            All.Remove(this);
+            WeaponController.ShotFired -= OnPlayerShot;
+            OfficerLeader.Fallen -= OnOfficerFallen;
         }
 
         void Start()
@@ -113,6 +137,8 @@ namespace DBP.AI
         void Update()
         {
             if (dead) return;
+            if (Time.time >= nextThinkAt) { nextThinkAt = Time.time + 0.25f; Think(); }
+            if (fleeing) { if (!agent.pathPending && agent.remainingDistance < 0.6f) fleeing = false; return; }
 
             switch (state)
             {
@@ -160,14 +186,19 @@ namespace DBP.AI
         void TickAlerted()
         {
             if (!player) return;
-            float dist = Vector3.Distance(transform.position, player.position);
-            float stopDist = IsCharging ? 6f : fireRange;
-            if (dist <= stopDist)
+            if (IsCharging)
             {
-                SetState(State.Shoot);
+                // Nhóm phản kích xung phong: lao tới, lách trái phải để khó ngắm
+                float dist = Vector3.Distance(transform.position, player.position);
+                if (dist <= 6f) { SetState(State.Shoot); return; }
+                var side = Vector3.Cross(Vector3.up, (player.position - transform.position).normalized) * Mathf.Sin(Time.time * 1.3f + GetInstanceID()) * 3f;
+                if (agent.isOnNavMesh) agent.SetDestination(player.position + side);
+                if (CanSeePlayer(false) && Time.time >= nextFireAt && dist < fireRange * 0.7f) { TryFire(); nextFireAt = Time.time + fireInterval * 1.4f; }
                 return;
             }
-            agent.SetDestination(player.position);
+            if (!hasSpot) PickFiringSpot();
+            if (!hasSpot) { SetState(State.Shoot); return; }
+            if (!agent.pathPending && agent.remainingDistance < 0.7f) { agent.ResetPath(); SetState(State.Shoot); }
         }
 
         // ── Shoot: đứng/ngồi sau bao cát, bắn định kỳ ────────────────────────────
@@ -178,7 +209,7 @@ namespace DBP.AI
 
             if (!IsCharging)
             {
-                agent.ResetPath();
+                if (!agent.pathPending && agent.hasPath && agent.remainingDistance < 0.6f) agent.ResetPath();
             }
             else
             {
@@ -189,23 +220,43 @@ namespace DBP.AI
                     agent.ResetPath();
             }
 
-            FaceTarget(player.position);
+            bool sees = CanSeePlayer(false);
+            if (sees && Time.time - lastSeenAt > 1f) acquiredAt = Time.time;
+            if (sees) { lastSeenAt = Time.time; lastKnown = player.position; }
+            FaceTarget(sees ? player.position : lastKnown);
 
-            if (Time.time >= nextFireAt)
+            if (!sees)
             {
-                TryFire();
-                nextFireAt = Time.time + fireInterval;
+                // Không thấy: không bắn vào tường. Chờ chút rồi vòng sang chỗ có tầm bắn (tạt sườn)
+                if (Time.time - lastSeenAt > LoseSightSec && Time.time >= repositionAt && !IsCharging)
+                {
+                    repositionAt = Time.time + 4f;
+                    hasSpot = false;
+                    PickFiringSpot();
+                    if (hasSpot) SetState(State.Alerted);
+                }
+                if (Time.time - lastSeenAt > 25f) { hasSpot = false; SetState(State.Idle); }
+                return;
             }
 
-            // Mất tầm nhìn quá lâu → về Idle
-            if (!CanSeePlayer() && Time.time > nextFireAt + 3f)
-                SetState(State.Idle);
+            if (Time.time - acquiredAt < ReactionSec || Time.time < nextFireAt) return;
+            TryFire();
+            float officer = OfficerLeader.BonusAt(transform.position, GetComponent<OfficerLeader>());
+            nextFireAt = Time.time + fireInterval * officer * Random.Range(0.8f, 1.2f);
+            // Bắn 2–3 phát rồi thụp xuống nấp một lúc, không đứng lì giữa làn đạn
+            if (--burstLeft <= 0 && !IsCharging)
+            {
+                burstLeft = Random.Range(2, 4);
+                suppressEndsAt = Time.time + Random.Range(1.0f, 2.0f);
+                SetState(State.Suppress);
+            }
         }
 
         // ── Suppress: nấp thấp, không bắn ────────────────────────────────────────
         void TickSuppress()
         {
             if (health != null && health.Retreated) return;
+            if (player) FaceTarget(lastKnown);
             if (Time.time >= suppressEndsAt)
             {
                 SetState(State.Shoot);
@@ -222,7 +273,7 @@ namespace DBP.AI
             CombatEffects.Muzzle(muzzle.position, muzzle.rotation);
 
             // Tia raycast với độ lệch ngẫu nhiên nhỏ (lính bắn không chuẩn)
-            var spread = Random.insideUnitCircle * bulletSpread;
+            var spread = Random.insideUnitCircle * CurrentSpread();
             var dir = (player.position + Vector3.up * 0.8f - muzzle.position).normalized;
             dir = Quaternion.Euler(spread.x, spread.y, 0f) * dir;
 
@@ -251,8 +302,114 @@ namespace DBP.AI
 
         void Alert()
         {
+            if (player) lastKnown = player.position;
             Play(alertClip);
+            hasSpot = false;
             SetState(State.Alerted);
+            AlertAround(transform.position, 20f, lastKnown, this); // gọi đồng đội quanh mình
+        }
+
+        /// Báo động cho lính đang rảnh quanh một điểm (tiếng hô, tiếng súng).
+        public static void AlertAround(Vector3 origin, float radius, Vector3 target, SoldierAI except = null)
+        {
+            foreach (var s in All.ToArray())
+            {
+                if (s == except || s.dead || s.state != State.Idle) continue;
+                var sentry = s.GetComponent<SentryAI>();
+                if (sentry != null && sentry.enabled) continue;
+                if ((s.transform.position - origin).sqrMagnitude > radius * radius) continue;
+                s.lastKnown = target;
+                s.hasSpot = false;
+                s.SetState(State.Alerted);
+            }
+        }
+
+        // ── Chiến thuật ───────────────────────────────────────────────────────────
+        /// 4 lần/giây: tránh lựu đạn đang lăn tới.
+        void Think()
+        {
+            if (!agent || !agent.isOnNavMesh) return;
+            foreach (var g in Grenade.Live)
+            {
+                if (!g) continue;
+                var away = transform.position - g.transform.position; away.y = 0;
+                float danger = g.BlastRadius + 1f;
+                if (away.sqrMagnitude > danger * danger) continue;
+                var target = transform.position + (away.sqrMagnitude > 0.01f ? away.normalized : -transform.forward) * (danger + 2f);
+                if (NavMesh.SamplePosition(target, out var hit, 3f, NavMesh.AllAreas))
+                {
+                    fleeing = true; hasSpot = false;
+                    agent.SetDestination(hit.position);
+                    if (state == State.Idle) SetState(State.Alerted);
+                }
+                break;
+            }
+        }
+
+        /// Chọn chỗ đứng bắn: thấy được người chơi, có vật che ngang hông, cách 10–28 m, gần mình, không trùng đồng đội.
+        void PickFiringSpot()
+        {
+            if (!player || !agent || !agent.isOnNavMesh) return;
+            var target = lastKnown == Vector3.zero ? player.position : lastKnown;
+            var chest = target + Vector3.up * 1.2f;
+            float best = float.MinValue; Vector3 bestPos = default;
+            for (int i = 0; i < 14; i++)
+            {
+                float a = Random.value * Mathf.PI * 2f, r = Random.Range(3f, 13f);
+                var p = transform.position + new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * r;
+                if (!NavMesh.SamplePosition(p, out var hit, 2f, NavMesh.AllAreas)) continue;
+                p = hit.position;
+                float d = Vector3.Distance(p, target);
+                if (d < 6f || d > fireRange) continue;
+                bool view = !Physics.Linecast(p + Vector3.up * 1.6f, chest, sightMask, QueryTriggerInteraction.Ignore);
+                bool cover = Physics.Linecast(chest, p + Vector3.up * 0.6f, sightMask, QueryTriggerInteraction.Ignore);
+                float score = (view ? 4f : -6f) + (cover ? 3f : 0f) - Mathf.Abs(d - 18f) * 0.12f - r * 0.15f;
+                foreach (var s in All)
+                    if (s != this && s.hasSpot && (s.claimedSpot - p).sqrMagnitude < 4f) score -= 3f;
+                if (score > best) { best = score; bestPos = p; }
+            }
+            if (best <= -2f) return;
+            claimedSpot = bestPos; hasSpot = true;
+            agent.SetDestination(bestPos);
+        }
+
+        float CurrentSpread()
+        {
+            float d = player ? Vector3.Distance(transform.position, player.position) : 20f;
+            float s = bulletSpread * (0.6f + d / 30f);
+            var cc = player ? player.GetComponent<CharacterController>() : null;
+            if (cc && new Vector2(cc.velocity.x, cc.velocity.z).magnitude > 3f) s *= 1.7f; // khó trúng người đang chạy
+            if (Time.time - acquiredAt < 2f) s *= 1.5f;                                      // phát đầu chưa ngắm kỹ
+            if (Time.time < panicUntil) s *= 1.8f;
+            return s * OfficerLeader.BonusAt(transform.position, GetComponent<OfficerLeader>());
+        }
+
+        /// Đạn của người chơi bay sát (dưới 2,5 m) thì nấp; nghe tiếng súng trong 35 m thì biết hướng.
+        void OnPlayerShot(Vector3 from, Vector3 to)
+        {
+            if (dead) return;
+            var me = transform.position + Vector3.up;
+            var seg = to - from;
+            float t = seg.sqrMagnitude > 0.01f ? Mathf.Clamp01(Vector3.Dot(me - from, seg) / seg.sqrMagnitude) : 0f;
+            float miss = Vector3.Distance(me, from + seg * t);
+            if ((from - me).sqrMagnitude < 35f * 35f)
+            {
+                lastKnown = from;
+                if (state == State.Idle && !(GetComponent<SentryAI>() is SentryAI sentry && sentry.enabled)) Alert();
+            }
+            if (miss < 2.5f && state == State.Shoot && !IsCharging)
+            {
+                suppressEndsAt = Time.time + suppressDuration * (miss < 1f ? 1f : 0.6f);
+                SetState(State.Suppress);
+            }
+        }
+
+        void OnOfficerFallen(Vector3 at, float radius)
+        {
+            if (dead || (transform.position - at).sqrMagnitude > radius * radius) return;
+            panicUntil = Time.time + 10f;
+            suppressEndsAt = Time.time + 3f;
+            SetState(State.Suppress);
         }
 
         // ── Sự kiện ───────────────────────────────────────────────────────────────
@@ -319,13 +476,16 @@ namespace DBP.AI
         }
 
         // ── Tiện ích ──────────────────────────────────────────────────────────────
-        bool CanSeePlayer()
+        bool CanSeePlayer() => CanSeePlayer(true);
+
+        /// useFov = false khi đã giao chiến: lính biết người chơi ở đâu, chỉ cần không bị che.
+        bool CanSeePlayer(bool useFov)
         {
             if (!player || !eyePoint) return false;
             var toPlayer = player.position + Vector3.up * 0.8f - eyePoint.position;
             float dist = toPlayer.magnitude;
-            if (dist > sightRange) return false;
-            if (Vector3.Angle(eyePoint.forward, toPlayer) > sightAngle) return false;
+            if (dist > (useFov ? sightRange : fireRange)) return false;
+            if (useFov && Vector3.Angle(eyePoint.forward, toPlayer) > sightAngle) return false;
             return !Physics.Raycast(eyePoint.position, toPlayer.normalized, dist, sightMask, QueryTriggerInteraction.Ignore);
         }
 

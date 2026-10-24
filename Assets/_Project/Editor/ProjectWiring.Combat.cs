@@ -46,6 +46,8 @@ namespace DBP.EditorTools
                 if (WireSoldier(h, sceneName)) soldiers++;
             }
             if (soldiers > 0) notes.Add($"{soldiers} lính có AI + model");
+            int officers = WireOfficers(enemies.Where(h => h.Kind == TargetKind.Infantry).ToList());
+            if (officers > 0) notes.Add($"{officers} sĩ quan Pháp");
 
             // 3. Lô cốt + bộc phá (T15, T33)
             int bunkers = 0;
@@ -66,6 +68,8 @@ namespace DBP.EditorTools
             // 6. Nhóm phản kích theo đợt (T39)
             int groups = WireCounterAttacks();
             if (groups > 0) notes.Add($"{groups} nhóm phản kích");
+
+            foreach (var satchel in All<SatchelCharge>()) DressSatchel(satchel.gameObject);
 
             // 7. Vật tư nhiệm vụ dự phòng (T30, BR-17)
             if (WireEmergencySupply()) notes.Add("điểm cấp bộc phá dự phòng");
@@ -129,9 +133,36 @@ namespace DBP.EditorTools
             return changed;
         }
 
-        static void AddSoldierModel(Transform soldier)
+        const string OfficerPrefabPath = "Assets/tt-3d/LowPolyWarStarterPack/Character/Prefabs/Officer.prefab";
+
+        /// Sĩ quan Pháp (model Officer): khoảng 1 người mỗi 7 lính, đứng phía sau đội hình, cách nhau ≥ 15 m.
+        static int WireOfficers(List<Health> infantry)
         {
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(InfantryPrefabPath);
+            if (infantry.Count == 0) return 0;
+            var player = PlayerPosition();
+            var chosen = infantry.Where(h => h.GetComponent<DBP.AI.OfficerLeader>()).ToList();
+            int want = Mathf.Max(1, infantry.Count / 7);
+            foreach (var h in infantry.OrderByDescending(h => (h.transform.position - player).sqrMagnitude))
+            {
+                if (chosen.Count >= want) break;
+                if (chosen.Contains(h) || chosen.Any(c => Vector3.Distance(c.transform.position, h.transform.position) < 15f)) continue;
+                chosen.Add(h);
+            }
+            int added = 0;
+            foreach (var h in chosen)
+            {
+                if (h.GetComponent<DBP.AI.OfficerLeader>()) continue;
+                h.gameObject.AddComponent<DBP.AI.OfficerLeader>();
+                h.gameObject.name = "SiQuanPhap_" + added;
+                AddSoldierModel(h.transform, OfficerPrefabPath);
+                added++;
+            }
+            return added;
+        }
+
+        static void AddSoldierModel(Transform soldier, string prefabPath = InfantryPrefabPath)
+        {
+            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (!prefab) return;
             var root = UnscaledChild(soldier, "Model");
             var model = (GameObject)PrefabUtility.InstantiatePrefab(prefab, root);
@@ -169,30 +200,14 @@ namespace DBP.EditorTools
         static bool WireBunker(Health h)
         {
             var go = h.gameObject;
-            if (go.GetComponent<Bunker>()) return false;
+            if (go.GetComponent<Bunker>()) { DressBunker(go); return false; }
             var bunker = go.AddComponent<Bunker>();
             var size = go.transform.lossyScale; // khối 4 × 2,5 × 4
             var forward = DirectionToPlayer(go.transform.position);
             go.transform.rotation = Quaternion.LookRotation(forward);
 
-            var visual = UnscaledChild(go.transform, "Visual");
-            Block(visual, "Than", new Vector3(0, 0, 0), size, concreteMat);
-            Block(visual, "Mai", new Vector3(0, size.y / 2 + 0.2f, 0), new Vector3(size.x + 0.6f, 0.4f, size.z + 0.6f), concreteMat);
-            Block(visual, "LoChauMai", new Vector3(0, size.y * 0.15f, size.z / 2 + 0.01f), new Vector3(size.x * 0.6f, 0.35f, 0.05f), darkMat);
-            for (int i = 0; i < 10; i++)
-            {
-                float a = i / 10f * Mathf.PI * 2f;
-                var p = new Vector3(Mathf.Cos(a) * (size.x * 0.75f), -size.y / 2 + 0.3f, Mathf.Sin(a) * (size.z * 0.75f));
-                if (p.z > size.z * 0.4f) continue; // chừa mặt trước cho lỗ châu mai
-                var bag = Block(visual, "BaoCat_" + i, p, new Vector3(1.1f, 0.6f, 0.6f), sandbagMat);
-                bag.transform.localRotation = Quaternion.Euler(0, -a * Mathf.Rad2Deg + 90, 0);
-            }
+            DressBunker(go);
             go.GetComponent<MeshRenderer>().enabled = false;
-
-            var muzzle = new GameObject("Muzzle").transform;
-            muzzle.SetParent(visual, false);
-            muzzle.localPosition = new Vector3(0, size.y * 0.15f, size.z / 2 + 0.3f);
-            SetRef(bunker, "muzzle", muzzle);
 
             // Bộc phá đặt sẵn trước lô cốt, hướng về phía người chơi (BR-17)
             var satchelGo = GameObject.CreatePrimitive(PrimitiveType.Cube);
@@ -211,25 +226,11 @@ namespace DBP.EditorTools
         static bool WireNest(Health h)
         {
             var go = h.gameObject;
-            if (go.GetComponent<ResistanceNest>()) return false;
+            if (go.GetComponent<ResistanceNest>()) { DressNest(go); return false; }
             go.AddComponent<ResistanceNest>();
             var forward = DirectionToPlayer(go.transform.position);
             go.transform.rotation = Quaternion.LookRotation(forward);
-            var visual = UnscaledChild(go.transform, "Visual");
-            for (int i = 0; i < 8; i++)
-            {
-                float a = i / 8f * Mathf.PI * 2f;
-                var bag = Block(visual, "BaoCat_" + i, new Vector3(Mathf.Cos(a) * 1.1f, -0.3f, Mathf.Sin(a) * 1.1f), new Vector3(1f, 0.6f, 0.5f), sandbagMat);
-                bag.transform.localRotation = Quaternion.Euler(0, -a * Mathf.Rad2Deg + 90, 0);
-            }
-            var lmg = AssetDatabase.LoadAssetAtPath<GameObject>(LmgModelPath);
-            if (lmg)
-            {
-                var gun = (GameObject)PrefabUtility.InstantiatePrefab(lmg, visual);
-                gun.transform.localPosition = new Vector3(0, 0.15f, 0.6f);
-                gun.transform.localRotation = Quaternion.identity;
-                foreach (var c in gun.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
-            }
+            DressNest(go);
             go.GetComponent<MeshRenderer>().enabled = false;
             return true;
         }
@@ -239,33 +240,13 @@ namespace DBP.EditorTools
         static bool WireTank(Health h)
         {
             var go = h.gameObject;
-            if (go.GetComponent<ChaffeeTank>()) return false;
+            if (go.GetComponent<ChaffeeTank>()) { DressTank(go); return false; }
             var tank = go.AddComponent<ChaffeeTank>();
             var toPlayer = DirectionToPlayer(go.transform.position);
             go.transform.rotation = Quaternion.LookRotation(toPlayer);
 
-            var visual = UnscaledChild(go.transform, "Visual");
-            Block(visual, "Than", new Vector3(0, -0.1f, 0), new Vector3(2.6f, 0.9f, 4.8f), tankMat);
-            Block(visual, "XichTrai", new Vector3(-1.45f, -0.45f, 0), new Vector3(0.55f, 0.8f, 5f), darkMat);
-            Block(visual, "XichPhai", new Vector3(1.45f, -0.45f, 0), new Vector3(0.55f, 0.8f, 5f), darkMat);
-            var turret = new GameObject("Turret").transform;
-            turret.SetParent(visual, false);
-            turret.localPosition = new Vector3(0, 0.6f, -0.2f);
-            Block(turret, "ThapPhao", Vector3.zero, new Vector3(1.7f, 0.6f, 1.9f), tankMat);
-            var barrel = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-            barrel.name = "NongPhao";
-            Object.DestroyImmediate(barrel.GetComponent<Collider>());
-            barrel.transform.SetParent(turret, false);
-            barrel.transform.localPosition = new Vector3(0, 0.05f, 1.9f);
-            barrel.transform.localRotation = Quaternion.Euler(90, 0, 0);
-            barrel.transform.localScale = new Vector3(0.18f, 1.1f, 0.18f);
-            barrel.GetComponent<Renderer>().sharedMaterial = darkMat;
-            var muzzle = new GameObject("Muzzle").transform;
-            muzzle.SetParent(turret, false);
-            muzzle.localPosition = new Vector3(0, 0.05f, 3.1f);
+            DressTank(go);
             go.GetComponent<MeshRenderer>().enabled = false;
-            SetRef(tank, "turret", turret);
-            SetRef(tank, "muzzle", muzzle);
 
             // Lộ trình: tiến về phía người chơi rồi dừng cách khoảng 18 m
             var path = new GameObject("LoTrinh_" + go.name).transform;

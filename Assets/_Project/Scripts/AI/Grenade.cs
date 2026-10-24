@@ -33,6 +33,12 @@ namespace DBP.AI
 
         void Awake() => rb = GetComponent<Rigidbody>();
 
+        /// Lựu đạn chưa nổ: lính địch thấy thì chạy tránh.
+        public static readonly System.Collections.Generic.List<Grenade> Live = new System.Collections.Generic.List<Grenade>();
+        public float BlastRadius => blastRadius;
+        void OnEnable() => Live.Add(this);
+        void OnDisable() => Live.Remove(this);
+
         void Start()
         {
             if (fuseSec > 0f)
@@ -50,6 +56,7 @@ namespace DBP.AI
         {
             if (exploded) return;
             exploded = true;
+            Live.Remove(this);
             CancelInvoke(nameof(Explode));
 
             // VFX

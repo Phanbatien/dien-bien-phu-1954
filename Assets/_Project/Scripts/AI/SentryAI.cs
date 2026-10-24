@@ -209,7 +209,7 @@ namespace DBP.AI
 
             FaceTarget(player.position);
 
-            if (Time.time >= nextFireAt)
+            if (Time.time >= nextFireAt && CanSeePlayer())
             {
                 nextFireAt = Time.time + fireInterval;
                 TryFire();
