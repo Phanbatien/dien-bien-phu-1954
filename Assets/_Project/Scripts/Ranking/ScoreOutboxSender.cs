@@ -43,8 +43,28 @@ namespace DBP.Ranking
         {
             if (sending || Time.frameCount % 30 != 0 || !ProfileService.HasProfile) return;
             var outbox = new ScoreOutbox(OutboxPath);
-            var entry = outbox.NextDue(NowMs);
+            var entry = NextSendable(outbox, NowMs);
             if (entry != null) StartCoroutine(Send(outbox, entry));
+        }
+
+        /// Mục đến hạn tiếp theo mà chủ hồ sơ vẫn đồng ý công khai. Người chơi rút lại đồng ý (hoặc xóa hồ sơ)
+        /// thì kết quả đang chờ của họ bị bỏ khỏi hàng chờ, không bao giờ gửi đi (BR-26).
+        public static ScoreOutbox.Entry NextSendable(ScoreOutbox outbox, long nowMs)
+        {
+            for (var entry = outbox.NextDue(nowMs); entry != null; entry = outbox.NextDue(nowMs))
+            {
+                if (OwnerConsents(ScoreOutbox.OwnerOf(entry))) return entry;
+                outbox.MarkSent(entry.id); // bỏ, không gửi
+            }
+            return null;
+        }
+
+        static bool OwnerConsents(string profileId)
+        {
+            if (string.IsNullOrEmpty(profileId)) return false;
+            foreach (var profile in ProfileService.Repository.Profiles)
+                if (profile.id == profileId) return !string.IsNullOrEmpty(profile.consentAt);
+            return false;
         }
 
         IEnumerator Send(ScoreOutbox outbox, ScoreOutbox.Entry entry)

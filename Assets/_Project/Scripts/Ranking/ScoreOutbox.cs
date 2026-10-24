@@ -28,6 +28,13 @@ namespace DBP.Ranking
         public ScoreOutbox(string path)
         {
             this.path = path;
+            Reload();
+        }
+
+        /// Đọc lại từ đĩa. Mọi thao tác ghi đều đọc lại trước, vì một bản sao khác (người gửi đang chờ mạng)
+        /// có thể đã thêm hoặc xóa mục; ghi đè bằng ảnh chụp cũ sẽ làm mất kết quả chưa gửi.
+        void Reload()
+        {
             data = new FileData();
             if (!File.Exists(path)) return;
             try { data = JsonUtility.FromJson<FileData>(File.ReadAllText(path)) ?? new FileData(); }
@@ -40,10 +47,19 @@ namespace DBP.Ranking
         /// Thêm một lượt thắng hợp lệ của người đã đồng ý công khai. Lượt đã có trong hàng chờ thì bỏ qua.
         public bool Enqueue(RankedResult result, long nowMs)
         {
-            if (result == null || string.IsNullOrEmpty(result.attemptId) || data.entries.Any(e => e.id == result.attemptId)) return false;
+            if (result == null || string.IsNullOrEmpty(result.attemptId)) return false;
+            Reload();
+            if (data.entries.Any(e => e.id == result.attemptId)) return false;
             data.entries.Add(new Entry { id = result.attemptId, payload = JsonUtility.ToJson(result), nextAtMs = nowMs });
             Save();
             return true;
+        }
+
+        /// Chủ của kết quả (mã hồ sơ) đọc từ bản gửi, để kiểm tra lại sự đồng ý ngay trước khi gửi.
+        public static string OwnerOf(Entry entry)
+        {
+            try { return JsonUtility.FromJson<RankedResult>(entry.payload)?.profileId; }
+            catch (ArgumentException) { return null; }
         }
 
         public Entry NextDue(long nowMs) => data.entries.Where(e => e.nextAtMs <= nowMs).OrderBy(e => e.nextAtMs).FirstOrDefault();
@@ -51,11 +67,13 @@ namespace DBP.Ranking
         /// Server đã nhận (kể cả trả lời "đã có"): xóa khỏi hàng chờ.
         public void MarkSent(string id)
         {
+            Reload();
             if (data.entries.RemoveAll(e => e.id == id) > 0) Save();
         }
 
         public void MarkFailed(string id, long nowMs)
         {
+            Reload();
             var entry = data.entries.FirstOrDefault(e => e.id == id);
             if (entry == null) return;
             entry.nextAtMs = nowMs + RetrySeconds[Math.Min(entry.attempts, RetrySeconds.Length - 1)] * 1000L;

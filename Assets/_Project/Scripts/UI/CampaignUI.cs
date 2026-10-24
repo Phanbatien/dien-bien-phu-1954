@@ -256,7 +256,7 @@ namespace DBP.UI
         void Tutorial()
         {
             W.Label(page, "Title", "Trước giờ xuất trận", 200, 126, 1200, 80, 48);
-            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây để mở hòm / tương tác", "R     Thay đạn   ·   1 / 2: đổi súng", "SHIFT     Chạy   ·   CTRL / C: cúi   ·   SPACE: nhảy" };
+            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây: mở hòm tiếp tế (hòm đạn có quầng sáng)", "R     Thay đạn   ·   1 / 2: đổi súng", "SHIFT     Chạy   ·   CTRL / C: cúi   ·   SPACE: nhảy" };
             for (int i = 0; i < rows.Length; i++) W.Label(page, "Control" + i, rows[i], 200, 242 + i * 68, 1200, 58, 28);
             W.Label(page, "TutorialHint", "Theo mục tiêu trên HUD để tiến quân. ESC mở tạm dừng và hướng dẫn.\nKhi trả lời câu hỏi, chiến trường dừng nhưng đồng hồ câu hỏi vẫn chạy.", 200, 602, 1200, 100, 25, W.Gold);
             W.Button(page, "BeginMission", "ĐÃ RÕ • BẮT ĐẦU", 200, 736, 1200, 68, () => Show(CampaignScreen.Gameplay));
