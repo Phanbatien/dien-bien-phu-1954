@@ -112,6 +112,7 @@ namespace DBP.Interaction
             go.transform.localScale = isCrate ? new Vector3(0.9f, 0.6f, 0.6f) : new Vector3(0.2f, 0.12f, 1f);
             go.transform.position += Vector3.up * go.transform.localScale.y / 2f;
             go.GetComponent<Renderer>().material.color = RarityRules.Color(reward.rarity);
+            if (isCrate) Dress(go, RarityRules.Color(reward.rarity));
 
             var crate = go.AddComponent<QuizCrate>();
             crate.rarity = reward.rarity;
@@ -122,6 +123,23 @@ namespace DBP.Interaction
             crate.countsForPity = isCrate;
             crate.Audit("offered",default,0,0,null);
             return crate;
+        }
+
+        /// Hòm tiếp tế trông như hòm đạn quân dụng, có quầng sáng màu độ hiếm, để không lẫn với hòm gỗ
+        /// trang trí trong hào (bấm E vào hòm trang trí thì không có gì). Model nằm ở Resources/HomTiepTe,
+        /// đã chuẩn hóa về khối 1×1×1 nên khớp đúng collider của khối hộp.
+        static void Dress(GameObject crate, Color rarity)
+        {
+            var model = Resources.Load<GameObject>("HomTiepTe");
+            if (!model) return;
+            var visual = Instantiate(model, crate.transform, false);
+            visual.name = "Model";
+            foreach (var c in visual.GetComponentsInChildren<Collider>()) Destroy(c);
+            crate.GetComponent<Renderer>().enabled = false;
+            var glow = new GameObject("QuangSang").AddComponent<Light>();
+            glow.transform.SetParent(crate.transform, false);
+            glow.transform.position = crate.transform.position + Vector3.up * 0.6f;
+            glow.type = LightType.Point; glow.range = 2.2f; glow.intensity = 1.6f; glow.color = rarity; glow.shadows = LightShadows.None;
         }
 
         public bool CanInteract(Interactor who)

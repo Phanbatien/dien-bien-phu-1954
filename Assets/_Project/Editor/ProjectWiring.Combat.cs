@@ -417,6 +417,36 @@ namespace DBP.EditorTools
             EnsureSoldierController();
             EnsurePlayerGrenades();
             EnsureSmgViewModel();
+            EnsureCrateModel();
+        }
+
+        /// Model hòm tiếp tế cho QuizCrate: hòm đạn quân dụng (khác hòm gỗ trang trí), chuẩn hóa về khối 1×1×1 tâm ở gốc.
+        static void EnsureCrateModel()
+        {
+            const string path = "Assets/_Project/Resources/HomTiepTe.prefab";
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(path)) return;
+            var source = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Defensive_props/Prefabs/defence/ammo_box.prefab");
+            if (!source) return;
+            var root = new GameObject("HomTiepTe");
+            var fit = new GameObject("Fit").transform; // khung không xoay, co giãn theo trục thế giới
+            fit.SetParent(root.transform, false);
+            var model = (GameObject)PrefabUtility.InstantiatePrefab(source, fit);
+            foreach (var c in model.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+            var b = WorldBounds(model);
+            // Cạnh dài nằm theo trục X như khối hộp 0,9 × 0,6 × 0,6
+            if (b.size.z > b.size.x) { model.transform.rotation = Quaternion.Euler(0, 90, 0); b = WorldBounds(model); }
+            fit.localScale = new Vector3(1f / b.size.x, 1f / b.size.y, 1f / b.size.z);
+            b = WorldBounds(model);
+            fit.position -= b.center;
+            UrpMaterialUtility.Apply(root);
+            PrefabUtility.SaveAsPrefabAsset(root, path);
+            Object.DestroyImmediate(root);
+        }
+
+        public static void EnsureCrateModelCI()
+        {
+            try { EnsureCrateModel(); AssetDatabase.SaveAssets(); EditorApplication.Exit(0); }
+            catch (System.Exception e) { Debug.LogException(e); EditorApplication.Exit(1); }
         }
 
         static Material LoadOrMakeMat(string name, Color color)
