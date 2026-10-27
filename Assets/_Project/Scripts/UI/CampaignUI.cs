@@ -17,7 +17,7 @@ using UnityEngine.UI;
 using W = DBP.UI.UIWidgets;
 namespace DBP.UI
 {
-    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard, Story, Credits, Settings }
+    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard, Story, Credits, Settings, BunkerView }
 
     /// Runtime Canvas UI leaves authored mission scenes and shared player prefabs intact.
     public sealed partial class CampaignUI : MonoBehaviour
@@ -118,11 +118,11 @@ namespace DBP.UI
             if (screen == CampaignScreen.Gameplay && !InputLock.Locked) FirstPersonController.LockCursor(); else FirstPersonController.UnlockCursor();
             ClearPage();
             // Hầm chữ A sau màn chuẩn bị: nền mờ để thấy ánh đèn dầu, bản đồ, điện đài
-            bool inBunker = screen == CampaignScreen.Preparation && !mission;
+            bool inBunker = (screen == CampaignScreen.Preparation || screen == CampaignScreen.BunkerView) && !mission;
             if (inBunker) BunkerBackdrop.Show(); else BunkerBackdrop.Hide();
             if (screen != CampaignScreen.Gameplay)
             {
-                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : inBunker && BunkerBackdrop.Available ? new Color(.05f, .06f, .05f, .55f) : W.Ink);
+                var shade = W.Panel(page, "Backdrop", -2000, -2000, 5600, 4900, mission ? new Color(.055f,.075f,.065f,.96f) : inBunker && BunkerBackdrop.Available ? new Color(.05f, .06f, .05f, screen == CampaignScreen.BunkerView ? 0f : .28f) : W.Ink);
                 shade.transform.SetAsFirstSibling();
                 W.Label(page, "Eyebrow", "ĐIỆN BIÊN PHỦ 1954     /     QUYẾT CHIẾN • QUYẾT THẮNG", 64, 28, 1450, 40, 18, W.Gold);
                 W.Panel(page, "Rule", 64, 88, 1472, 2, W.Gold);
@@ -141,6 +141,7 @@ namespace DBP.UI
                 case CampaignScreen.Story: StoryPage(); break;
                 case CampaignScreen.Credits: CreditsPage(); break;
                 case CampaignScreen.Settings: SettingsPage(); break;
+                case CampaignScreen.BunkerView: BunkerViewPage(); break;
             }
         }
         void Guard(Action action)
@@ -248,6 +249,7 @@ namespace DBP.UI
                 if (!canBuy && current < 3) W.Label(page, "Shortfall", $"Thiếu {cost - ProfileService.Data.resolve} điểm", x + 22, 568, 306, 30, 18, W.Gold);
             }
             BriefingSection();
+            if (BunkerBackdrop.Available) W.Button(page, "ViewBunker", "Xem Hầm chữ A", 1180, 236, 356, 46, () => Show(CampaignScreen.BunkerView));
             W.Button(page, "BackToMenu", "← Chọn nhiệm vụ", 64, 740, 440, 66, () => { briefing = null; Show(CampaignScreen.Menu); });
             W.Button(page, "Deploy", "XUẤT TRẬN →", 1096, 740, 440, 66, Deploy, BriefingReady);
         }

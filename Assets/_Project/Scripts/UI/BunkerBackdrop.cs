@@ -19,7 +19,15 @@ namespace DBP.UI
             pending = true;
             var op = SceneManager.LoadSceneAsync(SceneName, LoadSceneMode.Additive);
             if (op == null) { pending = false; return; }
-            op.completed += _ => { pending = false; if (!wanted) Hide(); };
+            op.completed += _ =>
+            {
+                pending = false;
+                if (!wanted) { Hide(); return; }
+                // Camera trong hầm đưa nhẹ qua lại cho cảnh sống động
+                foreach (var root in SceneManager.GetSceneByName(SceneName).GetRootGameObjects())
+                    foreach (var cam in root.GetComponentsInChildren<Camera>())
+                        if (!cam.GetComponent<DBP.Core.BunkerCameraSway>()) cam.gameObject.AddComponent<DBP.Core.BunkerCameraSway>();
+            };
         }
 
         public static void Hide()

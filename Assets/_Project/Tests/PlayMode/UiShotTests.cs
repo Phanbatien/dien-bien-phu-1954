@@ -52,6 +52,9 @@ namespace DBP.Tests
             float t = Time.realtimeSinceStartup + 5; while (!BunkerBackdrop.Loaded && Time.realtimeSinceStartup < t) yield return null;
             yield return null; yield return null;
             yield return Shot("ui_4_ham_chuan_bi");
+            Click("ViewBunker"); yield return new WaitForSecondsRealtime(1.5f);
+            yield return Shot("ui_4b_xem_ham");
+            Click("BackToPreparation"); yield return null;
             Click("BackToMenu"); yield return null;
             Click("PlayPrologue"); yield return null;
             yield return Shot("ui_5_mo_dau");
