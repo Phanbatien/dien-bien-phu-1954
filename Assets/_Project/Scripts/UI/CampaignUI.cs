@@ -194,7 +194,16 @@ namespace DBP.UI
                 W.Label(page, "LocalOnly", "Không đồng ý vẫn chơi và lưu tại máy.", 604, 790, 900, 32, 20);
             }
             StoryMenuButtons();
+            W.Button(page, "ExitGame", "Thoát game (Exit)", 1190, 730, 346, 58, ExitGame);
             if (ProfileService.Repository.RecoveredBackup) status.text = "Đã đọc bản sao lưu hồ sơ sau lỗi lưu trước đó.";
+        }
+        static void ExitGame()
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#else
+            Application.Quit();
+#endif
         }
         static string ShortLabel(string value, int length) => string.IsNullOrEmpty(value) ? "" : value.Length <= length ? value : value.Substring(0, length - 1) + "…";
         void CreateProfile()

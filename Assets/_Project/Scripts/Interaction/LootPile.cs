@@ -30,7 +30,9 @@ namespace DBP.Interaction
             go.transform.position = anchor.position + anchor.forward * 0.9f + Vector3.up * 0.15f;
             var s = anchor.lossyScale;
             go.transform.localScale = new Vector3(0.6f / s.x, 0.3f / s.y, 0.4f / s.z);
-            go.GetComponent<Renderer>().material.color = new Color(0.4f, 0.3f, 0.2f);
+            // Keep an explicit URP material (and its shader variants) in player builds.
+            // The primitive's Editor default material is not a reliable build dependency.
+            go.GetComponent<Renderer>().sharedMaterial = Resources.Load<Material>("LootPileMaterial");
             return go.AddComponent<LootPile>();
         }
 

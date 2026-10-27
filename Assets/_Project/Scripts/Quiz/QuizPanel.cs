@@ -6,7 +6,7 @@ namespace DBP.Quiz
     /// T18: giao diện câu hỏi ngoài trận (IMGUI), bản "thật" của IQuizView.
     /// Đồng hồ KHÔNG nằm ở đây: QuizTimer (QuizTypes.cs) đếm bằng thời gian thực và bộ điều khiển
     /// gọi SetRemaining mỗi khung hình; giao diện chỉ vẽ lại. Việc mở/khóa chuột do WorldFreeze lo.
-    /// Chọn đáp án bằng chuột hoặc phím 1–4. Sau lần chọn đầu tiên, các nút bị khóa; bộ điều khiển gọi Hide().
+    /// Chọn bằng chuột hoặc phím 1–4; khóa lựa chọn và hiện kết quả trước khi đóng.
     public class QuizPanel : MonoBehaviour, IQuizView
     {
         [Header("Giao diện")]
@@ -31,6 +31,10 @@ namespace DBP.Quiz
         private GUIStyle _answerStyle;
         private GUIStyle _timerStyle;
         private GUIStyle _metaStyle;
+        private GUIStyle _correctStyle;
+        private GUIStyle _wrongStyle;
+        private QuizOutcome? _outcome;
+        private string _selected;
 
         public bool IsVisible { get { return _visible; } }
 
@@ -57,8 +61,21 @@ namespace DBP.Quiz
             _remaining = _limit;
             _onAnswer = onAnswer;
             _answered = false;
+            _outcome = null;
+            _selected = null;
             _visible = true;
         }
+
+        public void ShowResult(QuizOutcome outcome, string selectedOption)
+        {
+            _answered = true;
+            _outcome = outcome;
+            _selected = selectedOption;
+            _onAnswer = null;
+        }
+
+        public Color ResultColor => _outcome == QuizOutcome.Correct
+            ? new Color(.16f, .48f, .22f) : new Color(.72f, .16f, .12f);
 
         public void SetRemaining(float seconds)
         {
@@ -93,6 +110,8 @@ namespace DBP.Quiz
             {
                 _bodyStyle.font = font; _answerStyle.font = font; _timerStyle.font = font; _metaStyle.font = font;
             }
+            _correctStyle = DBP.UI.UITheme.ImguiButton(_answerStyle, new Color(.16f, .48f, .22f));
+            _wrongStyle = DBP.UI.UITheme.ImguiButton(_answerStyle, new Color(.72f, .16f, .12f));
         }
 
         private void OnGUI()
@@ -136,7 +155,11 @@ namespace DBP.Quiz
 
             GUI.color = Color.white;
             GUI.Label(new Rect(x, y, inner * 0.5f, 50f), "Cấp " + _question.level, _metaStyle);
-            GUI.Label(new Rect(x + inner * 0.5f, y, inner * 0.5f, 50f), "Còn " + Mathf.CeilToInt(_remaining) + " giây", _timerStyle);
+            _timerStyle.normal.textColor = _outcome.HasValue ? ResultColor : DBP.UI.UITheme.Heading;
+            string status = !_outcome.HasValue ? "Còn " + Mathf.CeilToInt(_remaining) + " giây"
+                : _outcome == QuizOutcome.Correct ? "Chính xác!"
+                : _outcome == QuizOutcome.Wrong ? "Sai đáp án!" : "Hết giờ!";
+            GUI.Label(new Rect(x + inner * 0.5f, y, inner * 0.5f, 50f), status, _timerStyle);
             y += 50f;
 
             GUI.color = new Color(0.25f, 0.16f, 0.08f, 0.55f);
@@ -149,11 +172,19 @@ namespace DBP.Quiz
             GUI.Label(new Rect(x, y, inner, bodyH + 4f), _question.stem, _bodyStyle);
             y += bodyH + 30f;
 
-            GUI.enabled = !_answered;
             string chosen = null;
             for (int i = 0; i < _options.Length; i++)
             {
-                if (GUI.Button(new Rect(x, y, inner, answerH[i]), (i + 1) + ".  " + _options[i].text, _answerStyle))
+                var rect = new Rect(x, y, inner, answerH[i]);
+                string text = (i + 1) + ".  " + _options[i].text;
+                if (_outcome.HasValue)
+                {
+                    bool correct = _options[i].id == _question.correct;
+                    bool wrong = _options[i].id == _selected && !correct;
+                    GUI.Label(rect, text + (correct ? "   ✓" : wrong ? "   ✗" : ""),
+                        correct ? _correctStyle : wrong ? _wrongStyle : _answerStyle);
+                }
+                else if (!_answered && GUI.Button(rect, text, _answerStyle))
                     chosen = _options[i].id;
                 y += answerH[i] + 16f;
             }
