@@ -78,7 +78,7 @@ namespace DBP.UI
             if (!parent) return false;
             var corners = new Vector3[4]; label.GetWorldCorners(corners);
             var center = (corners[0] + corners[2]) * 0.5f;
-            foreach (var img in parent.GetComponentsInChildren<Image>())
+            foreach (var img in parent.root.GetComponentsInChildren<Image>()) // cả bảng giấy nằm ngoài cha trực tiếp (nhãn ô tích)
             {
                 if (img.sprite != UITheme.PaperSprite) continue;
                 var c = new Vector3[4]; img.rectTransform.GetWorldCorners(c);
@@ -137,9 +137,9 @@ namespace DBP.UI
             Label(rect, "Label", label, 48, 0, w - 48, 56, 20);
             toggle.onValueChanged.AddListener(change); return toggle;
         }
-        public static Slider Volume(Transform parent, float value, float x, float y, UnityAction<float> change)
+        public static Slider Volume(Transform parent, float value, float x, float y, UnityAction<float> change, string name = "VolumeSlider")
         {
-            var rect = Rect(parent, "VolumeSlider", x, y, 320, 44); var slider = rect.gameObject.AddComponent<Slider>();
+            var rect = Rect(parent, name, x, y, 320, 44); var slider = rect.gameObject.AddComponent<Slider>();
             var track = Panel(rect, "Track", 0, 15, 320, 14, new Color32(60, 40, 24, 255));
             track.sprite = UITheme.PillSprite(UITheme.Wood); track.type = Image.Type.Sliced; track.color = Color.white;
             var fillArea = Rect(rect, "FillArea", 4, 18, 312, 8);

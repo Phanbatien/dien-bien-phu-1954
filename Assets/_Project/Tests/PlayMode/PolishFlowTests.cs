@@ -68,6 +68,33 @@ namespace DBP.Tests
             Assert.IsTrue(session.TryOpen(1,5,.03f,_=>{}),"Use a remaining question; the level-1 fixture is intentionally not repeated.");
             yield return new WaitForSecondsRealtime(.1f);StringAssert.Contains("Hết giờ",Notice.text);
         }
+
+        [UnityTest] public IEnumerator WrongQuiz_KeepsResultVisibleAndWorldFrozen_ThenResumes() => QuizResultFeedback(false);
+        [UnityTest] public IEnumerator CorrectQuiz_KeepsResultVisibleAndWorldFrozen_ThenResumes() => QuizResultFeedback(true);
+
+        IEnumerator QuizResultFeedback(bool correct)
+        {
+            var session = FieldQuizSession.Instance;
+            var panel = session.GetComponent<QuizPanel>();
+            Assert.NotNull(panel);
+            int resolved = 0;
+            Assert.IsTrue(session.TryOpen(1, 12, _ => resolved++));
+            var question = (Question)typeof(FieldQuizSession).GetField("current", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(session);
+            var wrong = System.Array.Find(question.options, o => o.id != question.correct).id;
+            var answer = typeof(FieldQuizSession).GetMethod("OnAnswer", BindingFlags.Instance | BindingFlags.NonPublic);
+            answer.Invoke(session, new object[] { correct ? question.correct : wrong });
+            answer.Invoke(session, new object[] { question.correct });
+            yield return new WaitForSecondsRealtime(.2f);
+            Assert.IsTrue(panel.IsVisible, "Keep the result visible long enough to read.");
+            Assert.IsTrue(WorldFreeze.IsFrozen);
+            Assert.IsTrue(correct ? panel.ResultColor.g > panel.ResultColor.r : panel.ResultColor.r > panel.ResultColor.g);
+            Assert.AreEqual(1, resolved);
+            Assert.IsFalse(session.TryOpen(1, 12, _ => {}));
+            yield return new WaitForSecondsRealtime(2f);
+            Assert.IsFalse(panel.IsVisible);
+            Assert.IsFalse(session.IsOpen);
+            Assert.IsFalse(WorldFreeze.IsFrozen);
+        }
         [UnityTest] public IEnumerator SuccessfulSave_ShowsNotice_FailedWriteDoesNot()
         {
             ProfileService.Repository.Create("Save test","SE",false);

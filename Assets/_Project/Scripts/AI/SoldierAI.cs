@@ -95,6 +95,10 @@ namespace DBP.AI
         bool hasSpot, fleeing;
         float lastSeenAt = -99f, acquiredAt = -99f, repositionAt, nextThinkAt, panicUntil;
         int burstLeft = 3;
+        ComradeFollower allyFoe;     // đang nhắm đồng đội thay vì người chơi
+        float nextMeleeAt;
+        const float MeleeRange = 2.2f;
+        Vector3 FoePos => allyFoe ? allyFoe.transform.position : player.position;
         const float ReactionSec = 0.55f;   // thấy rồi mới bóp cò, công bằng với người chơi
         const float LoseSightSec = 1.6f;   // không thấy quá lâu thì đổi chỗ
 
@@ -220,10 +224,11 @@ namespace DBP.AI
                     agent.ResetPath();
             }
 
-            bool sees = CanSeePlayer(false);
+            if (TryMelee()) return;
+            bool sees = allyFoe ? SeesAlly(allyFoe, false) : CanSeePlayer(false);
             if (sees && Time.time - lastSeenAt > 1f) acquiredAt = Time.time;
-            if (sees) { lastSeenAt = Time.time; lastKnown = player.position; }
-            FaceTarget(sees ? player.position : lastKnown);
+            if (sees) { lastSeenAt = Time.time; lastKnown = FoePos; }
+            FaceTarget(sees ? FoePos : lastKnown);
 
             if (!sees)
             {
@@ -273,6 +278,18 @@ namespace DBP.AI
             CombatEffects.Muzzle(muzzle.position, muzzle.rotation);
 
             // Tia raycast với độ lệch ngẫu nhiên nhỏ (lính bắn không chuẩn)
+            if (allyFoe)
+            {
+                // Bắn đồng đội: đồng đội không có va chạm, tính trúng theo độ tản và khoảng cách
+                var aim = allyFoe.transform.position + Vector3.up * 1.1f;
+                float dist = Vector3.Distance(muzzle.position, aim);
+                bool hitAlly = Random.value < Mathf.Clamp(0.65f - dist / 80f, 0.2f, 0.6f) * bulletSpread / Mathf.Max(0.5f, CurrentSpread());
+                var end = hitAlly ? aim : aim + Random.insideUnitSphere * 1.5f;
+                CombatEffects.Tracer(muzzle.position, end, true);
+                CombatEffects.Impact(end, (muzzle.position - end).normalized, false);
+                if (hitAlly) allyFoe.TakeHit(fireDamage);
+                return;
+            }
             var spread = Random.insideUnitCircle * CurrentSpread();
             var dir = (player.position + Vector3.up * 0.8f - muzzle.position).normalized;
             dir = Quaternion.Euler(spread.x, spread.y, 0f) * dir;
@@ -329,6 +346,7 @@ namespace DBP.AI
         void Think()
         {
             if (!agent || !agent.isOnNavMesh) return;
+            PickFoe();
             foreach (var g in Grenade.Live)
             {
                 if (!g) continue;
@@ -344,6 +362,49 @@ namespace DBP.AI
                 }
                 break;
             }
+        }
+
+        /// Nhắm người chơi hay đồng đội: ưu tiên ai thấy được và gần hơn rõ rệt. Đang rảnh mà thấy đồng đội thì báo động.
+        void PickFoe()
+        {
+            if (!player) return;
+            if (allyFoe && (allyFoe.IsDead || !allyFoe.isActiveAndEnabled)) allyFoe = null;
+            bool seesPlayer = CanSeePlayer(state == State.Idle);
+            float playerDist = Vector3.Distance(transform.position, player.position);
+            ComradeFollower best = null; float bestDist = fireRange;
+            foreach (var c in ComradeFollower.All)
+            {
+                if (!c || c.IsDead) continue;
+                float d = Vector3.Distance(transform.position, c.transform.position);
+                if (d < bestDist && SeesAlly(c, state == State.Idle)) { bestDist = d; best = c; }
+            }
+            allyFoe = best && (!seesPlayer || bestDist < playerDist * 0.7f) ? best : null;
+            if (state == State.Idle && allyFoe) { lastKnown = allyFoe.transform.position; Alert(); }
+        }
+
+        bool SeesAlly(ComradeFollower c, bool useFov)
+        {
+            if (!eyePoint) return false;
+            var to = c.transform.position + Vector3.up * 1.2f - eyePoint.position;
+            if (to.magnitude > (useFov ? sightRange : fireRange)) return false;
+            if (useFov && Vector3.Angle(eyePoint.forward, to) > sightAngle) return false;
+            return !Physics.Raycast(eyePoint.position, to.normalized, to.magnitude, sightMask, QueryTriggerInteraction.Ignore);
+        }
+
+        /// Giáp lá cà khi địch áp sát: báng súng/lưỡi lê.
+        bool TryMelee()
+        {
+            var to = FoePos - transform.position; to.y = 0;
+            if (to.magnitude > MeleeRange) return false;
+            agent.ResetPath();
+            FaceTarget(FoePos);
+            if (Time.time < nextMeleeAt) return true;
+            nextMeleeAt = Time.time + 1.5f;
+            transform.position += to.normalized * 0.2f;
+            if (allyFoe) allyFoe.TakeHit(40f);
+            else player.GetComponent<IDamageable>()?.TakeDamage(22f, DamageType.Bullet, player.position + Vector3.up);
+            CombatEffects.Impact(FoePos + Vector3.up * 1.2f, -to.normalized, false);
+            return true;
         }
 
         /// Chọn chỗ đứng bắn: thấy được người chơi, có vật che ngang hông, cách 10–28 m, gần mình, không trùng đồng đội.

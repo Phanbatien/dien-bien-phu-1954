@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DBP.Content;
 using DBP.Core;
@@ -8,7 +9,7 @@ using UnityEngine;
 namespace DBP.Quiz
 {
     /// Vòng đời một câu hỏi ngoài trận (T13; BR-09–BR-12):
-    /// mở câu → đóng băng thế giới → đếm giờ thực → chốt đáp án → phát thưởng → 0,5 s chuyển tiếp → chạy lại.
+    /// mở câu → đóng băng → chốt → phát thưởng → hiện kết quả → 0,5 s chuyển tiếp → chạy lại.
     /// Hòm vũ khí, súng rơi (T22–T23) và điện thoại gọi pháo (T31) đều gọi TryOpen.
     public class FieldQuizSession : MonoBehaviour
     {
@@ -23,7 +24,7 @@ namespace DBP.Quiz
 
         public IQuestionProvider Questions { get; set; }
         public IQuizView View { get; set; }
-        /// true từ lúc mở câu tới hết 0,5 s chuyển tiếp: không mở câu thứ hai (BR-12).
+        /// true tới hết phần hiện kết quả và chuyển tiếp: không mở câu thứ hai (BR-12).
         public bool IsOpen { get; private set; }
 
         QuizTimer timer;
@@ -97,10 +98,10 @@ namespace DBP.Quiz
         void OnAnswer(string optionId)
         {
             if (!IsOpen || timer == null || !timer.TryAnswer(Now)) return;
-            Finish(optionId == current.correct ? QuizOutcome.Correct : QuizOutcome.Wrong);
+            Finish(optionId == current.correct ? QuizOutcome.Correct : QuizOutcome.Wrong, optionId);
         }
 
-        void Finish(QuizOutcome outcome)
+        void Finish(QuizOutcome outcome, string selectedOption = null)
         {
             var result = new QuizResult
             {
@@ -110,7 +111,9 @@ namespace DBP.Quiz
                 remaining = timer.RemainingAtSettle,
                 outcome = outcome,
             };
-            View.Hide();
+            var panel = View as QuizPanel;
+            if (panel) panel.ShowResult(outcome, selectedOption);
+            else View.Hide();
             if (outcome == QuizOutcome.Timeout) CampaignAudio.Interface("ui_timeout");
             else if (outcome == QuizOutcome.Correct) CampaignAudio.Interface("ui_reward");
             onResolved?.Invoke(result); // phát thưởng một lần, trong lúc thế giới còn đứng yên
@@ -119,6 +122,14 @@ namespace DBP.Quiz
             if (outcome == QuizOutcome.Timeout) DBP.UI.CampaignNotices.Show("Hết giờ — câu hỏi đã kết thúc.");
             else if (outcome == QuizOutcome.Correct)
                 DBP.UI.CampaignNotices.Show($"Trả lời đúng · +{KnowledgeScore.Calculate(result.level, QuizForm.Field, result.outcome, result.remaining, result.timeLimit)} điểm kiến thức");
+            if (panel) StartCoroutine(CloseResult());
+            else freeze.Resume(() => IsOpen = false);
+        }
+
+        IEnumerator CloseResult()
+        {
+            yield return new WaitForSecondsRealtime(1.25f);
+            View.Hide();
             freeze.Resume(() => IsOpen = false);
         }
     }

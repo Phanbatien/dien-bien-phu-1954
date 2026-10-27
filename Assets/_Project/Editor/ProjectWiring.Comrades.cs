@@ -129,7 +129,7 @@ namespace DBP.EditorTools
             return m.Build("MuCoi");
         }
 
-        /// 3 đồng đội đi cùng người chơi (sau lưng, hai bên), dựng lại mỗi lần nối scene.
+        /// 12 đồng đội đi cùng người chơi (ba hàng sau lưng), dựng lại mỗi lần nối scene.
         static int WireComrades()
         {
             var old = GameObject.Find("DongDoi");
@@ -141,7 +141,11 @@ namespace DBP.EditorTools
             var root = new GameObject("DongDoi").transform;
             var fwd = player.transform.forward; fwd.y = 0; fwd = fwd.sqrMagnitude > 0.01f ? fwd.normalized : Vector3.forward;
             var right = Vector3.Cross(Vector3.up, fwd);
-            var slots = new[] { new Vector2(-2.5f, -1.5f), new Vector2(2.8f, -2.2f), new Vector2(-1f, -4f) };
+            // 12 đồng đội (mỗi phe 10–20 người): ba hàng sau lưng người chơi, so le
+            var slots = new System.Collections.Generic.List<Vector2>();
+            for (int row = 0; row < 3; row++)
+                for (int col = 0; col < 4; col++)
+                    slots.Add(new Vector2((col - 1.5f) * 3.2f + (row % 2) * 1.2f, -2.5f - row * 3f));
             int n = 0;
             foreach (var slot in slots)
             {

@@ -10,9 +10,10 @@ namespace DBP.Core
         public static CombatEffects Current { get; private set; }
         /// Vật liệu hạt mềm dùng chung (khói, lửa, pháo sáng của BattlefieldAmbience).
         public static Material SoftMaterial { get { var fx = Ensure(); return fx ? fx.material : null; } }
-        readonly ParticleSystem[][] pools = new ParticleSystem[5][];
-        readonly int[] next = new int[5];
+        readonly ParticleSystem[][] pools = new ParticleSystem[6][];
+        readonly int[] next = new int[6];
         Material material;
+        Material rubbleMaterial;
         Texture2D texture;
         // Đường đạn (T44): vệt sáng bay từ nòng tới điểm trúng, để người chơi luôn thấy hỏa lực đến từ đâu
         const int TracerCount = 32;
@@ -52,8 +53,13 @@ namespace DBP.Core
             texture.SetPixels(pixels); texture.Apply(false, true);
             material = new Material(Resources.Load<Shader>("CombatParticles")) { name = "CombatParticles" };
             material.mainTexture = texture;
-            string[] names = { "Muzzle", "Dust", "Sparks", "Blast", "Smoke" };
-            int[] sizes = { 12, 8, 8, 4, 4 };
+            rubbleMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit")) { name = "BunkerRubble", color = new Color(.34f, .29f, .23f) };
+            var cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.SetActive(false);
+            var rubbleMesh = cube.GetComponent<MeshFilter>().sharedMesh;
+            Destroy(cube);
+            string[] names = { "Muzzle", "Dust", "Sparks", "Blast", "Smoke", "Rubble" };
+            int[] sizes = { 12, 8, 8, 4, 4, 4 };
             for (int kind = 0; kind < pools.Length; kind++)
             {
                 pools[kind] = new ParticleSystem[sizes[kind]];
@@ -75,6 +81,16 @@ namespace DBP.Core
                     var size = p.sizeOverLifetime; size.enabled = true;
                     size.size = new ParticleSystem.MinMaxCurve(1, AnimationCurve.Linear(0, kind == 4 ? .5f : 1, 1, kind == 4 ? 2 : .15f));
                     var renderer = p.GetComponent<ParticleSystemRenderer>(); renderer.sharedMaterial = material;
+                    if (kind == 5)
+                    {
+                        renderer.renderMode = ParticleSystemRenderMode.Mesh;
+                        renderer.mesh = rubbleMesh;
+                        renderer.sharedMaterial = rubbleMaterial;
+                        main.startRotation3D = true;
+                        main.startRotation = new ParticleSystem.MinMaxCurve(0f, Mathf.PI * 2);
+                        var spin = p.rotationOverLifetime; spin.enabled = true;
+                        spin.z = new ParticleSystem.MinMaxCurve(-4f, 4f);
+                    }
                     renderer.shadowCastingMode = ShadowCastingMode.Off; renderer.receiveShadows = false;
                     pools[kind][i] = p;
                 }
@@ -113,9 +129,10 @@ namespace DBP.Core
             var main = p.main; main.startLifetime = new ParticleSystem.MinMaxCurve(life * .6f, life);
             main.startSize = new ParticleSystem.MinMaxCurve(size * .65f, size);
             main.startSpeed = new ParticleSystem.MinMaxCurve(speed * .4f, speed);
-            main.startColor = tint; main.gravityModifier = kind == 2 ? .3f : 0;
+            main.startColor = tint; main.gravityModifier = kind == 5 ? 1f : kind == 2 ? .3f : 0;
             var shape = p.shape; shape.enabled = true; shape.shapeType = ParticleSystemShapeType.Cone;
-            shape.angle = kind == 4 ? 30 : 65; shape.radius = kind == 4 ? .2f * size : .02f;
+            shape.angle = kind == 4 ? 30 : 65;
+            shape.radius = kind == 5 ? size * 2f : kind == 4 ? .2f * size : .02f;
             p.Play(); p.Emit(count);
         }
         public static void Muzzle(Vector3 position, Quaternion rotation, float scale = 1)
@@ -158,10 +175,19 @@ namespace DBP.Core
             fx.Burst(3, position + Vector3.up * .15f, Quaternion.Euler(-90, 0, 0), 12, 1.3f * scale, .35f, 2 * scale, new Color(1, .47f, .12f, .95f));
             fx.Burst(4, position + Vector3.up * .35f, Quaternion.Euler(-90, 0, 0), 10, 1.2f * scale, 2.5f, .65f * scale, new Color(.23f, .21f, .18f, .65f));
         }
+        public static void BunkerExplosion(Vector3 position, float scale = 2f)
+        {
+            var fx = Ensure(); if (!fx || !fx.enabled) return;
+            scale = Mathf.Clamp(scale, 1f, 3f);
+            Explosion(position, scale);
+            fx.Burst(5, position, Quaternion.Euler(-90, 0, 0), 24, .35f * scale, 3f, 5f * scale, Color.white);
+            fx.Burst(1, position, Quaternion.Euler(-90, 0, 0), 20, 1.4f * scale, 2f, 2f * scale, new Color(.5f, .42f, .3f, .8f));
+        }
         void OnDestroy()
         {
             if (Current == this) Current = null;
             if (material) Destroy(material);
+            if (rubbleMaterial) Destroy(rubbleMaterial);
             if (texture) Destroy(texture);
         }
     }

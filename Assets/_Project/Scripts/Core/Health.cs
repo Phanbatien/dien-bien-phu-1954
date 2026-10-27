@@ -60,7 +60,24 @@ namespace DBP.Core
 
         public bool IsImmuneTo(DamageType type) => Array.IndexOf(immuneTo, type) >= 0;
 
+        /// Cú đánh cuối cùng là của đồng đội (AI phe ta): mục tiêu chết thì không tính công cho người chơi.
+        public bool LastHitByAlly { get; private set; }
+
+        /// Đồng đội gây sát thương: vẫn trừ máu bình thường nhưng không cộng vào thành tích người chơi.
+        public void TakeAllyDamage(float amount, DamageType type, Vector3 point)
+        {
+            if (current <= 0f && initialized) return;
+            LastHitByAlly = true;
+            ApplyDamage(amount, type, point);
+        }
+
         public void TakeDamage(float amount, DamageType type, Vector3 point)
+        {
+            LastHitByAlly = false;
+            ApplyDamage(amount, type, point);
+        }
+
+        void ApplyDamage(float amount, DamageType type, Vector3 point)
         {
             Init();
             if (current <= 0f || amount <= 0f || IsImmuneTo(type)) return;

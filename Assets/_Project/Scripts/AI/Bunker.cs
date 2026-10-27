@@ -38,7 +38,7 @@ namespace DBP.AI
         [SerializeField] AudioClip destructionClip;
 
         [Header("Renderer để tắt khi phá")]
-        [SerializeField] GameObject[] toDisableOnDestroyed;
+        [SerializeField] GameObject[] toDisableOnDestroyed = System.Array.Empty<GameObject>();
 
         // ── Runtime ───────────────────────────────────────────────────────────────
         Health health;
@@ -127,16 +127,29 @@ namespace DBP.AI
             if (destroyed) return;
             destroyed = true;
 
+            var bounds = new Bounds(transform.position + Vector3.up, Vector3.one * 2f);
+            var renderers = GetComponentsInChildren<Renderer>();
+            bool hasBounds = false;
+            foreach (var renderer in renderers)
+            {
+                if (!renderer.enabled || renderer is ParticleSystemRenderer) continue;
+                if (!hasBounds) { bounds = renderer.bounds; hasBounds = true; }
+                else bounds.Encapsulate(renderer.bounds);
+            }
+            CombatEffects.BunkerExplosion(bounds.center, Mathf.Clamp(bounds.extents.magnitude, 1f, 3f));
+
             if (destructionPrefab)
                 Destroy(Instantiate(destructionPrefab, transform.position, Quaternion.identity), 5f);
-            else CombatEffects.Explosion(transform.position, 2f);
 
             if (audioSource && destructionClip)
                 AudioSource.PlayClipAtPoint(destructionClip, transform.position);
             else CampaignAudio.Effect("explosion_01", transform.position);
 
-            foreach (var go in toDisableOnDestroyed)
-                if (go) go.SetActive(false);
+            if (toDisableOnDestroyed != null)
+                foreach (var go in toDisableOnDestroyed)
+                    if (go) go.SetActive(false);
+            foreach (var renderer in renderers)
+                if (renderer && !(renderer is ParticleSystemRenderer)) renderer.enabled = false;
 
             // Vô hiệu hoá collider vật lý (hào vẫn đi được)
             foreach (var col in GetComponentsInChildren<Collider>())

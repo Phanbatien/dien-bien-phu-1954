@@ -94,5 +94,24 @@ namespace DBP.Tests
             yield return SceneManager.LoadSceneAsync("MainMenu"); yield return null;
             Assert.IsFalse(old, "Effects must belong to their mission scene.");
         }
+
+        [UnityTest] public IEnumerator BunkerDestruction_HidesShell_EmitsRubble_AndExpires()
+        {
+            var shell = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            shell.name = "TestBunker";
+            var bunker = shell.AddComponent<Bunker>();
+            var health = shell.GetComponent<Health>();
+            health.TakeDamage(999, DamageType.Bullet, shell.transform.position);
+            Assert.IsFalse(health.IsDead);
+            bunker.OnSatchelPlanted();
+            yield return new WaitForSeconds(3.1f);
+            Assert.IsTrue(health.IsDead);
+            Assert.IsFalse(shell.GetComponent<Renderer>().enabled, "Destroyed shell must disappear.");
+            Assert.IsTrue(Particles.Any(p => p.name.StartsWith("Rubble") && p.particleCount > 0));
+            Assert.IsFalse(shell.GetComponent<Collider>().enabled);
+            yield return new WaitForSeconds(5f);
+            Assert.IsTrue(Particles.All(p => p.particleCount == 0));
+            Object.Destroy(shell);
+        }
     }
 }

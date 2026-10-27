@@ -192,7 +192,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.AI.ComradeFollower
   slot: {x: -3, y: -2}
-  fireRange: 45
+  fireRange: 40
+  maxHealth: 100
+  fireDamage: 18
+  meleeDamage: 50
   muzzle: {fileID: 654518118998701242}
 --- !u!1001 &5842412104604273608
 PrefabInstance:

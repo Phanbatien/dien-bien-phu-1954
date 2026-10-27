@@ -30,8 +30,9 @@ Nhân vật lịch sử có thật chỉ xuất hiện trong cốt truyện, ho�
 ### BR-03 — Bảo toàn diễn biến lịch sử [Kế thừa, Làm rõ]
 Câu trả lời chỉ ảnh hưởng đến trang bị và lợi thế chiến đấu, không tạo kết cục lịch sử khác. Các sự kiện như vụ nổ A1 và cắm cờ ở hầm chỉ huy vẫn được thể hiện theo kịch bản đã duyệt khi người chơi đến đoạn tương ứng. Thua hoặc bỏ dở màn kết thúc lượt của người chơi, không được diễn giải thành thay đổi kết quả chiến dịch.
 
-### BR-04 — Quy tắc không quân [Kế thừa]
-Không dựng mô hình máy bay trực tiếp tham chiến trên màn hình. Máy bay địch chỉ được thể hiện bằng âm thanh nền.
+### BR-04 — Quy tắc không quân [Sửa 27/10/2026 theo yêu cầu trưởng nhóm]
+~~Không dựng mô hình máy bay trực tiếp tham chiến trên màn hình. Máy bay địch chỉ được thể hiện bằng âm thanh nền.~~
+Máy bay Pháp (dáng F8F Bearcat) bay ngang ném bom ngẫu nhiên trong mỗi màn: lần đầu sau 25–45 giây, sau đó 50–90 giây một lần; có thông báo "Máy bay địch! Tìm chỗ nấp!" trước khi bom rơi; điểm ném cách người chơi 12–30 m (không trúng ngay chỗ đứng); bom nổ sát thương mọi bên trong 7 m; địch chết vì bom không tính công người chơi. Mã: `Scripts/Missions/AirRaid.cs`.
 
 ---
 
