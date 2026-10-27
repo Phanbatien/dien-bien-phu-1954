@@ -15,6 +15,7 @@ namespace DBP.AI
         Animator animator;
         NavMeshAgent agent;
         Health health;
+        ComradeFollower comrade;
         Vector3 lastPosition;
         float fallTime = -1f;
         Quaternion standRotation, fallRotation;
@@ -26,6 +27,7 @@ namespace DBP.AI
             animator = GetComponent<Animator>();
             agent = GetComponentInParent<NavMeshAgent>();
             health = GetComponentInParent<Health>();
+            comrade = GetComponentInParent<ComradeFollower>();
             lastPosition = transform.position;
             // Lệch nhịp để cả nhóm lính không thở cùng một lúc
             animator.Play(0, 0, Random.value);
@@ -33,7 +35,7 @@ namespace DBP.AI
 
         void Update()
         {
-            if (health && health.IsDead)
+            if (health && health.IsDead || comrade && comrade.IsDead)
             {
                 Fall();
                 return;

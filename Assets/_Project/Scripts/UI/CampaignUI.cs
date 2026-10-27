@@ -17,7 +17,7 @@ using UnityEngine.UI;
 using W = DBP.UI.UIWidgets;
 namespace DBP.UI
 {
-    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard, Story, Credits }
+    public enum CampaignScreen { Menu, CreateProfile, Preparation, Tutorial, Gameplay, Pause, Results, Leaderboard, Story, Credits, Settings }
 
     /// Runtime Canvas UI leaves authored mission scenes and shared player prefabs intact.
     public sealed partial class CampaignUI : MonoBehaviour
@@ -140,6 +140,7 @@ namespace DBP.UI
                 case CampaignScreen.Leaderboard: LeaderboardPage(); break;
                 case CampaignScreen.Story: StoryPage(); break;
                 case CampaignScreen.Credits: CreditsPage(); break;
+                case CampaignScreen.Settings: SettingsPage(); break;
             }
         }
         void Guard(Action action)
@@ -194,6 +195,7 @@ namespace DBP.UI
                 W.Label(page, "LocalOnly", "Không đồng ý vẫn chơi và lưu tại máy.", 604, 790, 900, 32, 20);
             }
             StoryMenuButtons();
+            W.Button(page, "OpenSettings", "Cài đặt", 1190, 800, 346, 44, OpenSettings);
             W.Button(page, "ExitGame", "Thoát game (Exit)", 1190, 730, 346, 58, ExitGame);
             if (ProfileService.Repository.RecoveredBackup) status.text = "Đã đọc bản sao lưu hồ sơ sau lỗi lưu trước đó.";
         }
@@ -313,6 +315,7 @@ namespace DBP.UI
             W.Button(page, "Resume", "Tiếp tục", 200, 496, 1200, 66, () => Show(CampaignScreen.Gameplay));
             W.Button(page, "Restart", "Chơi lại từ hầm", 200, 592, 1200, 66, () => ReturnToMenu(true));
             W.Button(page, "QuitMission", "Bỏ dở và về menu", 200, 688, 1200, 66, () => ReturnToMenu(false));
+            W.Button(page, "OpenSettingsPause", "Cài đặt âm thanh và nhạc nền", 200, 784, 1200, 56, OpenSettings);
         }
         void OnEnded(Attempt attempt) { if (mission) Show(CampaignScreen.Results); }
         void Results()

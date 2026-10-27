@@ -226,7 +226,7 @@ namespace DBP.Missions
                 case TargetKind.Infantry:
                 case TargetKind.MachineGunNest:
                 case TargetKind.Tank:
-                    Attempt.Kills++;
+                    if (!h.LastHitByAlly) Attempt.Kills++; // chỉ tính địch người chơi hạ (BR-24)
                     break;
                 case TargetKind.Bunker:
                     Attempt.BunkersDestroyed++;

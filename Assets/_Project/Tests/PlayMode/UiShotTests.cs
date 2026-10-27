@@ -61,38 +61,52 @@ namespace DBP.Tests
             CampaignUI.Current.SelectMission(0); yield return null; Click("BackToMenu"); yield return null;
             yield return SceneManager.LoadSceneAsync("M1_HimLam"); yield return null; yield return null; yield return null;
             yield return Shot("ui_7_huong_dan");
-            Click("BeginMission"); yield return new WaitForSecondsRealtime(1f);
+            Click("BeginMission"); yield return new WaitForSecondsRealtime(4f);
             yield return Shot("ui_8_hud");
+            CampaignUI.Current.OpenSettings(); yield return null;
+            yield return Shot("ui_9_cai_dat");
         }
 
         IEnumerator Shot(string name)
         {
             yield return null;
+            // 1. Thế giới 3D (mọi camera theo thứ tự độ sâu)
             var rt = new RenderTexture(1600, 900, 24);
-            foreach (var cam in Camera.allCameras.OrderBy(c => c.depth))
+            foreach (var cam in Camera.allCameras.Where(c => c.targetTexture == null).OrderBy(c => c.depth))
             {
-                var old = cam.targetTexture; cam.targetTexture = rt; cam.Render(); cam.targetTexture = old;
+                cam.targetTexture = rt; cam.Render(); cam.targetTexture = null;
             }
-            var canvas = CampaignUI.Current ? CampaignUI.Current.GetComponentInChildren<Canvas>() : null;
-            if (canvas)
-            {
-                var layers = canvas.GetComponentsInChildren<Transform>(true).ToDictionary(x => x, x => x.gameObject.layer);
-                foreach (var x in layers.Keys) x.gameObject.layer = 5;
-                var uiCam = new GameObject("UiShotCam").AddComponent<Camera>();
-                uiCam.clearFlags = Camera.allCameras.Length > 0 ? CameraClearFlags.Depth : CameraClearFlags.SolidColor;
-                uiCam.backgroundColor = Color.black; uiCam.cullingMask = 1 << 5; uiCam.targetTexture = rt; uiCam.orthographic = true;
-                canvas.renderMode = RenderMode.ScreenSpaceCamera; canvas.worldCamera = uiCam; canvas.planeDistance = 1;
-                Canvas.ForceUpdateCanvases();
-                uiCam.Render();
-                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-                foreach (var kv in layers) if (kv.Key) kv.Key.gameObject.layer = kv.Value;
-                Object.Destroy(uiCam.gameObject);
-            }
+            var world = Read(rt);
+            // 2. Giao diện: mọi canvas phủ màn hình vẽ chung một camera nền trong suốt, rồi ghép lên ảnh thế giới
+            var canvases = Object.FindObjectsByType<Canvas>(FindObjectsSortMode.None).Where(c => c.isRootCanvas && c.renderMode == RenderMode.ScreenSpaceOverlay && c.isActiveAndEnabled).OrderBy(c => c.sortingOrder).ToArray();
+            var uiRt = new RenderTexture(1600, 900, 24, RenderTextureFormat.ARGB32);
+            var uiCam = new GameObject("UiShotCam").AddComponent<Camera>();
+            uiCam.clearFlags = CameraClearFlags.SolidColor; uiCam.backgroundColor = new Color(0, 0, 0, 0);
+            uiCam.cullingMask = 1 << 5; uiCam.targetTexture = uiRt; uiCam.orthographic = true;
+            var layers = canvases.SelectMany(c => c.GetComponentsInChildren<Transform>(true)).Distinct().ToDictionary(x => x, x => x.gameObject.layer);
+            foreach (var x in layers.Keys) x.gameObject.layer = 5;
+            for (int i = 0; i < canvases.Length; i++)
+            { canvases[i].renderMode = RenderMode.ScreenSpaceCamera; canvases[i].worldCamera = uiCam; canvases[i].planeDistance = 10 - i; }
+            Canvas.ForceUpdateCanvases();
+            uiCam.Render();
+            foreach (var c in canvases) c.renderMode = RenderMode.ScreenSpaceOverlay;
+            foreach (var kv in layers) if (kv.Key) kv.Key.gameObject.layer = kv.Value;
+            Object.Destroy(uiCam.gameObject);
+            var ui = Read(uiRt);
+            var a = world.GetPixels(); var b = ui.GetPixels();
+            for (int i = 0; i < a.Length; i++) a[i] = Color.Lerp(a[i], new Color(b[i].r, b[i].g, b[i].b, 1), b[i].a);
+            world.SetPixels(a); world.Apply();
+            File.WriteAllBytes(Path.Combine(dir, name + ".png"), world.EncodeToPNG());
+            rt.Release(); uiRt.Release();
+        }
+
+        static Texture2D Read(RenderTexture rt)
+        {
             RenderTexture.active = rt;
-            var tex = new Texture2D(1600, 900, TextureFormat.RGB24, false);
-            tex.ReadPixels(new Rect(0, 0, 1600, 900), 0, 0); tex.Apply();
-            RenderTexture.active = null; rt.Release();
-            File.WriteAllBytes(Path.Combine(dir, name + ".png"), tex.EncodeToPNG());
+            var tex = new Texture2D(rt.width, rt.height, TextureFormat.RGBA32, false);
+            tex.ReadPixels(new Rect(0, 0, rt.width, rt.height), 0, 0); tex.Apply();
+            RenderTexture.active = null;
+            return tex;
         }
     }
 }
