@@ -88,10 +88,12 @@ dien-bien-phu-1954/
 - Bản nộp build thành công, **Validate Content 0 lỗi**; FPS thấp nhất 531 trên máy trưởng nhóm ([docs/build.md](docs/build.md)).
 - 70/75 việc xong; 5 việc còn cần người thật: playtest với người ngoài nhóm (T37, T65, T68), đo FPS máy yếu nhất (T63), tập demo 2 lượt (T75). Xem [docs/cong-viec.md](docs/cong-viec.md).
 
+**Cập nhật 27/10/2026:** bản đồ nhỏ (ta/địch/mục tiêu), mỗi phe 10–20 chiến sĩ biết nấp, bắn loạt, giáp lá cà (địch do đồng đội hạ không tính công người chơi), nhạc nền khi chiến đấu + màn Cài đặt (bật/tắt, âm lượng nhạc, chọn bản nhạc), máy bay Pháp ném bom ngẫu nhiên, trailer mới 57 giây.
+
 | Tài liệu nộp | |
 |---|---|
 | Báo cáo | [docs/bao-cao.md](docs/bao-cao.md) |
 | Slide | [docs/nop-bai/bao-cao.pptx](docs/nop-bai/bao-cao.pptx) |
-| Trailer 56 giây | [docs/nop-bai/trailer.mp4](docs/nop-bai/trailer.mp4) |
+| Trailer 57 giây | [docs/nop-bai/trailer.mp4](docs/nop-bai/trailer.mp4) |
 | Kịch bản demo | [docs/demo.md](docs/demo.md) |
 | Cốt truyện | [docs/cot-truyen.md](docs/cot-truyen.md) |

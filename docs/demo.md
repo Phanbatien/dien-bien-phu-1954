@@ -53,4 +53,10 @@ TRAILER_DIR=<thư mục ảnh> Unity.exe -batchmode -projectPath . -runTests -te
 
 Test `TrailerCaptureTests` chạy 5 màn, camera lướt qua trận địa, ghi 24 khung/giây ra JPG. Sau đó ghép bằng ffmpeg (chữ phụ đề, thẻ tiêu đề đầu và cuối) thành `docs/nop-bai/trailer.mp4`.
 
+**Trailer bản 2 (27/10):** `EpicTrailerTests` quay 6 cảnh (xung phong Him Lam, máy bay ném bom, giáp trận, đêm pháo sáng, giáp lá cà trong hào, chiều 7/5), ghép bằng ffmpeg với khung hình điện ảnh, phụ đề phông Be Vietnam Pro và nhạc Màn 1 (đoạn từ giây 58):
+
+```bash
+TRAILER_DIR=<thư mục ảnh> Unity.exe -batchmode -projectPath . -runTests -testPlatform PlayMode -testFilter EpicTrailerTests
+```
+
 Video demo dài (chơi Màn 1 có khoảnh khắc đóng băng và bảng xếp hạng): dùng **Win + G** (Xbox Game Bar) quay lúc tập demo lượt 2, theo đúng các bước trên.

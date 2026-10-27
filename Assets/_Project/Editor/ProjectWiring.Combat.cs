@@ -46,6 +46,8 @@ namespace DBP.EditorTools
                 if (WireSoldier(h, sceneName)) soldiers++;
             }
             if (soldiers > 0) notes.Add($"{soldiers} lính có AI + model");
+            int reinforced = WireReinforcements(sceneName, enemies);
+            if (reinforced > 0) { notes.Add($"thêm {reinforced} lính địch (đủ 12)"); enemies = All<Health>().Where(h => h.Kind != TargetKind.Player).ToList(); }
             int officers = WireOfficers(enemies.Where(h => h.Kind == TargetKind.Infantry).ToList());
             if (officers > 0) notes.Add($"{officers} sĩ quan Pháp");
 
@@ -136,6 +138,34 @@ namespace DBP.EditorTools
 
             if (!go.transform.Find("Model")) { AddSoldierModel(go.transform); changed = true; }
             return changed;
+        }
+
+        /// Mỗi phe 10–20 người: màn ít lính địch thì nhân bản lính có sẵn (cùng AI, model) rải quanh chỗ cũ cho đủ 12.
+        static int WireReinforcements(string sceneName, List<Health> enemies)
+        {
+            if (!(sceneName.Length > 1 && sceneName[0] == 'M' && "12345".Contains(sceneName[1]))) return 0;
+            var infantry = enemies.Where(h => h.Kind == TargetKind.Infantry && !h.GetComponent<DBP.AI.OfficerLeader>()).ToList();
+            var sources = infantry.Where(h => h.gameObject.activeInHierarchy).ToList();
+            if (sources.Count == 0) sources = infantry;
+            if (sources.Count == 0) return 0;
+            int have = infantry.Count + enemies.Count(h => h.GetComponent<DBP.AI.OfficerLeader>());
+            var rng = new System.Random(StableHash(sceneName + "/tang-vien"));
+            var player = PlayerPosition();
+            int added = 0;
+            for (int i = 0; have + added < 12 && i < 60; i++)
+            {
+                var src = sources[rng.Next(sources.Count)];
+                float a = (float)rng.NextDouble() * Mathf.PI * 2f, r = Mathf.Lerp(4f, 10f, (float)rng.NextDouble());
+                var p = src.transform.position + new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * r;
+                if ((p - player).sqrMagnitude < 20f * 20f || !GroundHit(p, out var g)) continue;
+                var clone = Object.Instantiate(src.gameObject, src.transform.parent);
+                clone.name = "TangVien_" + (have + added);
+                float halfHeight = src.transform.position.y - BottomY(src.transform);
+                clone.transform.position = g.point + Vector3.up * halfHeight;
+                clone.transform.rotation = Quaternion.LookRotation(Flat(player - g.point).normalized);
+                added++;
+            }
+            return added;
         }
 
         const string OfficerPrefabPath = "Assets/tt-3d/LowPolyWarStarterPack/Character/Prefabs/Officer.prefab";

@@ -43,12 +43,34 @@ namespace DBP.Core
             Current = this;
             for (int i = 0; i < voices.Length; i++) voices[i] = Source("WorldVoice" + i, transform, false);
             for (int i = 0; i < ui.Length; i++) ui[i] = Source("UIVoice" + i, transform, true);
-            var music = AudioCatalog.Music(gameObject.scene.name);
-            if (music)
+            var scene = gameObject.scene.name;
+            bool mission = AudioCatalog.Music(scene);
+            var music = MusicSettings.ClipFor(scene);
+            if (music) musicSource = Loop(mission ? "MissionMusic" : "MenuMusic", music, transform, false, 1f);
+            if (mission) Loop("AirplaneAmbience", AudioCatalog.Clip("airplane_loop"), transform, false, 1f);
+        }
+
+        /// Áp cài đặt nhạc ngay (đổi bản nhạc, bật/tắt) — gọi từ màn Cài đặt.
+        public void ApplyMusicSettings()
+        {
+            if (!musicSource) return;
+            var clip = MusicSettings.ClipFor(gameObject.scene.name);
+            if (clip && clip != musicSource.clip) { musicSource.clip = clip; musicSource.Play(); }
+        }
+
+        // Giao tranh gần (địch đang bắn trong 50 m) thì nhạc mạnh lên
+        float combatUntil, nextCombatCheck;
+        bool InCombat()
+        {
+            if (Time.unscaledTime >= nextCombatCheck)
             {
-                musicSource = Loop("MissionMusic", music, transform, false, 1f);
-                Loop("AirplaneAmbience", AudioCatalog.Clip("airplane_loop"), transform, false, 1f);
+                nextCombatCheck = Time.unscaledTime + 0.5f;
+                var listener = Camera.main ? Camera.main.transform.position : transform.position;
+                foreach (var s in DBP.AI.SoldierAI.All)
+                    if (s && !s.IsDead && s.CurrentState != DBP.AI.SoldierAI.State.Idle && (s.transform.position - listener).sqrMagnitude < 50f * 50f)
+                    { combatUntil = Time.unscaledTime + 6f; break; }
             }
+            return Time.unscaledTime < combatUntil;
         }
         AudioSource Source(string name, Transform parent, bool interfaceSound)
         {
@@ -82,7 +104,8 @@ namespace DBP.Core
         {
             if (musicSource)
             {
-                float target = AudioMix.Gain(musicSource.clip.name) * (Time.unscaledTime < duckUntil ? .55f : 1f);
+                float target = AudioMix.Gain(musicSource.clip.name) * (Time.unscaledTime < duckUntil ? .55f : 1f)
+                    * (MusicSettings.Enabled ? MusicSettings.Volume : 0f) * (InCombat() ? 1.25f : 0.85f);
                 musicSource.volume = Mathf.MoveTowards(musicSource.volume, target, Time.unscaledDeltaTime * .8f);
             }
             // WorldFreeze already pauses the listener and fades it back in. Do not

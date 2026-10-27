@@ -58,7 +58,8 @@ namespace DBP.Tests
             Assert.IsTrue(WorldFreeze.IsFrozen, "Trong 0,5 s chuyển tiếp chiến trường vẫn đứng yên (BR-12)");
             Assert.IsTrue(InputLock.Locked);
 
-            yield return new WaitForSecondsRealtime(0.7f);
+            // Bảng câu hỏi hiện kết quả 1,25 s (FieldQuizSession.CloseResult) rồi mới tới 0,5 s chuyển tiếp
+            yield return new WaitForSecondsRealtime(1.25f + 0.7f);
             Assert.IsFalse(WorldFreeze.IsFrozen);
             Assert.AreEqual(1f, Time.timeScale);
             Assert.IsFalse(InputLock.Locked, "Mở điều khiển cùng lúc chiến trường chạy lại");
