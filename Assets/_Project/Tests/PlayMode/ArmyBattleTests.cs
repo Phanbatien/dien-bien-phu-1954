@@ -142,6 +142,48 @@ namespace DBP.Tests
             Assert.IsNotNull(DBP.Player.Ladder.At(foot), "Đứng ở chân thang thì vào vùng trèo");
         }
 
+        [UnityTest] public IEnumerator M5_RiverHasWalkableBanks()
+        {
+            yield return Begin("M5_ChieuMungBay");
+            var river = GameObject.Find("SongNamRom").GetComponent<Collider>().bounds;
+            foreach (float z in new[] { river.min.z + 1.5f, river.max.z - 1.5f })
+            {
+                Assert.IsTrue(Physics.Raycast(new Vector3(-20f, 5f, z), Vector3.down, out var hit, 10f), "Có dốc bờ sông");
+                Assert.That(hit.point.y, Is.InRange(river.max.y + 0.2f, -0.2f), "Giữa dốc phải nằm giữa lòng sông và mặt bờ");
+                Assert.Less(Vector3.Angle(hit.normal, Vector3.up), 40f, "Dốc thoải để leo lên được");
+            }
+        }
+
+        [UnityTest] public IEnumerator Enemies_ChargeInsteadOfHolding_OfficerIsTougher()
+        {
+            yield return Begin("M1_HimLam");
+            var player = GameObject.FindGameObjectWithTag("Player");
+            player.GetComponent<Health>().Configure(TargetKind.Player, 100000f);
+            var enemy = SoldierAI.All.First(s => s.isActiveAndEnabled && !s.GetComponent<OfficerLeader>());
+            float normalMax = enemy.Health.Max;
+            enemy.Health.Configure(TargetKind.Infantry, 100000f); // đồng đội không hạ kịp trong lúc đo
+            var toEnemy = (enemy.transform.position - player.transform.position).normalized;
+            var cc = player.GetComponent<CharacterController>(); cc.enabled = false;
+            player.transform.position = enemy.transform.position - toEnemy * 18f; cc.enabled = true;
+            float start = Vector3.Distance(enemy.transform.position, player.transform.position);
+            SoldierAI.AlertAround(enemy.transform.position, 1f, player.transform.position);
+            float end = Time.realtimeSinceStartup + 6f;
+            while (Time.realtimeSinceStartup < end && enemy && !enemy.IsDead) yield return null;
+            Assert.IsTrue(enemy && !enemy.IsDead);
+            Assert.Less(Vector3.Distance(enemy.transform.position, player.transform.position), start - 4f, "Địch thấy quân ta phải xung phong tới, không đứng yên");
+
+            var officer = Object.FindObjectsByType<OfficerLeader>(FindObjectsSortMode.None).FirstOrDefault();
+            if (officer)
+            {
+                var oh = officer.GetComponent<Health>();
+                SoldierAI.AlertAround(officer.transform.position, 1f, player.transform.position);
+                yield return null; yield return null;
+                if (!oh.IsDead) Assert.AreEqual(OfficerLeader.DodgeChance, oh.DodgeChance, "Giao chiến thì chỉ huy biết né đạn");
+                Assert.AreEqual(2f, officer.GetComponent<SoldierAI>().DamageMul, "Chỉ huy sát thương gấp đôi");
+                Assert.Greater(oh.Max, normalMax, "Chỉ huy máu trâu hơn");
+            }
+        }
+
         [UnityTest] public IEnumerator Crates_GlowWithColoredBeam()
         {
             yield return Begin("M1_HimLam");

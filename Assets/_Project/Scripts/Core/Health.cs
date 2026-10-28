@@ -89,10 +89,15 @@ namespace DBP.Core
             ApplyDamage(amount, type, point, crit);
         }
 
+        /// Tỉ lệ né đạn (chỉ huy địch); né thì không mất máu và báo AnyDodged.
+        public float DodgeChance { get; set; }
+        public static event Action<Health, Vector3> AnyDodged;
+
         void ApplyDamage(float amount, DamageType type, Vector3 point, bool crit = false)
         {
             Init();
             if (current <= 0f || amount <= 0f || IsImmuneTo(type)) return;
+            if (type == DamageType.Bullet && DodgeChance > 0f && UnityEngine.Random.value < DodgeChance) { AnyDodged?.Invoke(this, point); return; }
             float applied = Mathf.Min(amount, current);
             current -= applied;
             TotalDamageTaken += applied;
