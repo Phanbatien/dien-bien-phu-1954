@@ -10,6 +10,7 @@ namespace DBP.AI
     public class GrenadeThrowController : MonoBehaviour
     {
         [SerializeField] Grenade grenadePrefab;
+        public Grenade Prefab => grenadePrefab;
         [Tooltip("Điểm xuất phát lựu đạn (tay phải của nhân vật).")]
         [SerializeField] Transform throwPoint;
         [SerializeField] Camera cam;

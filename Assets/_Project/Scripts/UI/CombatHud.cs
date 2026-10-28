@@ -45,14 +45,18 @@ namespace DBP.UI
             scaler.referenceResolution = new Vector2(1600, 900); scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.Expand;
             canvas = (RectTransform)go.transform;
             Health.AnyDamaged += OnDamaged;
+            Health.AnyDodged += OnDodged;
             ComradeFollower.AnyHurt += OnAllyHurt;
         }
 
         void OnDestroy()
         {
             Health.AnyDamaged -= OnDamaged;
+            Health.AnyDodged -= OnDodged;
             ComradeFollower.AnyHurt -= OnAllyHurt;
         }
+
+        void OnDodged(Health h, Vector3 point) => Spawn(point, "NÉ!", new Color(0.6f, 0.85f, 1f), 28);
 
         void OnDamaged(Health h, float amount, Vector3 point, bool crit)
         {
