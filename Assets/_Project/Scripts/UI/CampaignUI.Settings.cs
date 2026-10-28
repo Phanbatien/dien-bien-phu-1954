@@ -19,7 +19,7 @@ namespace DBP.UI
         void SettingsPage()
         {
             W.Label(page, "Title", "Cài đặt", 360, 120, 900, 76, 46);
-            W.Panel(page, "SettingsPanel", 360, 210, 880, 520);
+            W.Panel(page, "SettingsPanel", 360, 210, 880, 540);
             float y = 250;
             if (ProfileService.HasProfile)
             {
@@ -27,8 +27,11 @@ namespace DBP.UI
                 W.Volume(page, ProfileService.Data.volume, 760, y + 2, value => Guard(() => { ProfileService.Repository.SetVolume(value); AudioListener.volume = value; }), "VolumeSlider");
                 y += 80;
             }
+            W.Label(page, "BrightnessLabel", "Độ sáng (phím B)", 400, y, 340, 48, 24);
+            W.Volume(page, Brightness.Level, 760, y + 2, value => Brightness.Level = value, "BrightnessSlider");
+            y += 70;
             W.Toggle(page, "MusicOn", "Bật nhạc nền", MusicSettings.Enabled, 400, y, 600, value => MusicSettings.Enabled = value);
-            y += 80;
+            y += 70;
             W.Label(page, "MusicVolumeLabel", "Âm lượng nhạc nền", 400, y, 340, 48, 24);
             W.Volume(page, MusicSettings.Volume, 760, y + 2, value => MusicSettings.Volume = value, "MusicVolumeSlider");
             y += 80;
@@ -37,6 +40,11 @@ namespace DBP.UI
             W.Label(page, "TrackName", MusicSettings.TrackNames[MusicSettings.Track], 740, y, 360, 56, 24).alignment = TextAnchor.MiddleCenter;
             W.Button(page, "NextTrack", "▶", 1116, y, 64, 56, () => { MusicSettings.Track++; Show(CampaignScreen.Settings); });
             y += 90;
+            if (!mission)
+            {
+                W.Toggle(page, "UnlockAll", "Mở khóa tất cả màn (chơi thử, không cần thắng màn trước)", ProfileService.UnlockAllForPlaytest, 400, y - 30, 800, value => ProfileService.UnlockAllForPlaytest = value);
+                y += 40;
+            }
             W.Label(page, "MusicHint", "Khi đang giao tranh, nhạc tự mạnh lên. Cài đặt nhạc lưu trên máy, dùng chung mọi hồ sơ.", 400, y, 800, 60, 20);
             W.Button(page, "SettingsBack", "← Quay lại", 360, 760, 420, 66, () => Show(settingsReturn));
         }

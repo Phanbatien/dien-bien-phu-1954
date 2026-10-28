@@ -16,7 +16,7 @@ using Object = UnityEngine.Object;
 
 namespace DBP.Tests
 {
-    /// T25 trên luồng thật: hầm chuẩn bị → họp tác chiến → xuất trận → thắng → nhận Quyết Tâm đúng một lần.
+    /// Luồng thật: hầm chuẩn bị → (họp nếu có) → xuất trận → thắng → mọi câu đúng trong lượt nhận Quyết Tâm đúng một lần.
     public class BriefingFlowTests
     {
         IDisposable scope;
@@ -59,12 +59,12 @@ namespace DBP.Tests
             mission.Setup("M1", "Him Lam", "M2", "M2_GiuDocLap", mission.Player, new System.Collections.Generic.List<Objective>(), true);
 
         [UnityTest]
-        public IEnumerator DeployLockedUntilBriefed_CorrectAnswersPayResolveOnceOnWin()
+        public IEnumerator DeployWithoutBriefing_CorrectAnswersPayResolveOnceOnWin()
         {
             Click("Mission1");
             yield return Frames();
             Assert.AreEqual(CampaignScreen.Preparation, CampaignUI.Current.ScreenState);
-            Assert.IsFalse(Find<Button>("Deploy").interactable, "Chưa họp thì chưa được xuất trận (BR-06)");
+            Assert.IsTrue(Find<Button>("Deploy").interactable, "Không còn bắt buộc họp tác chiến: câu hỏi nằm trong hòm giữa trận (sửa 28/10)");
             var briefing = CampaignUI.Current.Briefing;
             Assert.That(briefing.Questions.Count, Is.InRange(3, 5));
             int expected = briefing.Questions.Sum(q => q.level * 10);

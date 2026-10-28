@@ -18,6 +18,16 @@ namespace DBP.Core
     {
         /// Bắn ra mỗi khi bất kỳ Health nào chết: MissionController dùng để đếm địch hạ, lô cốt phá (BR-24).
         public static event Action<Health> AnyDied;
+        /// Mỗi lần trúng đòn: mục tiêu, sát thương thực nhận, điểm trúng, có phải chí mạng (để hiện số sát thương).
+        public static event Action<Health, float, Vector3, bool> AnyDamaged;
+
+        /// Trúng đầu: điểm trúng nằm trong 0,38 m trên cùng của thân lính (chí mạng ×2).
+        public static bool IsHeadshot(Health h, Vector3 point)
+        {
+            if (!h || h.Kind != TargetKind.Infantry) return false;
+            var col = h.GetComponent<Collider>();
+            return col && point.y >= col.bounds.max.y - 0.38f;
+        }
 
         [SerializeField] float maxHealth = 100f;
         [SerializeField] TargetKind kind = TargetKind.Infantry;
@@ -64,20 +74,22 @@ namespace DBP.Core
         public bool LastHitByAlly { get; private set; }
 
         /// Đồng đội gây sát thương: vẫn trừ máu bình thường nhưng không cộng vào thành tích người chơi.
-        public void TakeAllyDamage(float amount, DamageType type, Vector3 point)
+        public void TakeAllyDamage(float amount, DamageType type, Vector3 point, bool crit = false)
         {
             if (current <= 0f && initialized) return;
             LastHitByAlly = true;
-            ApplyDamage(amount, type, point);
+            ApplyDamage(amount, type, point, crit);
         }
 
-        public void TakeDamage(float amount, DamageType type, Vector3 point)
+        public void TakeDamage(float amount, DamageType type, Vector3 point) => TakeDamage(amount, type, point, false);
+
+        public void TakeDamage(float amount, DamageType type, Vector3 point, bool crit)
         {
             LastHitByAlly = false;
-            ApplyDamage(amount, type, point);
+            ApplyDamage(amount, type, point, crit);
         }
 
-        void ApplyDamage(float amount, DamageType type, Vector3 point)
+        void ApplyDamage(float amount, DamageType type, Vector3 point, bool crit = false)
         {
             Init();
             if (current <= 0f || amount <= 0f || IsImmuneTo(type)) return;
@@ -85,6 +97,7 @@ namespace DBP.Core
             current -= applied;
             TotalDamageTaken += applied;
             Damaged?.Invoke(applied);
+            AnyDamaged?.Invoke(this, applied, point, crit);
             if (current <= 0f)
             {
                 Died?.Invoke();

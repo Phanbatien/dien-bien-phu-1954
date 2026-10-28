@@ -44,7 +44,15 @@ namespace DBP.Upgrades
             if (HasProfile) Repository.Unlock(nextMissionId);
             else if (!string.IsNullOrEmpty(nextMissionId) && !Data.unlockedMissions.Contains(nextMissionId)) Data.unlockedMissions.Add(nextMissionId);
         }
-        public static bool IsUnlocked(string missionId) => Data.unlockedMissions.Contains(missionId);
+        public static bool IsUnlocked(string missionId) => UnlockAllForPlaytest || Data.unlockedMissions.Contains(missionId);
+
+        /// Chơi thử: mở mọi màn để cả nhóm góp ý một lượt. Bản build mặc định bật, Editor mặc định tắt
+        /// (để test luật mở màn vẫn đúng). Đổi trong màn Cài đặt; không ghi vào hồ sơ.
+        public static bool UnlockAllForPlaytest
+        {
+            get => UnityEngine.PlayerPrefs.GetInt("dbp.unlockAll", UnityEngine.Application.isEditor ? 0 : 1) == 1;
+            set { UnityEngine.PlayerPrefs.SetInt("dbp.unlockAll", value ? 1 : 0); UnityEngine.PlayerPrefs.Save(); }
+        }
         public static BuyResult Buy(string upgradeId, bool inBunker)
         {
             if (!HasProfile) return BuyResult.NotInBunker;
