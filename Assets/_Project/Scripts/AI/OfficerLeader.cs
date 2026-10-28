@@ -29,11 +29,15 @@ namespace DBP.AI
 
         Health health;
         SoldierAI soldier;
+        SentryAI sentry;
+        TrenchSoldierAI trench;
+        NavMeshAgent agent;
+        Transform player;
         bool shouted;
         float engagedAt, nextReinforce, nextMine, nextBlast, nextAirRaid;
         int reinforced, mines;
 
-        void Awake() { health = GetComponent<Health>(); soldier = GetComponent<SoldierAI>(); }
+        void Awake() { health = GetComponent<Health>(); soldier = GetComponent<SoldierAI>(); sentry = GetComponent<SentryAI>(); trench = GetComponent<TrenchSoldierAI>(); agent = GetComponent<NavMeshAgent>(); }
         void OnEnable() { All.Add(this); health.Died += OnDied; Health.AnyDodged += OnDodged; }
         void OnDisable() { All.Remove(this); health.Died -= OnDied; Health.AnyDodged -= OnDodged; }
 
@@ -42,11 +46,20 @@ namespace DBP.AI
             transform.localScale *= 1.15f;
             health.Configure(health.Kind, health.Max * 2f);
             if (soldier) soldier.DamageMul = 2f;
+            if (sentry) sentry.DamageMul = 2f;
+            if (trench) trench.DamageMul = 2f;
+            var p = GameObject.FindGameObjectWithTag("Player");
+            if (p) player = p.transform;
         }
+
+        /// Đang giao chiến: lính đã báo động, lính gác (Màn 3) chuyển sang chiến đấu, hoặc lính hào (Màn 4) đang bắn / quân ta trong 30 m.
+        public bool Fighting => !health.IsDead && !health.Retreated &&
+            ((soldier && soldier.isActiveAndEnabled && soldier.CurrentState != SoldierAI.State.Idle) || (sentry && sentry.CurrentState == SentryAI.State.Alert) ||
+             (trench && player && (trench.CurrentState != TrenchSoldierAI.State.HaoCover || (player.position - transform.position).sqrMagnitude < 30f * 30f)));
 
         void Update()
         {
-            bool fighting = soldier && !soldier.IsDead && soldier.CurrentState != SoldierAI.State.Idle && !health.Retreated;
+            bool fighting = Fighting && player;
             health.DodgeChance = fighting ? DodgeChance : 0f; // chỉ né khi đang giao chiến (biết bị nhắm bắn)
             if (!fighting) return;
             if (!shouted)
@@ -54,9 +67,9 @@ namespace DBP.AI
                 shouted = true;
                 engagedAt = Time.time;
                 nextReinforce = Time.time + 6f; nextMine = Time.time + 4f; nextBlast = Time.time + 9f; nextAirRaid = Time.time + 15f;
-                SoldierAI.AlertAround(transform.position, commandRadius * 1.6f, soldier.LastKnownTarget);
+                SoldierAI.AlertAround(transform.position, commandRadius * 1.6f, player.position);
             }
-            var foe = soldier.FoePosition;
+            var foe = soldier && soldier.isActiveAndEnabled ? soldier.FoePosition : player.position;
             float dist = Vector3.Distance(transform.position, foe);
 
             if (reinforced < MaxReinforce && Time.time >= nextReinforce) { nextReinforce = Time.time + 25f; Reinforce(); }
@@ -72,19 +85,21 @@ namespace DBP.AI
         /// Né: lách ngang 1,5 m.
         void OnDodged(Health h, Vector3 _)
         {
-            if (h != health || !soldier || !soldier.Agent || !soldier.Agent.isOnNavMesh) return;
-            soldier.Agent.Move(transform.right * (UnityEngine.Random.value < 0.5f ? -1.5f : 1.5f));
+            if (h != health || !agent || !agent.isOnNavMesh) return;
+            agent.Move(transform.right * (UnityEngine.Random.value < 0.5f ? -1.5f : 1.5f));
         }
 
         /// Gọi 2 lính viện binh (nhân bản lính thường còn nguyên máu gần nhất) xuất hiện sau lưng rồi xung phong.
         void Reinforce()
         {
-            SoldierAI template = null; float best = float.MaxValue;
-            foreach (var s in SoldierAI.All)
+            // Mẫu: lính thường (SoldierAI hoặc lính gác) còn nguyên máu gần nhất
+            Health template = null; float best = float.MaxValue;
+            foreach (var h in FindObjectsByType<Health>(FindObjectsSortMode.None))
             {
-                if (!s || s.IsDead || s.GetComponent<OfficerLeader>() || s.Health.Current < s.Health.Max) continue;
-                float d = (s.transform.position - transform.position).sqrMagnitude;
-                if (d < best) { best = d; template = s; }
+                if (h.Kind != TargetKind.Infantry || h.IsDead || h.Current < h.Max || h.GetComponent<OfficerLeader>()) continue;
+                if (!h.GetComponent<SoldierAI>() && !h.GetComponent<SentryAI>() && !h.GetComponent<TrenchSoldierAI>()) continue;
+                float d = (h.transform.position - transform.position).sqrMagnitude;
+                if (d < best) { best = d; template = h; }
             }
             if (!template) return;
             reinforced++;
@@ -103,7 +118,7 @@ namespace DBP.AI
         IEnumerator AlertNextFrame(Vector3 at)
         {
             yield return null; yield return null; // chờ Start của lính mới đặt Idle xong
-            SoldierAI.AlertAround(at, 1.5f, soldier ? soldier.FoePosition : at);
+            SoldierAI.AlertAround(at, 1.5f, player ? player.position : at);
         }
 
         /// Đặt mìn giữa mình và quân ta, lệch ngang một chút để khó đoán.

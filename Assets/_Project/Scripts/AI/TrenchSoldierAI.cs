@@ -100,6 +100,8 @@ namespace DBP.AI
         bool dead;
 
         public State CurrentState => state;
+        /// Hệ số sát thương (chỉ huy / trùm = 2).
+        public float DamageMul { get; set; } = 1f;
         public int RemainingGrenades => grenadeCount;
 
         // ── Khởi tạo ────────────────────────────────────────────────────────────
@@ -377,7 +379,7 @@ namespace DBP.AI
             {
                 CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var damageable = hit.collider.GetComponentInParent<IDamageable>();
-                damageable?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
+                damageable?.TakeDamage(fireDamage * DamageMul, DamageType.Bullet, hit.point);
             }
         }
 

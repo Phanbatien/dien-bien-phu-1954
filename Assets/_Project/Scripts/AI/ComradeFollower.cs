@@ -40,6 +40,7 @@ namespace DBP.AI
         void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            LadderClimber.Ensure(this);
             Health = maxHealth;
             nextShotAt = Time.time + Random.Range(1f, 3f);
             burst = Random.Range(2, 4);
