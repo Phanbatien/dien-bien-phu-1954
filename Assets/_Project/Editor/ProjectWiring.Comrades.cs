@@ -17,6 +17,8 @@ namespace DBP.EditorTools
         {
             var existing = AssetDatabase.LoadAssetAtPath<GameObject>(ComradePrefabPath);
             if (existing && !rebuild) return existing;
+            if (AssetDatabase.LoadAssetAtPath<GameObject>(AlliedAnimatedModelPath))
+                return BuildJungleComrade();
             var src = AssetDatabase.LoadAssetAtPath<GameObject>(InfantryPrefabPath);
             if (!src) return null;
             var root = new GameObject("BoDoi");

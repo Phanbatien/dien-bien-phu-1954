@@ -38,15 +38,16 @@ namespace DBP.EditorTools
                 foreach (var i in src.triangles) subs[sub].Add(o + i);
             }
 
-            static Mesh capsule, sphere;
+            static Mesh sphere;
 
             /// Viên nang từ a tới b (ngón tay, cổ tay): đầu tròn, không góc cạnh.
             public void Capsule(Vector3 a, Vector3 b, float r, int sub)
             {
-                if (!capsule) capsule = Prim(PrimitiveType.Capsule);
-                var d = b - a;
-                float len = d.magnitude + r * 2f;
-                Add(capsule, Matrix4x4.TRS((a + b) * 0.5f, Quaternion.FromToRotation(Vector3.up, d.normalized), new Vector3(r * 2, len * 0.5f, r * 2)), sub);
+                // Stretch only the shaft: stretching a whole capsule also elongates
+                // its end caps, leaving swollen beads at every finger joint.
+                Rod(a, b, r, sub);
+                Ellipsoid(a, Vector3.one * (r * 2f), Quaternion.identity, sub);
+                Ellipsoid(b, Vector3.one * (r * 2f), Quaternion.identity, sub);
             }
 
             /// Chuỗi viên nang nối các khớp (ngón tay nhiều đốt).
