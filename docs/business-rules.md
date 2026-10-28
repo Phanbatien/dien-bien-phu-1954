@@ -44,7 +44,7 @@ Máy bay Pháp (dáng F8F Bearcat) bay ngang ném bom ngẫu nhiên trong mỗi 
 Mỗi lượt có 3–5 câu trong hầm, cấp 1–3. Số câu và phân bố cấp phải được khai báo cho màn; không thay đổi sau khi lượt bắt đầu. Chọn câu theo BR-31, tính cả các câu dùng được ở hai hình thức.
 
 ### BR-06 — Thời gian trong hầm [Đề xuất v2]
-Câu trong hầm không giới hạn thời gian, không có thưởng trả lời nhanh. Người chơi phải trả lời hết phần chuẩn bị mới ra chiến trường; có thể bỏ dở lượt theo BR-33.
+Câu trong hầm không giới hạn thời gian, không có thưởng trả lời nhanh. Từ 28/10 không còn bắt buộc họp tác chiến trước khi xuất trận: câu hỏi chuyển vào các **hòm phát sáng** giữa trận (có cột sáng; màu theo độ khó: xanh lá = dễ, xanh dương = vừa, tím = khó, vàng = rất khó). Trả lời đúng nhận súng trong hòm và Quyết Tâm chờ theo BR-34.
 
 ### BR-07 — Kết quả trong hầm [Kế thừa, Đề xuất v2]
 - Đúng: nhận điểm kiến thức cơ bản theo BR-25; ghi nhận Điểm Quyết Tâm chờ quyết toán theo BR-34.
@@ -231,7 +231,7 @@ Nhân vật hết máu là thua; chủ động kết thúc trước khi thắng 
 Mặc định v2 không có tiếp tục giữa màn hoặc điểm lưu chiến đấu. Chơi lại luôn tạo lượt mới từ hầm, seed mới, hòm/súng/điện thoại mới; đặt lại câu đã gặp trong lượt, chuỗi bảo hiểm, điểm kiến thức, Điểm Quyết Tâm chờ, mục tiêu, địch và trang bị tạm. Không đặt lại tiến độ mở màn, nâng cấp đã mua, số dư đã quyết toán và dấu thưởng toàn hồ sơ. Lượt thua/bỏ dở không được lên bảng và không nhận Quyết Tâm chờ. Việc chọn chơi lại phải kết thúc lượt cũ trước, không có hai lượt hoạt động cùng hồ sơ.
 
 ### BR-34 — Thưởng Điểm Quyết Tâm [Đề xuất v2]
-Câu trong hầm đúng ở cấp 1/2/3 lần lượt tạo **10/20/30** điểm chờ. Khi thắng, cộng điểm chờ và ghi dấu đã nhận thưởng cùng một lần lưu an toàn. Mỗi mã câu trong hầm chỉ cấp Quyết Tâm **một lần trên mỗi hồ sơ**, kể cả xuất hiện ở màn khác; thay đổi thứ tự đáp án hoặc sửa phiên bản câu không làm mất dấu này. Trả lời lại vẫn nhận điểm kiến thức của lượt mới theo BR-25.
+Mọi câu trả lời đúng trong lượt (hòm giữa trận hoặc họp tác chiến) ở cấp 1/2/3 lần lượt tạo **10/20/30** điểm chờ. Khi thắng, cộng điểm chờ và ghi dấu đã nhận thưởng cùng một lần lưu an toàn. Mỗi mã câu trong hầm chỉ cấp Quyết Tâm **một lần trên mỗi hồ sơ**, kể cả xuất hiện ở màn khác; thay đổi thứ tự đáp án hoặc sửa phiên bản câu không làm mất dấu này. Trả lời lại vẫn nhận điểm kiến thức của lượt mới theo BR-25.
 
 Nếu lượt trước thua hoặc bỏ dở thì chưa ghi dấu thưởng; người chơi có thể trả lời đúng câu đó và thắng ở lượt sau để nhận lần đầu. Không thưởng thêm khi đọc lại kết quả, mở lại game hoặc gửi lại dữ liệu. Giữ mã câu ổn định khi sửa nội dung; không đổi mã chỉ để cấp lại thưởng. Chính sách này giới hạn tổng Quyết Tâm theo ngân hàng câu; nhóm phải kiểm tra tổng điểm có thể kiếm so với chi phí nâng cấp mong muốn trước phát hành.
 

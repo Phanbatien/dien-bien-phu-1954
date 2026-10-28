@@ -155,11 +155,19 @@ namespace DBP.Missions
 
             if (outcome == MissionOutcome.Won)
             {
-                // Quyết toán Quyết Tâm chờ cùng lần lưu tiến độ khi thắng (BR-07, BR-34, BR-37)
-                if (Briefing != null)
+                // Quyết toán Quyết Tâm khi thắng (BR-07, BR-34 sửa 28/10, BR-37): mọi câu trả lời đúng trong lượt
+                // (hòm, súng rơi, điện thoại, họp nếu có) cộng cấp × 10; mỗi câu chỉ thưởng một lần cho mỗi hồ sơ
                 {
                     var data = ProfileService.Data;
-                    Attempt.ResolveGained = Briefing.Settle(ref data.resolve, data.rewardedQuestions);
+                    int gained = 0;
+                    foreach (var r in Attempt.Answers)
+                    {
+                        if (r.outcome != QuizOutcome.Correct || string.IsNullOrEmpty(r.questionId) || data.rewardedQuestions.Contains(r.questionId)) continue;
+                        data.rewardedQuestions.Add(r.questionId);
+                        gained += BunkerBriefing.ResolveFor(r.level);
+                    }
+                    data.resolve += gained;
+                    Attempt.ResolveGained = gained;
                 }
                 TrySaveProgress();
                 onWon.Invoke();

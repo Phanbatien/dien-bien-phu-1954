@@ -121,7 +121,11 @@ namespace DBP.Quiz
             Answered?.Invoke(result);
             if (outcome == QuizOutcome.Timeout) DBP.UI.CampaignNotices.Show("Hết giờ — câu hỏi đã kết thúc.");
             else if (outcome == QuizOutcome.Correct)
-                DBP.UI.CampaignNotices.Show($"Trả lời đúng · +{KnowledgeScore.Calculate(result.level, QuizForm.Field, result.outcome, result.remaining, result.timeLimit)} điểm kiến thức");
+            {
+                bool newQuestion = !DBP.Upgrades.ProfileService.Data.rewardedQuestions.Contains(result.questionId);
+                string resolve = newQuestion ? $" · +{BunkerBriefing.ResolveFor(result.level)} Quyết Tâm (cộng khi thắng màn)" : "";
+                DBP.UI.CampaignNotices.Show($"Trả lời đúng · +{KnowledgeScore.Calculate(result.level, QuizForm.Field, result.outcome, result.remaining, result.timeLimit)} điểm kiến thức{resolve}");
+            }
             if (panel) StartCoroutine(CloseResult());
             else freeze.Resume(() => IsOpen = false);
         }

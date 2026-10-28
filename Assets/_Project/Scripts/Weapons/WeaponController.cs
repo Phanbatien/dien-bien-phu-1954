@@ -152,7 +152,10 @@ namespace DBP.Weapons
             if (struck)
             {
                 var target = hit.collider.GetComponentInParent<IDamageable>();
-                target?.TakeDamage(stats.damage, weapon.Def.Damage, hit.point);
+                var health = target as Health;
+                bool crit = Health.IsHeadshot(health, hit.point); // trúng đầu: chí mạng ×2
+                if (health) health.TakeDamage(stats.damage * (crit ? 2f : 1f), weapon.Def.Damage, hit.point, crit);
+                else target?.TakeDamage(stats.damage, weapon.Def.Damage, hit.point);
                 if (impactPrefab) Destroy(Instantiate(impactPrefab, hit.point, Quaternion.LookRotation(hit.normal)), 5f);
                 else CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 Hit?.Invoke(hit);

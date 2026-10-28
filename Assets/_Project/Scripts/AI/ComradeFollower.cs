@@ -15,6 +15,8 @@ namespace DBP.AI
     public class ComradeFollower : MonoBehaviour
     {
         public static readonly List<ComradeFollower> All = new List<ComradeFollower>();
+        /// Đồng đội trúng đòn: ai, sát thương, có phải chí mạng (để hiện số sát thương).
+        public static event System.Action<ComradeFollower, float, bool> AnyHurt;
 
         [Tooltip("Vị trí trong đội hình so với người chơi (phải, lên trước).")]
         public Vector2 slot = new Vector2(-3f, -2f);
@@ -53,10 +55,12 @@ namespace DBP.AI
         }
 
         /// Trúng đạn/nổ. Chết thì dừng mọi việc, hoạt ảnh tự gục (EnemyAnimatorDriver).
-        public void TakeHit(float amount)
+        public void TakeHit(float amount, bool crit = false)
         {
             if (IsDead) return;
+            amount = Mathf.Min(amount, Health);
             Health -= amount;
+            AnyHurt?.Invoke(this, amount, crit);
             crouchUntil = Time.time + 1.2f; // trúng đạn thì nấp ngay
             if (Health > 0f) return;
             Health = 0f;
@@ -75,21 +79,33 @@ namespace DBP.AI
             float dist = to.magnitude;
             Face(target.transform.position);
 
-            // Giáp lá cà
+            // Giáp lá cà: gần thì đâm lưỡi lê / đấm báng súng; trúng đầu là chí mạng
             if (dist < 2.2f)
             {
                 agent.ResetPath();
                 if (Time.time >= nextMeleeAt)
                 {
-                    nextMeleeAt = Time.time + 1.3f;
+                    nextMeleeAt = Time.time + 1.1f;
+                    bool stab = Random.value < 0.65f;
+                    bool crit = Random.value < 0.3f;
+                    MeleeAnimator.Play(this, stab);
                     transform.position += to.normalized * 0.25f; // lao tới
                     var health = target.Health;
-                    if (health) health.TakeAllyDamage(meleeDamage, DamageType.Bullet, target.transform.position + Vector3.up);
-                    CombatEffects.Impact(target.transform.position + Vector3.up * 1.2f, -to.normalized, false);
+                    float dmg = (stab ? meleeDamage : meleeDamage * 0.6f) * (crit ? 2f : 1f);
+                    var at = target.transform.position + Vector3.up * (crit ? 1.65f : 1.1f);
+                    if (health) health.TakeAllyDamage(dmg, DamageType.Bullet, at, crit);
+                    CombatEffects.Impact(at, -to.normalized, false);
                 }
                 return;
             }
-            if (dist < 5f && Random.value < 0.01f) { agent.SetDestination(target.transform.position); return; } // xông lên đâm lê
+            // Địch trong 8 m: lao lên dùng dao (xung phong đâm lê), xa hơn thì bắn
+            if (dist < 8f)
+            {
+                agent.speed = 5f;
+                agent.SetDestination(target.transform.position);
+                hasSpot = false;
+                return;
+            }
 
             bool sees = Sees(target.transform);
             if (sees) lastSeenAt = Time.time;
@@ -137,6 +153,7 @@ namespace DBP.AI
             var aimAt = target.transform.position + Vector3.up * 1.1f;
             float dist = Vector3.Distance(from, aimAt);
             bool hit = Random.value < Mathf.Clamp(0.75f - dist / 80f, 0.25f, 0.7f);
+            bool crit = hit && Random.value < 0.15f; // trúng đầu
             var end = hit ? aimAt : aimAt + Random.insideUnitSphere * 1.5f;
             if (Physics.Linecast(from, end, out var block, ~0, QueryTriggerInteraction.Ignore) && !block.collider.transform.IsChildOf(target.transform))
             { end = block.point; hit = false; }
@@ -144,7 +161,7 @@ namespace DBP.AI
             CombatEffects.Tracer(from, end, false);
             CombatEffects.Impact(end, (from - end).normalized, false);
             CampaignAudio.Play(AudioCatalog.Weapon("W-MOSIN", Random.Range(0, 5)), from, true, 0.55f);
-            if (hit && target.Health) target.Health.TakeAllyDamage(fireDamage, DamageType.Bullet, end);
+            if (hit && target.Health) target.Health.TakeAllyDamage(fireDamage * (crit ? 2f : 1f), DamageType.Bullet, end, crit);
             if (--burst <= 0) { burst = Random.Range(2, 4); crouchUntil = Time.time + Random.Range(1f, 2f); }
         }
 

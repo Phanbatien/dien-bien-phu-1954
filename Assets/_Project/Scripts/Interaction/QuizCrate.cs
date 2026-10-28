@@ -33,10 +33,11 @@ namespace DBP.Interaction
 
         public static Color Color(Rarity rarity) => rarity switch
         {
-            Rarity.Common => new Color(0.55f, 0.4f, 0.25f),
-            Rarity.Uncommon => new Color(0.2f, 0.45f, 0.75f),
-            Rarity.Rare => new Color(0.75f, 0.2f, 0.15f),
-            _ => new Color(0.95f, 0.8f, 0.2f),
+            // Màu theo độ khó câu hỏi: xanh lá = dễ, xanh dương = vừa, tím = khó, vàng = rất khó
+            Rarity.Common => new Color(0.35f, 0.95f, 0.35f),
+            Rarity.Uncommon => new Color(0.3f, 0.65f, 1f),
+            Rarity.Rare => new Color(0.8f, 0.4f, 1f),
+            _ => new Color(1f, 0.82f, 0.2f),
         };
 
         /// Đọc độ hiếm ghi trong weapons.json ("common", "uncommon", "rare", "legendary").
@@ -139,7 +140,18 @@ namespace DBP.Interaction
             var glow = new GameObject("QuangSang").AddComponent<Light>();
             glow.transform.SetParent(crate.transform, false);
             glow.transform.position = crate.transform.position + Vector3.up * 0.6f;
-            glow.type = LightType.Point; glow.range = 2.2f; glow.intensity = 1.6f; glow.color = rarity; glow.shadows = LightShadows.None;
+            glow.type = LightType.Point; glow.range = 6f; glow.intensity = 4f; glow.color = rarity; glow.shadows = LightShadows.None;
+            // Cột sáng cao 30 m cùng màu độ khó: nhìn từ xa biết hòm ở đâu
+            var mat = DBP.Core.CombatEffects.SoftMaterial;
+            if (!mat) return;
+            var beam = new GameObject("CotSangHom").AddComponent<LineRenderer>();
+            beam.transform.SetParent(crate.transform, false);
+            beam.useWorldSpace = true; beam.positionCount = 2;
+            beam.SetPosition(0, crate.transform.position); beam.SetPosition(1, crate.transform.position + Vector3.up * 30f);
+            beam.widthCurve = new AnimationCurve(new Keyframe(0, 0.7f), new Keyframe(1, 0.35f));
+            beam.sharedMaterial = mat;
+            var tint = rarity; tint.a = 0.75f; beam.startColor = tint; tint.a = 0f; beam.endColor = tint;
+            beam.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.Off;
         }
 
         public bool CanInteract(Interactor who)
@@ -265,6 +277,8 @@ namespace DBP.Interaction
             }
             if (beam) Destroy(beam.gameObject);
             if (glow) glow.enabled = false;
+            var cot = transform.Find("CotSangHom");
+            if (cot) cot.gameObject.SetActive(false);
             var block = new MaterialPropertyBlock();
             foreach (var r in GetComponentsInChildren<Renderer>())
             {

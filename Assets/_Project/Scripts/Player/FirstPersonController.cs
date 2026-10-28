@@ -16,6 +16,9 @@ namespace DBP.Player
         public float crouchSpeed = 1.8f;
         public float jumpHeight = 1f;
         public float gravity = -20f;
+        public const float ClimbSpeed = 3f;
+        /// Đang bám thang (W/S trèo lên xuống).
+        public bool IsClimbing { get; private set; }
 
         [Header("Nhìn")]
         public Transform cameraPivot;
@@ -151,6 +154,20 @@ namespace DBP.Player
 
             float speed = IsCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed;
             Vector3 velocity = (transform.right * input.x + transform.forward * input.y) * speed;
+
+            // Trèo thang: đứng trong vùng thang, W/S lên/xuống, không bị trọng lực kéo; tới đỉnh bước lên bục; SPACE nhảy ra
+            var ladder = Ladder.At(transform.position);
+            if (ladder && (input.y != 0f || IsClimbing))
+            {
+                IsClimbing = true;
+                verticalVelocity = 0f;
+                var climb = Vector3.up * input.y * ClimbSpeed + transform.right * input.x * 1f;
+                if (input.y > 0f) climb += ladder.Into * 0.9f;
+                if (keyboard.spaceKey.wasPressedThisFrame) { IsClimbing = false; verticalVelocity = 3.5f; climb = -ladder.Into * 3f; }
+                controller.Move(climb * dt);
+                return;
+            }
+            IsClimbing = false;
 
             if (controller.isGrounded)
             {
