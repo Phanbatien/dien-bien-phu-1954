@@ -36,6 +36,15 @@ namespace DBP.AI
         /// Lựu đạn chưa nổ: lính địch thấy thì chạy tránh.
         public static readonly System.Collections.Generic.List<Grenade> Live = new System.Collections.Generic.List<Grenade>();
         public float BlastRadius => blastRadius;
+        /// Bộc phá: bán kính, sát thương và cỡ nổ nhân power, ngòi ngắn hơn. Gọi ngay sau Instantiate.
+        public void Boost(float power)
+        {
+            blastRadius *= power; maxDamage *= power; blastForce *= power;
+            fuseSec = Mathf.Min(fuseSec, 2.2f);
+            boost = power;
+            transform.localScale *= 1.6f;
+        }
+        float boost = 1f;
         void OnEnable() => Live.Add(this);
         void OnDisable() => Live.Remove(this);
 
@@ -62,7 +71,7 @@ namespace DBP.AI
             // VFX
             if (explosionPrefab)
                 Destroy(Instantiate(explosionPrefab, transform.position, Quaternion.identity), 5f);
-            else CombatEffects.Explosion(transform.position, 1f);
+            else CombatEffects.Explosion(transform.position, boost);
 
             // SFX
             if (explosionClip)

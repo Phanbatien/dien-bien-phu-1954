@@ -24,8 +24,36 @@ namespace DBP.EditorTools
             var notes = new List<string>();
             if (sceneName.StartsWith("M3")) notes.Add(DressHills(root));
             if (sceneName.StartsWith("M2")) notes.Add(DressM2(root));
+            if (sceneName.StartsWith("M5")) notes.Add(RiverBanks(root));
             notes.Add($"{FallenTrees(root, rng, keep, area)} cây gãy đổ / cháy");
             return string.Join(", ", notes.Where(n => !string.IsNullOrEmpty(n)));
+        }
+
+        // ───────── Màn 5: bờ sông dốc thoải ─────────
+
+        /// Lòng sông Nậm Rốm thấp hơn hai bờ 1,5 m, thành đứng nên rơi xuống là kẹt. Đắp dốc đất ~27° dọc hai bờ để leo lên được.
+        static string RiverBanks(Transform root)
+        {
+            var river = GameObject.Find("SongNamRom");
+            var ground = GameObject.Find("Ground");
+            if (!river || !river.TryGetComponent<BoxCollider>(out var box)) return "";
+            var b = box.bounds;
+            float drop = 0f - b.max.y, run = drop * 2f, len = Mathf.Sqrt(run * run + drop * drop), angle = Mathf.Atan2(drop, run) * Mathf.Rad2Deg;
+            var mat = ground && ground.TryGetComponent<Renderer>(out var gr) ? gr.sharedMaterial : null;
+            foreach (int side in new[] { -1, 1 })
+            {
+                float edge = side < 0 ? b.min.z : b.max.z;
+                var bank = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                bank.name = "BoSongDoc";
+                bank.transform.SetParent(root, true);
+                bank.transform.rotation = Quaternion.Euler(-side * angle, 0, 0);
+                bank.transform.localScale = new Vector3(b.size.x, 0.4f, len);
+                var mid = new Vector3(b.center.x, -drop * 0.5f, edge - side * run * 0.5f);
+                bank.transform.position = mid - bank.transform.up * 0.2f;
+                if (mat) bank.GetComponent<Renderer>().sharedMaterial = mat;
+                GameObjectUtility.SetStaticEditorFlags(bank, StaticEditorFlags.NavigationStatic | StaticEditorFlags.BatchingStatic);
+            }
+            return "2 bờ sông dốc thoải";
         }
 
         // ───────── Màn 3: bục bao cát + thang ─────────
