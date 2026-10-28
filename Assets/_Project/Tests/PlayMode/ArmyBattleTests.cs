@@ -104,5 +104,27 @@ namespace DBP.Tests
             }
             finally { MusicSettings.Volume = vol; MusicSettings.Track = track; MusicSettings.Enabled = on; }
         }
+
+        [UnityTest] public IEnumerator ZoneObjectives_HaveRedFlags_AndOldMarkersHidden([ValueSource(nameof(Missions))] string scene)
+        {
+            yield return Begin(scene);
+            yield return null;
+            int zones = MissionController.Current.Objectives.Count(o => o is ReachZoneObjective r && r.zone || o is CaptureZoneObjective c && c.zone);
+            var flags = Object.FindObjectsByType<ObjectiveFlag>(FindObjectsSortMode.None);
+            Assert.AreEqual(zones, flags.Length, $"{scene}: mỗi vùng mục tiêu một lá cờ");
+            Assert.IsFalse(Object.FindObjectsByType<Renderer>(FindObjectsSortMode.None).Any(r => r.name == "Marker" && r.enabled), "Cột xanh cũ phải ẩn");
+            var dir = System.Environment.GetEnvironmentVariable("SHOT_DIR");
+            if (flags.Length == 0 || string.IsNullOrEmpty(dir)) yield break;
+            var flag = flags[0].transform;
+            var cam = Camera.main; cam.transform.SetParent(null, true);
+            var arms = Object.FindAnyObjectByType<DBP.Player.FirstPersonArms>(); if (arms) arms.gameObject.SetActive(false);
+            cam.transform.position = flag.position + new Vector3(4.5f, 3.2f, -5f);
+            cam.transform.LookAt(flag.position + Vector3.up * 3.6f);
+            yield return new WaitForSeconds(0.5f);
+            var rt = new RenderTexture(1280, 720, 24); cam.targetTexture = rt; cam.Render(); cam.targetTexture = null;
+            RenderTexture.active = rt; var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
+            tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0); tex.Apply(); RenderTexture.active = null; rt.Release();
+            System.IO.File.WriteAllBytes(System.IO.Path.Combine(dir, $"co_{scene}.png"), tex.EncodeToPNG());
+        }
     }
 }
