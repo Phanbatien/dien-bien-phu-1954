@@ -6,8 +6,9 @@ using UnityEngine.AI;
 
 namespace DBP.AI
 {
-    /// AI lính (T07 – Đạt; BR-20), đổi lối đánh 28/10 theo góp ý: thấy quân ta là xung phong, không nấp, không bỏ chạy, không đứng yên.
-    ///   • Lao tới mục tiêu (người chơi hoặc đồng đội), còn xa thì lách trái phải, vừa chạy vừa bắn khi thấy.
+    /// AI lính (T07 – Đạt; BR-20), đổi lối đánh 28/10 theo góp ý: thấy quân ta thì tiến lên đánh, không nấp, không bỏ chạy.
+    ///   • Còn xa thì tiến tới (lách trái phải, vừa đi vừa bắn); vào tầm bắn riêng của mỗi lính (12–20 m) thì dừng lại đứng bắn.
+    ///   • Quân ta áp sát dưới 6 m thì lao vào đâm; mất tầm nhìn thì tiến tiếp cho tới khi thấy.
     ///   • Cách 8–22 m thỉnh thoảng ném lựu đạn (không ném khi lính phe mình đứng gần chỗ nổ).
     ///   • Áp sát dưới 2,2 m thì đâm lưỡi lê / đấm báng súng.
     ///   • Nghe tiếng súng và báo đồng đội quanh mình; có sĩ quan gần thì bắn tốt hơn; sĩ quan gục thì bắn loạn một lúc.
@@ -89,6 +90,8 @@ namespace DBP.AI
         Vector3 lastKnown;
         float lastSeenAt = -99f, acquiredAt = -99f, nextThinkAt, panicUntil, nextGrenadeAt, baseSpeed;
         int grenades = 2;
+        float holdRange;
+        const float RushRange = 6f;
         static Grenade grenadePrefab;
         ComradeFollower allyFoe;     // đang nhắm đồng đội thay vì người chơi
         float nextMeleeAt;
@@ -104,6 +107,8 @@ namespace DBP.AI
             if (!eyePoint) eyePoint = transform;
             if (!muzzle)   muzzle   = eyePoint;
             baseSpeed = agent.speed;
+            LadderClimber.Ensure(this);
+            holdRange = Random.Range(12f, 20f);
             nextGrenadeAt = Time.time + Random.Range(3f, 8f);
         }
 
@@ -196,7 +201,7 @@ namespace DBP.AI
             nextFireAt = Time.time + fireInterval * officer * Random.Range(0.8f, 1.2f);
         }
 
-        /// Đường chạy xung phong (4 lần/giây): còn xa thì lách chữ chi cho khó ngắm, gần thì lao thẳng, tăng tốc để đâm.
+        /// Di chuyển (4 lần/giây): xa thì tiến chữ chi, trong tầm thì đứng bắn, dưới 6 m thì lao thẳng tăng tốc để đâm.
         void Advance()
         {
             if (state == State.Idle || state == State.Suppress || (health && health.Retreated) || !player) return;
@@ -204,8 +209,11 @@ namespace DBP.AI
             var to = goal - transform.position; to.y = 0;
             float dist = to.magnitude;
             if (dist <= MeleeRange) return;
+            bool sees = Time.time - lastSeenAt < 0.5f;
+            // Trong tầm bắn và đang thấy: đứng lại bắn; quá gần thì lao vào đâm
+            if (sees && dist > RushRange && dist <= holdRange) { if (agent.hasPath) agent.ResetPath(); return; }
             var side = dist > 8f ? Vector3.Cross(Vector3.up, to.normalized) * Mathf.Sin(Time.time * 1.3f + GetInstanceID()) * 3f : Vector3.zero;
-            agent.speed = dist < 10f ? Mathf.Max(baseSpeed, 5.5f) : baseSpeed;
+            agent.speed = dist <= RushRange ? Mathf.Max(baseSpeed, 5.5f) : baseSpeed;
             agent.SetDestination(goal + side);
         }
 
