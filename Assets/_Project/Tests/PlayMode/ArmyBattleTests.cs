@@ -3,6 +3,7 @@ using System.Linq;
 using DBP.AI;
 using DBP.Core;
 using DBP.Missions;
+using DBP.Interaction;
 using DBP.UI;
 using NUnit.Framework;
 using UnityEngine;
@@ -125,6 +126,33 @@ namespace DBP.Tests
             RenderTexture.active = rt; var tex = new Texture2D(1280, 720, TextureFormat.RGB24, false);
             tex.ReadPixels(new Rect(0, 0, 1280, 720), 0, 0); tex.Apply(); RenderTexture.active = null; rt.Release();
             System.IO.File.WriteAllBytes(System.IO.Path.Combine(dir, $"co_{scene}.png"), tex.EncodeToPNG());
+        }
+
+        [UnityTest] public IEnumerator M3_HillsHaveLadders_ThatReachTheTop()
+        {
+            yield return Begin("M3_DoiED");
+            var ladders = Object.FindObjectsByType<DBP.Player.Ladder>(FindObjectsSortMode.None);
+            Assert.GreaterOrEqual(ladders.Length, 4, "Mỗi đồi E, D có 2 thang");
+            foreach (var hill in new[] { "DoiE", "DoiD" })
+            {
+                var top = GameObject.Find(hill).GetComponent<Collider>().bounds.max.y;
+                Assert.IsTrue(ladders.Any(l => l.TopY >= top && Vector3.Distance(l.transform.position, GameObject.Find(hill).transform.position) < 20f), $"{hill}: thang phải chạm tới đỉnh bục");
+            }
+            var foot = ladders[0].transform.position;
+            Assert.IsNotNull(DBP.Player.Ladder.At(foot), "Đứng ở chân thang thì vào vùng trèo");
+        }
+
+        [UnityTest] public IEnumerator Crates_GlowWithColoredBeam()
+        {
+            yield return Begin("M1_HimLam");
+            var crates = Object.FindObjectsByType<QuizCrate>(FindObjectsSortMode.None).Where(c => !c.Used).ToArray();
+            Assert.IsNotEmpty(crates);
+            foreach (var c in crates)
+            {
+                var beam = c.transform.Find("CotSangHom");
+                Assert.IsNotNull(beam, "Hòm phải có cột sáng");
+                Assert.AreEqual(RarityRules.Color(c.rarity).r, beam.GetComponent<LineRenderer>().startColor.r, 0.01f, "Màu cột sáng theo độ khó");
+            }
         }
     }
 }

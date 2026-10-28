@@ -248,10 +248,10 @@ namespace DBP.UI
                 W.Button(page, "Buy" + b, current == 3 ? "ĐÃ ĐỦ 3 CẤP" : $"MUA CẤP {next} • {cost} ĐIỂM", x + 22, 600, 306, 60, () => Purchase(id), canBuy);
                 if (!canBuy && current < 3) W.Label(page, "Shortfall", $"Thiếu {cost - ProfileService.Data.resolve} điểm", x + 22, 568, 306, 30, 18, W.Gold);
             }
-            BriefingSection();
+            W.Label(page, "CrateHint", "Câu hỏi nằm trong các hòm phát sáng giữa trận: trả lời đúng nhận súng + Quyết Tâm (cộng khi thắng màn).", 64, 704, 1472, 30, 20, W.Gold);
             if (BunkerBackdrop.Available) W.Button(page, "ViewBunker", "Xem Hầm chữ A", 1180, 236, 356, 46, () => Show(CampaignScreen.BunkerView));
             W.Button(page, "BackToMenu", "← Chọn nhiệm vụ", 64, 740, 440, 66, () => { briefing = null; Show(CampaignScreen.Menu); });
-            W.Button(page, "Deploy", "XUẤT TRẬN →", 1096, 740, 440, 66, Deploy, BriefingReady);
+            W.Button(page, "Deploy", "XUẤT TRẬN →", 1096, 740, 440, 66, Deploy);
         }
         public void Purchase(string upgradeId)
         {
@@ -261,16 +261,17 @@ namespace DBP.UI
         public void Deploy()
         {
             if (ScreenState != CampaignScreen.Preparation || loading || !ProfileService.HasProfile || !ProfileService.IsUnlocked("M" + (SelectedMission + 1))) return;
-            if (!BriefingReady) { if (status) status.text = "Hoàn thành họp tác chiến trước khi xuất trận (BR-06)."; return; }
-            briefing.Commit(); // giao câu đã trả lời và bộ chọn câu cho màn chơi (BR-31, BR-34)
+            // Không còn họp tác chiến bắt buộc (sửa 28/10): câu hỏi chỉ nằm trong hòm giữa trận
+            if (BriefingReady) briefing.Commit();
             briefing = null;
             loading = SceneTransition.Load(Scenes[SelectedMission]);
         }
         void Tutorial()
         {
             W.Label(page, "Title", "Trước giờ xuất trận", 200, 126, 1200, 80, 48);
-            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây: mở hòm tiếp tế (hòm đạn có quầng sáng)", "R     Thay đạn   ·   1 / 2: đổi súng", "SHIFT     Chạy   ·   CTRL / C: cúi   ·   SPACE: nhảy" };
+            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây: mở hòm tiếp tế (hòm đạn có quầng sáng)", "R  Thay đạn  ·  1 / 2: đổi súng  ·  V: đâm dao  ·  G: lựu đạn", "SHIFT  Chạy  ·  CTRL / C: cúi  ·  SPACE: nhảy  ·  W/S: trèo thang  ·  B: độ sáng" };
             for (int i = 0; i < rows.Length; i++) W.Label(page, "Control" + i, rows[i], 200, 242 + i * 68, 1200, 58, 28);
+            W.Label(page, "CrateColors", "Hòm có cột sáng — màu là độ khó: xanh lá = dễ · xanh dương = vừa · tím = khó · vàng = rất khó. Đúng: súng + Quyết Tâm.", 200, 576, 1200, 26, 18, W.Gold);
             W.Label(page, "TutorialHint", "Theo mục tiêu trên HUD để tiến quân. ESC mở tạm dừng và hướng dẫn.\nKhi trả lời câu hỏi, chiến trường dừng nhưng đồng hồ câu hỏi vẫn chạy.", 200, 602, 1200, 100, 25, W.Gold);
             W.Button(page, "BeginMission", "ĐÃ RÕ • BẮT ĐẦU", 200, 736, 1200, 68, () => Show(CampaignScreen.Gameplay));
             if (mission && mission.MissionId == "M1")
@@ -313,7 +314,7 @@ namespace DBP.UI
         void Pause()
         {
             W.Label(page, "Title", "Tạm dừng", 200, 135, 1200, 80, 48);
-            W.Label(page, "Help", "WASD: đi • Chuột: nhìn / bắn / ngắm\nGiữ E: tương tác • R: thay đạn • 1 / 2: đổi súng\nSHIFT: chạy • CTRL / C: cúi • SPACE: nhảy", 200, 250, 1200, 190, 28);
+            W.Label(page, "Help", "WASD: đi • Chuột: nhìn / bắn / ngắm • V: đâm dao • G: lựu đạn\nGiữ E: tương tác • R: thay đạn • 1 / 2: đổi súng • B: độ sáng\nSHIFT: chạy • CTRL / C: cúi • SPACE: nhảy • W/S khi đứng ở thang: trèo", 200, 250, 1200, 190, 28);
             W.Button(page, "Resume", "Tiếp tục", 200, 496, 1200, 66, () => Show(CampaignScreen.Gameplay));
             W.Button(page, "Restart", "Chơi lại từ hầm", 200, 592, 1200, 66, () => ReturnToMenu(true));
             W.Button(page, "QuitMission", "Bỏ dở và về menu", 200, 688, 1200, 66, () => ReturnToMenu(false));

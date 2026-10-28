@@ -40,6 +40,7 @@ namespace DBP.EditorTools
             int craters = Craters(root, rng, keep, area);
             int boards = PlaceTrenchFloor(root, area);
             PlaceFlora(root, rng, keep, area);
+            string features = WireFeatures(root, sceneName, rng, keep, area);
             var smoke = new List<Transform>();
             var fire = new List<Transform>();
             int wrecks = WreckSites(root, rng, keep, area, smoke, fire);
@@ -63,7 +64,7 @@ namespace DBP.EditorTools
             ambience.firePoints = fire.ToArray();
             if (sceneName.StartsWith("M3")) root.gameObject.AddComponent<DBP.Missions.RadioChatter>(); // T47
             EnsurePlayerFarClip();
-            return $"núi, {boards} ván lót hào, tre cháy + chuối, {craters} hố bom, {wrecks} xác pháo, {graves} mộ súng, {smoke.Count} cột khói, {fire.Count} đám cháy";
+            return $"{features}, núi, {boards} ván lót hào, tre cháy + chuối, {craters} hố bom, {wrecks} xác pháo, {graves} mộ súng, {smoke.Count} cột khói, {fire.Count} đám cháy";
         }
 
         // ───────────────────────── Ánh sáng & màu ─────────────────────────
@@ -71,7 +72,16 @@ namespace DBP.EditorTools
         static void Lighting(string sceneName)
         {
             // Thoáng hơn để thấy chiều sâu lòng chảo; đêm Màn 3 vẫn dày sương
-            RenderSettings.fogDensity = sceneName.StartsWith("M3") ? 0.022f : 0.008f;
+            RenderSettings.fogDensity = sceneName.StartsWith("M3") ? 0.016f : 0.008f;
+            if (sceneName.StartsWith("M3"))
+            {
+                // Đêm vẫn phải thấy địch: trăng sáng hơn, ánh sáng môi trường xanh nhạt
+                var moon = Object.FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault(l => l.type == LightType.Directional);
+                if (moon) { moon.intensity = Mathf.Max(moon.intensity, 0.7f); moon.color = new Color(0.65f, 0.75f, 1f); }
+                RenderSettings.ambientMode = UnityEngine.Rendering.AmbientMode.Flat;
+                RenderSettings.ambientLight = new Color(0.26f, 0.29f, 0.38f);
+                RenderSettings.fogColor = new Color(0.1f, 0.12f, 0.17f);
+            }
             if (!sceneName.StartsWith("M5")) return;
             // Chiều 7/5/1954: nắng xiên đỏ cam, khói bụi vàng đục
             var sun = Object.FindObjectsByType<Light>(FindObjectsInactive.Include, FindObjectsSortMode.None).FirstOrDefault(l => l.type == LightType.Directional);

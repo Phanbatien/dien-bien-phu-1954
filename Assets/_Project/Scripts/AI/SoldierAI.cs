@@ -287,7 +287,8 @@ namespace DBP.AI
                 var end = hitAlly ? aim : aim + Random.insideUnitSphere * 1.5f;
                 CombatEffects.Tracer(muzzle.position, end, true);
                 CombatEffects.Impact(end, (muzzle.position - end).normalized, false);
-                if (hitAlly) allyFoe.TakeHit(fireDamage);
+                bool critAlly = hitAlly && Random.value < 0.1f;
+                if (hitAlly) allyFoe.TakeHit(fireDamage * (critAlly ? 2f : 1f), critAlly);
                 return;
             }
             var spread = Random.insideUnitCircle * CurrentSpread();
@@ -400,9 +401,12 @@ namespace DBP.AI
             FaceTarget(FoePos);
             if (Time.time < nextMeleeAt) return true;
             nextMeleeAt = Time.time + 1.5f;
+            bool stab = Random.value < 0.6f, crit = Random.value < 0.2f;
+            MeleeAnimator.Play(this, stab);
             transform.position += to.normalized * 0.2f;
-            if (allyFoe) allyFoe.TakeHit(40f);
-            else player.GetComponent<IDamageable>()?.TakeDamage(22f, DamageType.Bullet, player.position + Vector3.up);
+            float dmg = (stab ? 1f : 0.6f) * (crit ? 2f : 1f);
+            if (allyFoe) allyFoe.TakeHit(40f * dmg, crit);
+            else player.GetComponent<IDamageable>()?.TakeDamage(22f * dmg, DamageType.Bullet, player.position + Vector3.up);
             CombatEffects.Impact(FoePos + Vector3.up * 1.2f, -to.normalized, false);
             return true;
         }
