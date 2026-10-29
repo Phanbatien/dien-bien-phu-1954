@@ -146,7 +146,7 @@ namespace DBP.AI
                     if (s != null && s.IsCharging && !s.IsDead)
                     {
                         var agent = s.Agent ?? s.GetComponent<NavMeshAgent>();
-                        if (agent != null && agent.enabled)
+                        if (agent != null && agent.enabled && agent.isOnNavMesh)
                         {
                             agent.SetDestination(player.position);
                         }
@@ -187,7 +187,7 @@ namespace DBP.AI
                     soldier.IsCharging = true;
                     soldier.SetState(SoldierAI.State.Alerted);
                     var agent = soldier.Agent ?? soldier.GetComponent<NavMeshAgent>();
-                    if (agent != null && agent.enabled && player != null)
+                    if (agent != null && agent.enabled && agent.isOnNavMesh && player != null)
                     {
                         agent.SetDestination(player.position);
                     }
@@ -218,7 +218,7 @@ namespace DBP.AI
                 m.SetState(SoldierAI.State.Suppress);
 
                 var agent = m.Agent ?? m.GetComponent<NavMeshAgent>();
-                if (agent != null && agent.enabled && retreatPoint != null)
+                if (agent != null && agent.enabled && agent.isOnNavMesh && retreatPoint != null)
                 {
                     agent.isStopped = false;
                     agent.SetDestination(retreatPoint.position);

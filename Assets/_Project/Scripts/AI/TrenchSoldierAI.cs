@@ -162,6 +162,14 @@ namespace DBP.AI
         {
             if (dead) return;
 
+            // Giao chiến (thấy người chơi trong 35 m, bộ đội trong 30 m, hoặc trúng đạn): chuyển sang SoldierAI để tiến đánh
+            // cả bộ đội lẫn người chơi thay vì nấp yên một chỗ.
+            if (Time.time >= nextEngageCheck)
+            {
+                nextEngageCheck = Time.time + .3f;
+                if (ShouldEngage()) { Engage(); return; }
+            }
+
             // Cập nhật tốc độ cho Animator
             if (animator && agent)
                 animator.SetFloat(AnimMove, agent.velocity.magnitude);
@@ -189,6 +197,18 @@ namespace DBP.AI
                     break;
             }
         }
+
+        float nextEngageCheck;
+
+        bool ShouldEngage()
+        {
+            if (player && (player.position - transform.position).sqrMagnitude < 35f * 35f && CanSeePlayer()) return true;
+            foreach (var c in ComradeFollower.All)
+                if (c && !c.IsDead && (c.transform.position - transform.position).sqrMagnitude < 30f * 30f) return true;
+            return false;
+        }
+
+        void Engage() => SoldierAI.TakeOver(this, eyePoint, muzzle, DamageMul, player ? player.position : transform.position);
 
         // ── State 1: HaoCover (Nấp thấp sau góc hào) ──────────────────────────
         void TickHaoCover()
@@ -441,6 +461,7 @@ namespace DBP.AI
         void OnDamaged(float _)
         {
             if (dead) return;
+            if (enabled) { Engage(); return; } // trúng đạn: phản công
 
             // Đổi chỗ nấp ngay lập tức khi bị bắn trúng
             if (coverPoints != null && coverPoints.Count > 1)

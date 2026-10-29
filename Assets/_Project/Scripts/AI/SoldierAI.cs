@@ -136,6 +136,35 @@ namespace DBP.AI
             if (playerGo) player = playerGo.transform;
             agent.height = standHeight;
             SetState(State.Idle);
+            started = true;
+            // Lính xuất hiện giữa trận (đợt phản kích Màn 2, viện binh, Màn 6) hoặc được giao quyền từ lính gác / lính hào:
+            // tiến đánh ngay, không đứng chờ thấy người trong tầm 30 m.
+            bool sentryControlled = TryGetComponent<SentryAI>(out var sentry) && sentry.enabled;
+            if (alertOnStart || (Time.timeSinceLevelLoad > 2f && !sentryControlled)) Alert();
+        }
+
+        bool started, alertOnStart;
+
+        /// Lính gác (Màn 3) / lính hào (Màn 4) chuyển sang lối đánh SoldierAI khi giao chiến: tiến vào tầm bắn,
+        /// bắn cả bộ đội, áp sát thì đâm; bộ đội cũng chọn được họ làm mục tiêu (ComradeFollower nhắm SoldierAI).
+        public static SoldierAI TakeOver(MonoBehaviour from, Transform eye, Transform gun, float damageMul, Vector3 target)
+        {
+            if (!from.TryGetComponent<SoldierAI>(out var s)) s = from.gameObject.AddComponent<SoldierAI>();
+            Transform Raised(Transform t, string name)
+            {
+                if (t && t != from.transform) return t;
+                var child = from.transform.Find(name);
+                if (!child) { child = new GameObject(name).transform; child.SetParent(from.transform, false); child.localPosition = Vector3.up * 1.55f; }
+                return child;
+            }
+            s.eyePoint = Raised(eye, "Mat");
+            s.muzzle = Raised(gun, "Mat");
+            s.DamageMul = Mathf.Max(s.DamageMul, damageMul);
+            s.lastKnown = target;
+            from.enabled = false;
+            s.enabled = true;
+            if (s.started) s.Alert(); else s.alertOnStart = true;
+            return s;
         }
 
         // ── Vòng lặp ──────────────────────────────────────────────────────────────

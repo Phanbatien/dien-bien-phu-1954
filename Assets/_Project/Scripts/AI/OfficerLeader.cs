@@ -59,6 +59,7 @@ namespace DBP.AI
 
         void Update()
         {
+            if (!soldier) soldier = GetComponent<SoldierAI>(); // lính gác / lính hào được giao cho SoldierAI khi giao chiến
             bool fighting = Fighting && player;
             health.DodgeChance = fighting ? DodgeChance : 0f; // chỉ né khi đang giao chiến (biết bị nhắm bắn)
             if (!fighting) return;
