@@ -30,7 +30,7 @@ namespace DBP.Player
         [Header("Tay gọn: ẩn thân lính, chỉ vẽ cẳng tay + bàn tay ôm súng")]
         public bool simpleArms = true;
         [Tooltip("Dời bộ tay + súng so với điểm cầm (không gian súng): thấp, gần hơn để thấy tay rõ")]
-        public Vector3 modelOffset = new Vector3(0.03f, -0.045f, -0.08f);
+        public Vector3 modelOffset = new Vector3(0.03f, -0.045f, -0.20f);
         [Tooltip("Nghiêng súng vào giữa màn hình để thấy thân súng, như các game FPS")]
         public Vector3 modelCant = new Vector3(-1.5f, -4f, -2f);
 

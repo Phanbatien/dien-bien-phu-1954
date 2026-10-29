@@ -31,6 +31,9 @@ namespace DBP.AI
         public SoldierAI Target => target;
 
         NavMeshAgent agent;
+        Animator animator;
+        static readonly int ShootAnimation = Animator.StringToHash("Shoot");
+        bool hasShootAnimation;
         Transform player;
         SoldierAI target;
         float nextThinkAt, nextShotAt, crouchUntil, lastSeenAt, nextMeleeAt, nextSpotAt;
@@ -41,6 +44,11 @@ namespace DBP.AI
         {
             agent = GetComponent<NavMeshAgent>();
             LadderClimber.Ensure(this);
+            animator = GetComponentInChildren<Animator>();
+            if (animator)
+                foreach (var parameter in animator.parameters)
+                    if (parameter.nameHash == ShootAnimation && parameter.type == AnimatorControllerParameterType.Trigger)
+                        hasShootAnimation = true;
             Health = maxHealth;
             nextShotAt = Time.time + Random.Range(1f, 3f);
             burst = Random.Range(2, 4);
@@ -149,6 +157,7 @@ namespace DBP.AI
 
         void Fire()
         {
+            if (hasShootAnimation) animator.SetTrigger(ShootAnimation);
             nextShotAt = Time.time + Random.Range(0.9f, 1.6f);
             var from = muzzle ? muzzle.position : transform.position + Vector3.up * 1.4f;
             var aimAt = target.transform.position + Vector3.up * 1.1f;
