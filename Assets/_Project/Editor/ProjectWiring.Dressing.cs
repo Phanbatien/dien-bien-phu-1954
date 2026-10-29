@@ -25,7 +25,6 @@ namespace DBP.EditorTools
         const string Wire = Rsg + "SM_rsg_military_barbed_wire_01.FBX";
         const string Hedgehog = Rsg + "SM_rsg_military_antitank_hedgehog_01.FBX";
         const string Concrete = Rsg + "SM_rsg_military_concret_block_01.FBX";
-        const string Bridge = "Assets/Polytope Studio/Lowpoly_Village/Sources/Meshes/Modular/Bridge/PT_Wooden_Bridge_02.fbx";
         const string SmgModel = "Assets/Low Poly Weapon Series V 4/Models/Low Poly Series V 4 New/Weapons/WWII_SMG_B.fbx";
 
         struct Spec { public string[] models; public int count; public float minDist, ring; public float scaleMin, scaleMax; }
@@ -126,25 +125,40 @@ namespace DBP.EditorTools
             return false;
         }
 
-        /// Màn 5: cầu gỗ Polytope thay tấm ván xám (giữ tấm ván làm mặt đi lại, chỉ ẩn hình).
+        /// Màn 5: cầu ván phẳng (War Map, hai nhịp) đúng bằng tấm ván va chạm: mặt cầu ngang mặt bờ nên đi trên cầu,
+        /// không xuyên qua; cọc gỗ hai bên làm lan can. (Cầu vòm Polytope cũ cao 1,8–3,1 m so với mặt đi.)
         static string DressBridge(Transform root)
         {
             var plank = GameObject.Find("CauMuongThanh");
-            var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(Bridge);
-            if (!plank || !prefab) return "";
-            var go = (GameObject)PrefabUtility.InstantiatePrefab(prefab, root);
-            go.name = "CauMuongThanh_Model";
-            go.transform.rotation = Quaternion.Euler(0, 90, 0);
-            var target = plank.GetComponent<Renderer>().bounds;
-            go.transform.position = target.center;
-            var b = WorldBounds(go);
-            float len = Mathf.Max(b.size.x, b.size.z);
-            if (len > 0.01f) go.transform.localScale = Vector3.one * (target.size.z / len);
-            b = WorldBounds(go);
-            go.transform.position += Vector3.up * (target.max.y - b.min.y - 0.05f);
-            foreach (var c in go.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+            if (!plank) return "";
+            var old = GameObject.Find("CauMuongThanh_Model");
+            if (old) Object.DestroyImmediate(old);
+            var deck = plank.GetComponent<Renderer>().bounds;
+            var asset = AssetDatabase.LoadAssetAtPath<GameObject>(WarMap + "Environment/SM_Prop_Trench_Bridge_02.prefab");
+            if (!asset) return "";
+            var go = new GameObject("CauMuongThanh_Model").transform;
+            go.SetParent(root, false);
+            const float PieceLen = 5.82f, PieceWidth = 3.22f, PieceHeight = .47f;
+            int n = Mathf.CeilToInt(deck.size.z / PieceLen);
+            float len = deck.size.z / n;
+            for (int i = 0; i < n; i++)
+            {
+                var piece = (GameObject)PrefabUtility.InstantiatePrefab(asset, go);
+                foreach (var c in piece.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+                piece.transform.localScale = new Vector3(deck.size.x / PieceWidth, 1f, len / PieceLen);
+                // Mặt ván (đỉnh mẫu) trùng mặt tấm va chạm
+                piece.transform.position = new Vector3(deck.center.x, deck.max.y - PieceHeight, deck.min.z + len * (i + .5f));
+            }
+            for (float z = deck.min.z + .3f; z <= deck.max.z - .2f; z += 2f)
+                foreach (int side in new[] { -1, 1 })
+                {
+                    var post = (GameObject)PrefabUtility.InstantiatePrefab(AssetDatabase.LoadAssetAtPath<GameObject>(WarMap + "Environment/SM_Env_Trench_Pole_01.prefab"), go);
+                    foreach (var c in post.GetComponentsInChildren<Collider>()) Object.DestroyImmediate(c);
+                    post.transform.localScale = new Vector3(1f, .6f, 1f);
+                    post.transform.position = new Vector3(deck.center.x + side * (deck.extents.x - .15f), deck.max.y - .15f, z);
+                }
             plank.GetComponent<Renderer>().enabled = false;
-            return ", cầu gỗ Mường Thanh";
+            return ", cầu ván Mường Thanh";
         }
 
         /// Màn 1: dây thép gai trôi lơ lửng (đáy cao hơn mặt đất > 0,4 m) được hạ xuống.

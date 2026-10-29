@@ -29,6 +29,8 @@ namespace DBP.AI
         Transform Blade()
         {
             if (blade) return blade;
+            // Súng đã có lưỡi lê thật (LuoiLe_Model) thì không dựng lưỡi khối
+            foreach (var t in GetComponentsInChildren<Transform>(true)) if (t.name == "LuoiLe_Model") return null;
             var go = GameObject.CreatePrimitive(PrimitiveType.Cube);
             Destroy(go.GetComponent<Collider>());
             go.name = "LuoiLe";
@@ -46,17 +48,17 @@ namespace DBP.AI
         {
             var b = Blade();
             var rest = model.localRotation; var restPos = model.localPosition;
-            b.gameObject.SetActive(true);
+            if (b) b.gameObject.SetActive(true);
             for (float t = 0; t < 0.32f; t += Time.deltaTime)
             {
                 float k = Mathf.Sin(Mathf.Clamp01(t / 0.32f) * Mathf.PI); // vào rồi ra
                 model.localRotation = rest * Quaternion.Euler(18f * k, 0, 0);
                 model.localPosition = restPos + Vector3.forward * 0.35f * k;
-                b.localPosition = new Vector3(0.15f, 1.25f, 0.45f + 0.55f * k);
+                if (b) b.localPosition = new Vector3(0.15f, 1.25f, 0.45f + 0.55f * k);
                 yield return null;
             }
             model.localRotation = rest; model.localPosition = restPos;
-            b.gameObject.SetActive(false);
+            if (b) b.gameObject.SetActive(false);
             running = null;
         }
 

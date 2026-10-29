@@ -24,6 +24,9 @@ EditorBuildSettings:
     path: Assets/_Project/Scenes/M5_ChieuMungBay.unity
     guid: 9e9e19d04acffc14c8e168b2ee35e8ca
   - enabled: 1
+    path: Assets/_Project/Scenes/M6_ThuThach.unity
+    guid: c6eca01a11b6a9340a1788dd47cb38ee
+  - enabled: 1
     path: Assets/_Project/Scenes/Sandbox.unity
     guid: 012c0066fb500c744adcdcd552844f9f
   - enabled: 1

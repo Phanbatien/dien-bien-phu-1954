@@ -56,6 +56,8 @@ namespace DBP.AI
 
             if (inventory != null) inventory.UseGrenade();
             else debugGrenadeCount--;
+            var body = GetComponentInParent<DBP.Player.FirstPersonController>();
+            if (body) EnemyAnimatorDriver.Play(body, "Throw");
 
             // Điểm và hướng ném
             var origin = throwPoint ? throwPoint.position : cam.transform.position + cam.transform.forward * 0.4f;
