@@ -29,6 +29,7 @@ namespace DBP.AI
         public float Health { get; private set; }
         public bool IsDead => Health <= 0f;
         public SoldierAI Target => target;
+        public bool IsCrouching => !IsDead && Time.time < crouchUntil;
 
         NavMeshAgent agent;
         Animator animator;

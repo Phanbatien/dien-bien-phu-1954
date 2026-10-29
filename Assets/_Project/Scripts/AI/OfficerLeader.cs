@@ -79,7 +79,7 @@ namespace DBP.AI
                 nextBlast = Time.time + 14f;
                 if (SoldierAI.Lob(this, foe, BlastPower)) DBP.UI.CampaignNotices.Show("Chỉ huy địch quăng bộc phá!");
             }
-            if (Time.time >= nextAirRaid) { nextAirRaid = Time.time + 75f; DBP.Missions.AirRaid.Now(); DBP.UI.CampaignNotices.Show("Chỉ huy địch gọi máy bay yểm trợ!"); }
+            if (Time.time >= nextAirRaid) { nextAirRaid = Time.time + 75f; DBP.Missions.AirRaid.Now(); Gesture(); DBP.UI.CampaignNotices.Show("Chỉ huy địch gọi máy bay yểm trợ!"); }
         }
 
         /// Né: lách ngang 1,5 m.
@@ -112,6 +112,7 @@ namespace DBP.AI
                 CombatEffects.Explosion(hit.position, 0.4f);
                 StartCoroutine(AlertNextFrame(hit.position));
             }
+            Gesture();
             DBP.UI.CampaignNotices.Show("Chỉ huy địch gọi viện binh!");
         }
 
@@ -128,8 +129,12 @@ namespace DBP.AI
             if (!NavMesh.SamplePosition(p, out var hit, 3f, NavMesh.AllAreas)) return;
             mines++;
             Landmine.Place(hit.position);
+            EnemyAnimatorDriver.Play(this, "Command");
             DBP.UI.CampaignNotices.Show("Chỉ huy địch đặt mìn — coi chừng bước chân!");
         }
+
+        /// Ra lệnh: chỉ huy chỉ tay, trùm giơ hai tay hô hào.
+        void Gesture() => EnemyAnimatorDriver.Play(this, GetComponent<Boss>() ? "Rally" : "Command");
 
         void OnDied()
         {

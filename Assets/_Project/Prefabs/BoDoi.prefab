@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 449fb4be29f6ffd46b0db17c608c24b3, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.AI.ComradeFollower
   slot: {x: -3, y: -2}
   fireRange: 40
@@ -675,7 +675,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2664098864995057252, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 9c58494e5d02322469f5f4b39edf5d5d, type: 2}
     - target: {fileID: 2916570863362053800, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
       propertyPath: m_LocalPosition.x
@@ -759,7 +759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5866666021909216657, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
       propertyPath: m_Controller
-      value:
+      value: 
       objectReference: {fileID: 9100000, guid: a95ac6d95c5fd9e498f9e92e03ce00d8, type: 2}
     - target: {fileID: 5866666021909216657, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
       propertyPath: m_ApplyRootMotion
@@ -957,7 +957,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8e8bbeea04f566e47a3fe80f5e9f210a, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.AI.EnemyAnimatorDriver
 --- !u!1001 &7169222696856305583
 PrefabInstance:
@@ -969,7 +969,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 121547177793210382, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 4f64e9ca3a89dfb4295f39a422adba74, type: 2}
     - target: {fileID: 327809216206490028, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: m_Name
@@ -1029,19 +1029,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2988399422059483360, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 4f64e9ca3a89dfb4295f39a422adba74, type: 2}
     - target: {fileID: 5440963630636514768, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 4f64e9ca3a89dfb4295f39a422adba74, type: 2}
     - target: {fileID: 5588575950391265335, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 4f64e9ca3a89dfb4295f39a422adba74, type: 2}
     - target: {fileID: 7580141293063442136, guid: 281bcf234393a3a47a81689b8be7731d, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
-      value:
+      value: 
       objectReference: {fileID: 2100000, guid: 4f64e9ca3a89dfb4295f39a422adba74, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

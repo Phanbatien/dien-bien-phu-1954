@@ -33,6 +33,7 @@ namespace DBP.EditorTools
         [MenuItem("DBP/Nối hệ thống vào scene")]
         public static void WireAll()
         {
+            BuildCharacterAnimations();
             foreach (var path in MissionScenes)
             {
                 var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);

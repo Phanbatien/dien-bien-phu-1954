@@ -339,6 +339,7 @@ namespace DBP.AI
             nextGrenadeAt = Time.time + grenadeCooldown;
 
             if (animator) animator.SetTrigger(AnimThrow);
+            EnemyAnimatorDriver.Play(this, "Throw");
             PlaySound(throwClip);
 
             var origin = throwPoint ? throwPoint.position : (transform.position + Vector3.up * 1.5f);
@@ -351,6 +352,7 @@ namespace DBP.AI
             var throwDir = Quaternion.AngleAxis(-upwardAngle, rightAxis) * aimDir;
 
             var g = Instantiate(grenadePrefab, origin, Quaternion.LookRotation(throwDir));
+            g.CreditPlayer = false;
             if (g.TryGetComponent<Rigidbody>(out var rb))
             {
                 rb.AddForce(throwDir * throwForce, ForceMode.Impulse);
@@ -360,6 +362,7 @@ namespace DBP.AI
         void TryFire()
         {
             if (!muzzle || !player) return;
+            EnemyAnimatorDriver.Play(this, "Shoot");
 
             if (animator) animator.SetTrigger(AnimShoot);
             PlaySound(fireClip);
@@ -379,7 +382,7 @@ namespace DBP.AI
             {
                 CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var damageable = hit.collider.GetComponentInParent<IDamageable>();
-                damageable?.TakeDamage(fireDamage * DamageMul, DamageType.Bullet, hit.point);
+                SoldierAI.EnemyBulletHit(damageable, fireDamage * DamageMul, hit.point);
             }
         }
 

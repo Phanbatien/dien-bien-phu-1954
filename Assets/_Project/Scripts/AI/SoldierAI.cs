@@ -228,6 +228,14 @@ namespace DBP.AI
             return true;
         }
 
+        /// Đạn địch trúng gì: người chơi thì mất máu; lính / công sự phe địch thì bỏ qua (không bắn nhầm nhau,
+        /// và địch chết vì đạn đồng bọn không bị tính công cho người chơi).
+        public static void EnemyBulletHit(IDamageable target, float amount, Vector3 point)
+        {
+            if (target is Health h && h.Kind != TargetKind.Player) return;
+            target?.TakeDamage(amount, DamageType.Bullet, point);
+        }
+
         /// Không có lính phe mình (còn sống) trong 6 m quanh chỗ nổ.
         public static bool SafeToBlast(Vector3 at, SoldierAI except)
         {
@@ -246,11 +254,13 @@ namespace DBP.AI
                 if (hand) grenadePrefab = hand.Prefab;
                 if (!grenadePrefab) return false;
             }
+            EnemyAnimatorDriver.Play(thrower, "Throw");
             var t = thrower.transform;
             var origin = t.position + Vector3.up * 1.6f + t.forward * 0.5f;
             const float flight = 1.1f;
             var v = (target - origin) / flight - 0.5f * Physics.gravity * flight;
             var g = Instantiate(grenadePrefab, origin, Quaternion.identity);
+            g.CreditPlayer = false;
             if (power > 1f) g.Boost(power);
             if (g.TryGetComponent<Rigidbody>(out var rb)) rb.linearVelocity = v;
             return true;
@@ -260,6 +270,7 @@ namespace DBP.AI
         void TryFire()
         {
             if (!muzzle || !player) return;
+            EnemyAnimatorDriver.Play(this, "Shoot");
 
             if (animator) animator.SetTrigger(AnimShoot);
             Play(fireClip);
@@ -291,7 +302,7 @@ namespace DBP.AI
             {
                 CombatEffects.Impact(hit.point, hit.normal, CombatEffects.IsMetal(hit.collider));
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
-                dmg?.TakeDamage(fireDamage * DamageMul, DamageType.Bullet, hit.point);
+                EnemyBulletHit(dmg, fireDamage * DamageMul, hit.point);
             }
         }
 

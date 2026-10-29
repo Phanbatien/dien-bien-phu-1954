@@ -45,6 +45,8 @@ namespace DBP.AI
             transform.localScale *= 1.6f;
         }
         float boost = 1f;
+        /// Lựu đạn của địch: lính địch chết vì nó không tính công người chơi.
+        public bool CreditPlayer { get; set; } = true;
         void OnEnable() => Live.Add(this);
         void OnDisable() => Live.Remove(this);
 
@@ -101,7 +103,8 @@ namespace DBP.AI
                     if (hitInfo.collider != col) amount *= 0.4f;
                 }
 
-                dmg.TakeDamage(amount, DamageType.Explosive, col.bounds.center);
+                if (!CreditPlayer && dmg is Health h) h.TakeAllyDamage(amount, DamageType.Explosive, col.bounds.center);
+                else dmg.TakeDamage(amount, DamageType.Explosive, col.bounds.center);
 
                 // Đẩy Rigidbody (lính ngã, vật bay)
                 if (col.attachedRigidbody)

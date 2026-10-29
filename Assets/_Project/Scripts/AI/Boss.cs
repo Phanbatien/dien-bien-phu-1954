@@ -58,6 +58,7 @@ namespace DBP.AI
         GameObject panel;
         Image fill;
         Text label;
+        bool rallied;
 
         void Awake()
         {
@@ -115,6 +116,7 @@ namespace DBP.AI
             bool near = player && (player.position - transform.position).sqrMagnitude < ShowRange * ShowRange;
             bool engaged = officer && officer.Fighting;
             panel.SetActive(gameplay && !health.IsDead && (near || engaged));
+            if (engaged && !rallied) { rallied = true; EnemyAnimatorDriver.Play(this, "Rally"); } // vào trận: hô hào
             fill.fillAmount = health.Current / health.Max;
         }
 

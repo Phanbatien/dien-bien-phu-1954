@@ -27,6 +27,7 @@ namespace DBP.EditorTools
             if (sceneName.StartsWith("M2")) notes.Add(DressM2(root));
             if (sceneName.StartsWith("M5")) notes.Add(RiverBanks(root));
             notes.Add($"{FallenTrees(root, rng, keep, area)} cây gãy đổ / cháy");
+            notes.Add(WireWarMap(root, sceneName, rng, keep, area));
             return string.Join(", ", notes.Where(n => !string.IsNullOrEmpty(n)));
         }
 
@@ -199,11 +200,13 @@ namespace DBP.EditorTools
                 gun.GetComponent<MeshRenderer>().enabled = false;
                 var model = UnscaledChild(gun.transform, "ModelSungMay");
                 model.name = "ModelSungMay";
-                var lmg = PlaceFitted(model, LmgPreset, Vector3.zero, 90f, 1.35f) ?? PlaceFitted(model, LmgModelPath, Vector3.zero, 90f, 1.35f);
+                // Súng máy hạng nặng trên giá ba chân (War Map); không có gói thì dùng LMG + giá tự dựng
+                var hmg = PlaceFitted(model, WarMap + "Weapons/SM_Wep_German_HeavyMachineGun_Tripod_01.prefab", new Vector3(0, -0.77f, 0), 90f, 1.5f);
+                var lmg = hmg ? null : PlaceFitted(model, LmgPreset, Vector3.zero, 90f, 1.35f) ?? PlaceFitted(model, LmgModelPath, Vector3.zero, 90f, 1.35f);
                 if (lmg) { lmg.transform.localPosition = new Vector3(0, -0.05f, 0); var lb = WorldBounds(lmg); lmg.transform.position += Vector3.up * (gun.transform.position.y - lb.center.y); }
                 var metal = darkMat;
                 // Giá ba chân, dây đạn vắt ra, hòm đạn dưới chân
-                for (int i = 0; i < 3; i++)
+                for (int i = 0; i < (hmg ? 0 : 3); i++)
                 {
                     float a = (90f + i * 120f) * Mathf.Deg2Rad;
                     var foot = new Vector3(Mathf.Cos(a) * 0.7f, -0.65f, Mathf.Sin(a) * 0.7f - 0.1f);
