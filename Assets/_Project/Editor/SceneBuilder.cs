@@ -314,7 +314,7 @@ namespace DBP.EditorTools
                 Dummy($"MauLinh_{i}", new Vector3(-70 + i * 3f, 0, 80), TargetKind.Infantry, 100, templates);
             templates.gameObject.SetActive(false);
 
-            Spawner(Points(-6, 6, -6, 6, 8, 0f), StandardRewards("W-MAT49"));
+            Spawner(Points(-6, 6, -6, 6, 12, 0f), StandardRewards("W-MAT49")); // 10–15 điểm đặt hòm (BR-13)
             var endless = Make<EndlessObjective>("Tiêu diệt càng nhiều địch càng tốt — địch kéo đến vô hạn");
             SetRef(endless, "templates", templates);
             Mission("M6", "Thử thách vô hạn", "", "", player, true, endless);
