@@ -285,7 +285,24 @@ namespace DBP.EditorTools
 
             Spawner(Points(-12, 12, 12, 36, 6, 0f).Concat(Points(-12, 12, 58, 92, 6, 0f)).ToArray(), StandardRewards("W-TYPE50"));
 
+            // Mở màn đánh trong chiến hào bờ nam: địch đột kích qua cầu thành hai đợt (31/10)
+            var waves = Group("Waves");
+            var raids = new List<GameObject>();
+            for (int w = 0; w < 2; w++)
+            {
+                var root = new GameObject($"DotKich_{w + 1}");
+                root.transform.SetParent(waves, false);
+                int count = 5 + w * 2;
+                for (int i = 0; i < count; i++)
+                    Dummy($"DotKich_{w + 1}_{i}", new Vector3(-18 + i * 36f / count, 0, 64 + (i % 2) * 4 + w * 3), TargetKind.Infantry, 100, root.transform);
+                root.SetActive(false);
+                raids.Add(root);
+            }
+            var hold = Make<RepelWavesObjective>("Giữ chiến hào bờ nam, đẩy lùi quân đột kích");
+            hold.waves = raids;
+
             var mc = Mission("M5", "Chiều mùng Bảy", "", "", player, true,
+                hold,
                 Reach("Vượt cầu Mường Thanh", new Vector3(0, 1, 54), new Vector3(8, 3, 4)),
                 Destroy("Loại bỏ ổ đề kháng", nests),
                 Reach("Vào hầm chỉ huy", new Vector3(0, 1, 101), new Vector3(5, 3, 5)));

@@ -61,13 +61,18 @@ namespace DBP.Missions
             if (!templates || templates.childCount == 0) return;
             int count = Mathf.Min(4 + Wave * 2, MaxAlive - alive);
             var fresh = new List<SoldierAI>();
+            // Chỉ nhân bản lính thường (nối dây có thể biến một mẫu thành sĩ quan); sĩ quan / trùm do đợt quyết định
+            var pool = new List<GameObject>();
+            foreach (Transform t in templates) if (!t.GetComponent<OfficerLeader>()) pool.Add(t.gameObject);
+            if (pool.Count == 0) foreach (Transform t in templates) pool.Add(t.gameObject);
             for (int i = 0; i < count; i++)
             {
                 float a = Random.value * Mathf.PI * 2f;
                 var p = player.position + new Vector3(Mathf.Cos(a), 0, Mathf.Sin(a)) * Random.Range(45f, 60f);
                 if (!NavMesh.SamplePosition(p, out var hit, 8f, NavMesh.AllAreas)) continue;
-                var template = templates.GetChild(Random.Range(0, templates.childCount)).gameObject;
+                var template = pool[Random.Range(0, pool.Count)];
                 var go = Instantiate(template, hit.position, Quaternion.LookRotation(player.position - hit.position));
+                if (go.TryGetComponent<OfficerLeader>(out var copied)) DestroyImmediate(copied);
                 go.name = $"Dot{Wave}_Linh{i}";
                 go.SetActive(true);
                 if (i == 0 && Wave % 5 == 0) Boss.Promote(go, $"TRÙM ĐỢT {Wave} · Chỉ huy phản kích");
