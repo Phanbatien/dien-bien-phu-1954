@@ -221,6 +221,7 @@ namespace DBP.AI
         void TryFire()
         {
             if (!muzzle || !player) return;
+            EnemyAnimatorDriver.Play(this, "Shoot");
 
             if (animator) animator.SetTrigger(AnimShoot);
             if (audioSource && fireClip) audioSource.PlayOneShot(fireClip);
@@ -231,7 +232,7 @@ namespace DBP.AI
             if (struck)
             {
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
-                dmg?.TakeDamage(fireDamage * DamageMul, DamageType.Bullet, hit.point);
+                SoldierAI.EnemyBulletHit(dmg, fireDamage * DamageMul, hit.point);
             }
         }
 
