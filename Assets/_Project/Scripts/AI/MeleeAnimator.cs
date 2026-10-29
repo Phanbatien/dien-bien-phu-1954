@@ -13,6 +13,7 @@ namespace DBP.AI
         public static void Play(Component soldier, bool stab)
         {
             if (!soldier) return;
+            EnemyAnimatorDriver.Play(soldier, stab ? "Stab" : "Punch");
             if (!soldier.TryGetComponent<MeleeAnimator>(out var anim)) anim = soldier.gameObject.AddComponent<MeleeAnimator>();
             anim.Run(stab);
         }

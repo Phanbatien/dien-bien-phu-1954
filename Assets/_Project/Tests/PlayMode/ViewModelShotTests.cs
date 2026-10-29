@@ -27,6 +27,16 @@ namespace DBP.Tests
                 yield return null; yield return null;
                 var shown = arms.GetComponentsInChildren<Transform>().Where(t => t.name.StartsWith("VM_")).Select(t => t.name).ToArray();
                 CollectionAssert.AreEqual(new[] { model }, shown, id);
+                var soldierArms = arms.GetComponentsInChildren<MeshFilter>()
+                    .Where(m => m.sharedMesh && m.sharedMesh.name.Contains("SentinelArms")).ToArray();
+                Assert.AreEqual(2, soldierArms.Length, "Both hands must come from the new allied soldier: " + id);
+                foreach (var arm in soldierArms)
+                {
+                    Assert.Greater(arm.sharedMesh.vertexCount, 100, "The soldier arm must retain its model geometry");
+                    var texture = arm.GetComponent<Renderer>().sharedMaterial.GetTexture("_BaseMap");
+                    Assert.IsNotNull(texture);
+                    Assert.AreEqual("Meshy_AI_Jungle_Sentinel_20261014_texture", texture.name);
+                }
                 if (string.IsNullOrEmpty(dir)) continue;
                 var rt = new RenderTexture(1280, 720, 24);
                 cam.targetTexture = rt; cam.Render(); cam.targetTexture = null; RenderTexture.active = rt;

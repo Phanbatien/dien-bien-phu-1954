@@ -12,6 +12,7 @@ namespace DBP.AI
         const float ClimbSpeed = 2.2f, StepSpeed = 3f;
         NavMeshAgent agent;
         bool climbing;
+        public bool IsClimbing => climbing;
 
         public static void Ensure(Component c) { if (!c.TryGetComponent<LadderClimber>(out _)) c.gameObject.AddComponent<LadderClimber>(); }
 

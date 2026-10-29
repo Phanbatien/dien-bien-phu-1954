@@ -56,6 +56,9 @@ namespace DBP.Core
         {
             // 0 → −0,3 EV, 1 → +1,4 EV; đêm cộng 0,9 EV
             color.postExposure.Override(Mathf.Lerp(-0.3f, 1.4f, Level) + (night ? 0.9f : 0f));
+            // Màu chiến trường rực rỡ hơn (29/10): tăng bão hòa và tương phản nhẹ
+            color.saturation.Override(night ? 10f : 22f);
+            color.contrast.Override(12f);
         }
 
         void Update()
