@@ -59,7 +59,7 @@ namespace DBP.Interaction
         {
             if (!cam) return null;
             // Bụi cỏ, đá nhỏ không được che mất hòm; vật lớn (vách hào, tường, mặt đất) thì vẫn chắn.
-            var hits = Physics.RaycastAll(cam.transform.position, cam.transform.forward, range, mask, QueryTriggerInteraction.Ignore);
+            var hits = Physics.RaycastAll(DBP.Player.PlayerView.AimOrigin(cam.transform), cam.transform.forward, range, mask, QueryTriggerInteraction.Ignore);
             System.Array.Sort(hits, (a, b) => a.distance.CompareTo(b.distance));
             foreach (var hit in hits)
             {

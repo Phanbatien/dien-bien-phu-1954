@@ -27,6 +27,7 @@ namespace DBP.AI
         LadderClimber climber;
         SoldierAI soldier;
         TrenchSoldierAI trench;
+        DBP.Player.FirstPersonController playerBody;
         float nextHitAt;
 
         Animator animator;
@@ -48,6 +49,7 @@ namespace DBP.AI
             climber = GetComponentInParent<LadderClimber>();
             soldier = GetComponentInParent<SoldierAI>();
             trench = GetComponentInParent<TrenchSoldierAI>();
+            playerBody = GetComponentInParent<DBP.Player.FirstPersonController>();
             foreach (var p in animator.parameters) parameters.Add(p.nameHash);
             lastPosition = transform.position;
             // Lệch nhịp để cả nhóm lính không thở cùng một lúc
@@ -94,8 +96,9 @@ namespace DBP.AI
                 lastPosition = transform.position;
             }
             animator.SetFloat(Speed, speed, 0.15f, Time.deltaTime);
-            SetBool(ClimbHash, climber && climber.IsClimbing);
-            SetBool(CrouchHash, comrade ? comrade.IsCrouching
+            SetBool(ClimbHash, climber && climber.IsClimbing || playerBody && playerBody.IsClimbing);
+            SetBool(CrouchHash, playerBody ? playerBody.IsCrouching
+                : comrade ? comrade.IsCrouching
                 : trench ? trench.CurrentState == TrenchSoldierAI.State.HaoCover
                 : soldier && soldier.CurrentState == SoldierAI.State.Suppress);
         }

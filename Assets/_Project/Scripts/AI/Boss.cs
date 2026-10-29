@@ -26,7 +26,8 @@ namespace DBP.AI
 
         static void OnLoaded(Scene s, LoadSceneMode mode)
         {
-            if (mode != LoadSceneMode.Single || !MissionController.Current || !s.name.StartsWith("M") || Current) return;
+            // Màn 6 (vô hạn) tự tạo trùm theo đợt (EndlessObjective)
+            if (mode != LoadSceneMode.Single || !MissionController.Current || !s.name.StartsWith("M") || s.name.StartsWith("M6") || Current) return;
             var player = GameObject.FindGameObjectWithTag("Player");
             if (!player) return;
             // Ứng viên: lính bộ binh địch có AI (SoldierAI, hoặc lính gác ở Màn 3), gồm cả lính đợt sau chưa bật
@@ -41,6 +42,15 @@ namespace DBP.AI
             if (!pick) return;
             if (!pick.GetComponent<OfficerLeader>()) pick.gameObject.AddComponent<OfficerLeader>();
             pick.gameObject.AddComponent<Boss>().Title = TitleFor(s.name);
+        }
+
+        /// Nâng một lính thành trùm (có kỹ năng chỉ huy), dùng cho đợt trùm ở Màn 6.
+        public static Boss Promote(GameObject soldier, string title)
+        {
+            if (!soldier.GetComponent<OfficerLeader>()) soldier.AddComponent<OfficerLeader>();
+            var boss = soldier.AddComponent<Boss>();
+            boss.Title = title;
+            return boss;
         }
 
         static string TitleFor(string scene)

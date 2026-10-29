@@ -17,7 +17,8 @@ namespace DBP.EditorTools
         {
             "Assets/_Project/Scenes/M1_HimLam.unity", "Assets/_Project/Scenes/M2_GiuDocLap.unity",
             "Assets/_Project/Scenes/M3_DoiED.unity", "Assets/_Project/Scenes/M4_LongHao.unity",
-            "Assets/_Project/Scenes/M5_ChieuMungBay.unity", "Assets/_Project/Scenes/Sandbox.unity",
+            "Assets/_Project/Scenes/M5_ChieuMungBay.unity", "Assets/_Project/Scenes/M6_ThuThach.unity",
+            "Assets/_Project/Scenes/Sandbox.unity",
         };
 
         /// Các bước nối, theo thứ tự. Mỗi bước nhận scene đang mở và trả về mô tả thay đổi.
@@ -27,6 +28,7 @@ namespace DBP.EditorTools
             ("Môi trường T41–T60, sửa Màn 1", WireDressing),
             ("Không khí bi tráng T44–T60", WireAtmosphere),
             ("AI & chiến đấu T07–T59, model T32–T33", WireCombat),
+            ("Lưỡi lê thật trên súng (sau khi dựng bộ đội, lính)", s => $"{SceneBayonets()} lưỡi lê"),
             ("Vật liệu URP (không hồng tím)", WireUrpMaterials),
         };
 
@@ -34,6 +36,7 @@ namespace DBP.EditorTools
         public static void WireAll()
         {
             BuildCharacterAnimations();
+            EnsurePlayerBody();
             foreach (var path in MissionScenes)
             {
                 var scene = EditorSceneManager.OpenScene(path, OpenSceneMode.Single);

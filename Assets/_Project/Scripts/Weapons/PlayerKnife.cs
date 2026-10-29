@@ -44,6 +44,8 @@ namespace DBP.Weapons
             if (kb == null || InputLock.Locked || Time.time < nextAt || !kb.vKey.wasPressedThisFrame) return;
             if (weapons && weapons.IsReloading) return;
             nextAt = Time.time + Cooldown;
+            var body = GetComponentInParent<FirstPersonController>();
+            if (body) DBP.AI.EnemyAnimatorDriver.Play(body, "Stab"); // thân nhân vật đâm lê (thấy ở góc thứ ba)
             StartCoroutine(Stab());
         }
 
@@ -51,7 +53,7 @@ namespace DBP.Weapons
         {
             var armsT = arms ? arms.transform : null;
             var armsRest = armsT ? armsT.localPosition : Vector3.zero;
-            knife.gameObject.SetActive(true);
+            knife.gameObject.SetActive(!PlayerView.ThirdPerson); // góc thứ ba: thân nhân vật tự đâm, không vẽ dao trước camera
             bool struck = false;
             for (float t = 0; t < 0.36f; t += Time.deltaTime)
             {
@@ -69,7 +71,7 @@ namespace DBP.Weapons
         void Hit()
         {
             var cam = transform;
-            if (!Physics.Raycast(cam.position, cam.forward, out var hit, Range, ~0, QueryTriggerInteraction.Ignore)) return;
+            if (!Physics.Raycast(PlayerView.AimOrigin(cam), cam.forward, out var hit, Range, ~0, QueryTriggerInteraction.Ignore)) return;
             var health = hit.collider.GetComponentInParent<Health>();
             if (!health || health.Kind == TargetKind.Player) return;
             bool crit = Health.IsHeadshot(health, hit.point);
@@ -79,6 +81,9 @@ namespace DBP.Weapons
 
         Transform BuildKnife()
         {
+            // Model dao găm thật (Combat Knife, gắn sẵn vào camera khi nối dây); không có thì dựng bằng khối
+            var model = transform.Find("DaoGam_Model");
+            if (model) { model.gameObject.SetActive(false); return model; }
             var root = new GameObject("DaoGam").transform;
             root.SetParent(transform, false);
             Part(root, new Vector3(0, 0, 0.12f), new Vector3(0.02f, 0.04f, 0.22f), new Color(0.78f, 0.8f, 0.82f)); // lưỡi
