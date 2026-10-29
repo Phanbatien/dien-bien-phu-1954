@@ -43,6 +43,7 @@ namespace DBP.AI
         void Awake()
         {
             agent = GetComponent<NavMeshAgent>();
+            LadderClimber.Ensure(this);
             animator = GetComponentInChildren<Animator>();
             if (animator)
                 foreach (var parameter in animator.parameters)

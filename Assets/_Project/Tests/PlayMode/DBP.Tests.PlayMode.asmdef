@@ -5,6 +5,7 @@
         "Unity.InputSystem",
         "Unity.ugui",
         "DBP.Runtime",
+        "Unity.AI.Navigation",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner"
     ],

@@ -67,6 +67,8 @@ namespace DBP.AI
         static readonly int AnimShoot = Animator.StringToHash("Shoot");
 
         public State CurrentState => currentState;
+        /// Hệ số sát thương (chỉ huy / trùm = 2).
+        public float DamageMul { get; set; } = 1f;
         public float HearRange => hearRange;
         public float SightRange => sightRange;
         public float SightAngle => sightAngle;
@@ -229,7 +231,7 @@ namespace DBP.AI
             if (struck)
             {
                 var dmg = hit.collider.GetComponentInParent<IDamageable>();
-                dmg?.TakeDamage(fireDamage, DamageType.Bullet, hit.point);
+                dmg?.TakeDamage(fireDamage * DamageMul, DamageType.Bullet, hit.point);
             }
         }
 

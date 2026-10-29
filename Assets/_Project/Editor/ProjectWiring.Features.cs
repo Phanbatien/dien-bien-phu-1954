@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DBP.Core;
 using DBP.Player;
+using Unity.AI.Navigation;
 using UnityEditor;
 using UnityEngine;
 
@@ -40,20 +41,34 @@ namespace DBP.EditorTools
             var b = box.bounds;
             float drop = 0f - b.max.y, run = drop * 2f, len = Mathf.Sqrt(run * run + drop * drop), angle = Mathf.Atan2(drop, run) * Mathf.Rad2Deg;
             var mat = ground && ground.TryGetComponent<Renderer>(out var gr) ? gr.sharedMaterial : null;
+            // Hai đoạn mỗi bờ, chừa khoảng dưới đầu cầu để dốc (vùng cấm AI) không đè lên mặt cầu
+            var bridge = GameObject.Find("CauMuongThanh");
+            var bb = bridge && bridge.TryGetComponent<Collider>(out var bc) ? bc.bounds : new Bounds(b.center, Vector3.zero);
+            var spans = new[] { (b.min.x, bb.min.x - 1f), (bb.max.x + 1f, b.max.x) };
             foreach (int side in new[] { -1, 1 })
+            foreach (var (x0, x1) in spans)
             {
                 float edge = side < 0 ? b.min.z : b.max.z;
                 var bank = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 bank.name = "BoSongDoc";
                 bank.transform.SetParent(root, true);
                 bank.transform.rotation = Quaternion.Euler(-side * angle, 0, 0);
-                bank.transform.localScale = new Vector3(b.size.x, 0.4f, len);
-                var mid = new Vector3(b.center.x, -drop * 0.5f, edge - side * run * 0.5f);
+                bank.transform.localScale = new Vector3(x1 - x0, 0.4f, len);
+                var mid = new Vector3((x0 + x1) * 0.5f, -drop * 0.5f, edge - side * run * 0.5f);
                 bank.transform.position = mid - bank.transform.up * 0.2f;
                 if (mat) bank.GetComponent<Renderer>().sharedMaterial = mat;
                 GameObjectUtility.SetStaticEditorFlags(bank, StaticEditorFlags.NavigationStatic | StaticEditorFlags.BatchingStatic);
+                NotWalkable(bank);
             }
-            return "2 bờ sông dốc thoải";
+            NotWalkable(river); // AI phải đi qua cầu, không lội sông
+            return "bờ sông dốc thoải (chừa đầu cầu), AI qua cầu";
+        }
+
+        static void NotWalkable(GameObject go)
+        {
+            if (!go.TryGetComponent<NavMeshModifier>(out var mod)) mod = go.AddComponent<NavMeshModifier>();
+            mod.overrideArea = true;
+            mod.area = 1; // Not Walkable
         }
 
         // ───────── Màn 3: bục bao cát + thang ─────────
@@ -163,6 +178,12 @@ namespace DBP.EditorTools
             area.center = new Vector3(0, height * 0.5f + 0.3f, reach * 0.5f - 0.2f);
             area.size = new Vector3(1.3f, height + 0.8f, reach + 1.6f);
             go.AddComponent<Ladder>();
+            // Liên kết NavMesh chân thang → mặt bục để lính AI cũng trèo được (LadderClimber)
+            var link = go.AddComponent<NavMeshLink>();
+            link.startPoint = new Vector3(0, 0, -1.8f); // ra khỏi vùng bao cát chân bục, chạm NavMesh
+            link.endPoint = new Vector3(0, height - 1.1f, reach + 1.9f);
+            link.width = 0.8f;
+            link.bidirectional = true;
         }
 
         // ───────── Màn 2: súng máy + hàng rào chống tăng ─────────

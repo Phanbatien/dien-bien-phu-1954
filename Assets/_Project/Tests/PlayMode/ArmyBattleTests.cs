@@ -142,6 +142,36 @@ namespace DBP.Tests
             Assert.IsNotNull(DBP.Player.Ladder.At(foot), "Đứng ở chân thang thì vào vùng trèo");
         }
 
+        [UnityTest] public IEnumerator M3_AiCanPathUpTheLadders_AndCrossM5ByBridge()
+        {
+            yield return Begin("M3_DoiED");
+            var ladder = Object.FindObjectsByType<DBP.Player.Ladder>(FindObjectsSortMode.None)[0];
+            var link = ladder.GetComponent<Unity.AI.Navigation.NavMeshLink>();
+            Assert.IsNotNull(link, "Thang có liên kết NavMesh cho AI");
+            var foot = ladder.transform.TransformPoint(link.startPoint);
+            var top = ladder.transform.TransformPoint(link.endPoint);
+            var path = new UnityEngine.AI.NavMeshPath();
+            Assert.IsTrue(UnityEngine.AI.NavMesh.SamplePosition(foot, out var a, 2f, UnityEngine.AI.NavMesh.AllAreas), "Chân thang nằm trên NavMesh");
+            Assert.IsTrue(UnityEngine.AI.NavMesh.SamplePosition(top, out var b, 2f, UnityEngine.AI.NavMesh.AllAreas), "Đầu thang nằm trên mặt bục");
+            UnityEngine.AI.NavMesh.CalculatePath(a.position, b.position, UnityEngine.AI.NavMesh.AllAreas, path);
+            Assert.AreEqual(UnityEngine.AI.NavMeshPathStatus.PathComplete, path.status, "AI tìm được đường trèo thang lên bục");
+            Assert.IsTrue(ComradeFollower.All.All(c => c.GetComponent<LadderClimber>()), "Đồng đội biết trèo thang");
+
+            yield return Begin("M5_ChieuMungBay");
+            var river = GameObject.Find("SongNamRom").GetComponent<Collider>().bounds;
+            UnityEngine.AI.NavMesh.SamplePosition(new Vector3(-25f, 0, river.min.z - 6f), out a, 3f, UnityEngine.AI.NavMesh.AllAreas);
+            UnityEngine.AI.NavMesh.SamplePosition(new Vector3(-25f, 0, river.max.z + 6f), out b, 3f, UnityEngine.AI.NavMesh.AllAreas);
+            UnityEngine.AI.NavMesh.CalculatePath(a.position, b.position, UnityEngine.AI.NavMesh.AllAreas, path);
+            Assert.AreEqual(UnityEngine.AI.NavMeshPathStatus.PathComplete, path.status, "Qua được sông");
+            var bridge = GameObject.Find("CauMuongThanh").GetComponent<Collider>().bounds;
+            for (int i = 1; i < path.corners.Length; i++)
+            {
+                var mid = (path.corners[i - 1] + path.corners[i]) * 0.5f;
+                if (mid.z > river.min.z + 0.5f && mid.z < river.max.z - 0.5f)
+                    Assert.That(mid.x, Is.InRange(bridge.min.x - 0.5f, bridge.max.x + 0.5f), "AI phải đi qua cầu, không lội sông");
+            }
+        }
+
         [UnityTest] public IEnumerator M5_RiverHasWalkableBanks()
         {
             yield return Begin("M5_ChieuMungBay");
@@ -164,15 +194,16 @@ namespace DBP.Tests
             enemy.Health.Configure(TargetKind.Infantry, 100000f); // đồng đội không hạ kịp trong lúc đo
             var toEnemy = (enemy.transform.position - player.transform.position).normalized;
             var cc = player.GetComponent<CharacterController>(); cc.enabled = false;
-            player.transform.position = enemy.transform.position - toEnemy * 18f; cc.enabled = true;
-            float start = Vector3.Distance(enemy.transform.position, player.transform.position);
+            player.transform.position = enemy.transform.position - toEnemy * 32f; cc.enabled = true;
             SoldierAI.AlertAround(enemy.transform.position, 1f, player.transform.position);
-            float end = Time.realtimeSinceStartup + 6f;
+            float end = Time.realtimeSinceStartup + 9f;
             while (Time.realtimeSinceStartup < end && enemy && !enemy.IsDead) yield return null;
             Assert.IsTrue(enemy && !enemy.IsDead);
-            Assert.Less(Vector3.Distance(enemy.transform.position, player.transform.position), start - 4f, "Địch thấy quân ta phải xung phong tới, không đứng yên");
+            float dist = Vector3.Distance(enemy.transform.position, player.transform.position);
+            Assert.Less(dist, 26f, "Địch thấy quân ta phải tiến lên vào tầm bắn, không đứng yên ở xa");
+            Assert.Greater(dist, 6f, "Vào tầm bắn thì đứng lại bắn, không lao vào chỗ chết");
 
-            var officer = Object.FindObjectsByType<OfficerLeader>(FindObjectsSortMode.None).FirstOrDefault();
+            var officer = Object.FindObjectsByType<OfficerLeader>(FindObjectsSortMode.None).FirstOrDefault(o => !o.GetComponent<Boss>());
             if (officer)
             {
                 var oh = officer.GetComponent<Health>();
@@ -181,6 +212,24 @@ namespace DBP.Tests
                 if (!oh.IsDead) Assert.AreEqual(OfficerLeader.DodgeChance, oh.DodgeChance, "Giao chiến thì chỉ huy biết né đạn");
                 Assert.AreEqual(2f, officer.GetComponent<SoldierAI>().DamageMul, "Chỉ huy sát thương gấp đôi");
                 Assert.Greater(oh.Max, normalMax, "Chỉ huy máu trâu hơn");
+            }
+        }
+
+        [UnityTest] public IEnumerator EveryMission_HasOneBoss_WithBigHealthBar()
+        {
+            foreach (var scene in new[] { "M1_HimLam", "M2_GiuDocLap", "M3_DoiED", "M4_LongHao", "M5_ChieuMungBay" })
+            {
+                yield return Begin(scene);
+                yield return null; yield return null;
+                var bosses = Object.FindObjectsByType<Boss>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+                Assert.AreEqual(1, bosses.Length, $"{scene}: mỗi màn đúng 1 trùm");
+                var boss = bosses[0];
+                Assert.IsNotNull(boss.GetComponent<OfficerLeader>(), "Trùm có kỹ năng chỉ huy");
+                Assert.IsTrue(boss.Title.StartsWith("TRÙM"));
+                if (!boss.isActiveAndEnabled) continue; // trùm thuộc đợt sau, chưa xuất hiện
+                var normal = Object.FindObjectsByType<Health>(FindObjectsSortMode.None).First(h => h.Kind == TargetKind.Infantry && !h.GetComponent<OfficerLeader>());
+                Assert.Greater(boss.GetComponent<Health>().Max, normal.Max * 4f, "Trùm máu rất trâu");
+                Assert.IsNotNull(GameObject.Find("BossHudCanvas"), "Có thanh máu trùm");
             }
         }
 
