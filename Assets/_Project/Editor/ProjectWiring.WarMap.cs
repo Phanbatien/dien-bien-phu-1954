@@ -43,7 +43,7 @@ namespace DBP.EditorTools
 
         static string WireWarMap(Transform root, string sceneName, System.Random rng, List<Vector3> keep, Rect area)
         {
-            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5"))) return "";
+            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5") || sceneName.StartsWith("M6"))) return "";
             if (!AssetDatabase.IsValidFolder("Assets/PolygonWarMap")) return "";
             FixWarMapParticles();
             int grounds = GroundTexture();
@@ -54,6 +54,21 @@ namespace DBP.EditorTools
 
             var extras = new List<Scatter>(WarMapCommon);
             if (sceneName.StartsWith("M5")) extras.Add(new Scatter(2, 5.4f, true, 0f, "Vehicles/SM_Veh_Artillery_01"));
+            if (sceneName.StartsWith("M6"))
+            {
+                // Thử thách vô hạn: nhét gần hết gói — gấp đôi đồ rải, thêm xe / máy bay / pháo nguyên vẹn làm chỗ nấp
+                extras.AddRange(WarMapCommon);
+                extras.Add(new Scatter(3, 7.8f, true, 0f, "Vehicles/SM_Veh_German_Tank_01", "Vehicles/SM_Veh_British_Tank_01", "Vehicles/SM_Veh_Small_Tank_01"));
+                extras.Add(new Scatter(2, 8.6f, true, 0f, "Vehicles/SM_Veh_Plane_British_WW1_01", "Vehicles/SM_Veh_Plane_German_WW1_01"));
+                extras.Add(new Scatter(3, 5.4f, true, 0f, "Vehicles/SM_Veh_Artillery_01"));
+                extras.Add(new Scatter(3, 1.5f, false, 0f, "Weapons/SM_Wep_German_HeavyMachineGun_01", "Weapons/SM_Wep_British_HeavyMachineGun_01"));
+                extras.Add(new Scatter(4, 2.9f, false, 0f, "Environment/SM_Prop_Ladder_01", "Environment/SM_Prop_Ladder_02"));
+                extras.Add(new Scatter(3, 3.4f, false, 0f, "Environment/SM_Prop_Trench_Bridge_01", "Environment/SM_Prop_Trench_Bridge_02"));
+                extras.Add(new Scatter(4, 9f, false, 0f, "Environment/SM_Prop_Blimp_Piece_01", "Environment/SM_Prop_Blimp_Piece_02", "Environment/SM_Prop_Blimp_Piece_03",
+                    "Environment/SM_Prop_Blimp_Piece_04", "Environment/SM_Prop_Blimp_Piece_05"));
+                // Khinh khí cầu nguyên vẹn lơ lửng trên trời
+                Raw(group, "Vehicles/SM_Veh_Blimp_01", new Vector3(area.center.x + 30f, 75f, area.center.y + 90f), 120f, Vector3.one);
+            }
             int placed = 0;
             foreach (var s in extras)
                 for (int i = 0; i < s.count; i++)

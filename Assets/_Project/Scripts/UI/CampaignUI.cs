@@ -23,8 +23,8 @@ namespace DBP.UI
     public sealed partial class CampaignUI : MonoBehaviour
     {
         public static CampaignUI Current { get; private set; }
-        public static readonly string[] Scenes = { "M1_HimLam", "M2_GiuDocLap", "M3_DoiED", "M4_LongHao", "M5_ChieuMungBay" };
-        static readonly string[] Titles = { "Mở màn Him Lam", "Giữ Độc Lập", "Đêm đồi E, D", "Trong lòng hào", "Chiều mùng Bảy" };
+        public static readonly string[] Scenes = { "M1_HimLam", "M2_GiuDocLap", "M3_DoiED", "M4_LongHao", "M5_ChieuMungBay", "M6_ThuThach" };
+        static readonly string[] Titles = { "Mở màn Him Lam", "Giữ Độc Lập", "Đêm đồi E, D", "Trong lòng hào", "Chiều mùng Bảy", "Thử thách vô hạn" };
         static readonly string[] BranchNames = { "CƠ SỐ ĐẠN", "THAY ĐẠN", "THỂ LỰC", "LỰU ĐẠN" };
         static int pendingPreparation = -1;
         public CampaignScreen ScreenState { get; private set; }
@@ -185,8 +185,11 @@ namespace DBP.UI
             {
                 int index = i; bool unlocked = ProfileService.HasProfile && ProfileService.IsUnlocked("M" + (i + 1));
                 W.Button(page, "Mission" + (i + 1), $"0{i + 1}    {Titles[i]}" + (unlocked ? "    →" : i == 0 ? "    [Chọn hồ sơ]" : $"    [Thắng màn {i} để mở]"),
-                    604, 320 + i * 67, 932, 56, () => SelectMission(index), unlocked);
+                    604, 320 + i * 58, 932, 50, () => SelectMission(index), unlocked);
             }
+            // Màn 6 ngoài chiến dịch: luôn mở khi đã có hồ sơ
+            W.Button(page, "Mission6", $"∞    THỬ THÁCH VÔ HẠN  ·  kỷ lục {DBP.Missions.EndlessObjective.Best} địch    →",
+                604, 612, 932, 46, () => SelectMission(5), ProfileService.HasProfile);
             if (ProfileService.HasProfile)
             {
                 W.Toggle(page, "Consent", "Đồng ý gửi tên, lớp và thành tích lên bảng công khai (tùy chọn)", !string.IsNullOrEmpty(ProfileService.Data.consentAt), 604, 665, 920,
@@ -269,7 +272,7 @@ namespace DBP.UI
         void Tutorial()
         {
             W.Label(page, "Title", "Trước giờ xuất trận", 200, 126, 1200, 80, 48);
-            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây: mở hòm tiếp tế (hòm đạn có quầng sáng)", "R  Thay đạn  ·  1 / 2: đổi súng  ·  V: đâm dao  ·  G: lựu đạn", "SHIFT  Chạy  ·  CTRL / C: cúi  ·  SPACE: nhảy  ·  W/S: trèo thang  ·  B: độ sáng" };
+            string[] rows = { "W A S D     Di chuyển   ·   Chuột: nhìn xung quanh", "CHUỘT TRÁI     Bắn   ·   CHUỘT PHẢI: ngắm", "E     Giữ 1 giây: mở hòm tiếp tế (hòm đạn có quầng sáng)", "R  Thay đạn  ·  1 / 2: đổi súng  ·  V: đâm dao  ·  G: lựu đạn", "SHIFT  Chạy  ·  CTRL / C: cúi  ·  SPACE: nhảy  ·  W/S: trèo thang  ·  B: độ sáng  ·  T: góc nhìn 1 / 3" };
             for (int i = 0; i < rows.Length; i++) W.Label(page, "Control" + i, rows[i], 200, 242 + i * 68, 1200, 58, 28);
             W.Label(page, "CrateColors", "Hòm có cột sáng — màu là độ khó: xanh lá = dễ · xanh dương = vừa · tím = khó · vàng = rất khó. Đúng: súng + Quyết Tâm.", 200, 576, 1200, 26, 18, W.Gold);
             W.Label(page, "TutorialHint", "Theo mục tiêu trên HUD để tiến quân. ESC mở tạm dừng và hướng dẫn.\nKhi trả lời câu hỏi, chiến trường dừng nhưng đồng hồ câu hỏi vẫn chạy.", 200, 602, 1200, 100, 25, W.Gold);
@@ -314,7 +317,7 @@ namespace DBP.UI
         void Pause()
         {
             W.Label(page, "Title", "Tạm dừng", 200, 135, 1200, 80, 48);
-            W.Label(page, "Help", "WASD: đi • Chuột: nhìn / bắn / ngắm • V: đâm dao • G: lựu đạn\nGiữ E: tương tác • R: thay đạn • 1 / 2: đổi súng • B: độ sáng\nSHIFT: chạy • CTRL / C: cúi • SPACE: nhảy • W/S khi đứng ở thang: trèo", 200, 250, 1200, 190, 28);
+            W.Label(page, "Help", "WASD: đi • Chuột: nhìn / bắn / ngắm • V: đâm dao • G: lựu đạn\nGiữ E: tương tác • R: thay đạn • 1 / 2: đổi súng • B: độ sáng • T: góc nhìn 1 / 3\nSHIFT: chạy • CTRL / C: cúi • SPACE: nhảy • W/S khi đứng ở thang: trèo", 200, 250, 1200, 190, 28);
             W.Button(page, "Resume", "Tiếp tục", 200, 496, 1200, 66, () => Show(CampaignScreen.Gameplay));
             W.Button(page, "Restart", "Chơi lại từ hầm", 200, 592, 1200, 66, () => ReturnToMenu(true));
             W.Button(page, "QuitMission", "Bỏ dở và về menu", 200, 688, 1200, 66, () => ReturnToMenu(false));

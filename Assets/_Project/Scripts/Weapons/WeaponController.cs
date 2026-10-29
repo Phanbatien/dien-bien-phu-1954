@@ -140,13 +140,17 @@ namespace DBP.Weapons
             float spread = IsAiming ? stats.adsSpread : stats.hipSpread;
             if (body && body.IsSprinting) spread *= 2f;
             var r = Random.insideUnitCircle * spread;
-            var origin = cam.transform.position;
+            var origin = DBP.Player.PlayerView.AimOrigin(cam.transform);
             var direction = cam.transform.rotation * (Quaternion.Euler(r.x, r.y, 0f) * Vector3.forward);
-            if (!Scoped) CombatEffects.Muzzle(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, cam.transform.rotation);
+            // Góc thứ ba: lửa đầu nòng / đạn vạch từ súng trên tay nhân vật
+            var gunMuzzle = DBP.Player.PlayerView.Muzzle;
+            var fxFrom = gunMuzzle ? gunMuzzle.position : origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f;
+            if (body) DBP.AI.EnemyAnimatorDriver.Play(body, "Shoot");
+            if (!Scoped || gunMuzzle) CombatEffects.Muzzle(fxFrom, cam.transform.rotation);
 
             bool struck = Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore);
 
-            CombatEffects.Tracer(origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f, struck ? hit.point : origin + direction * (stats.range), false);
+            CombatEffects.Tracer(fxFrom, struck ? hit.point : origin + direction * (stats.range), false);
             ShotFired?.Invoke(origin, struck ? hit.point : origin + direction * stats.range);
 
             if (struck)

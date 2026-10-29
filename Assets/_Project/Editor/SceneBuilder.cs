@@ -39,6 +39,7 @@ namespace DBP.EditorTools
             ("M3_DoiED", BuildM3),
             ("M4_LongHao", BuildM4),
             ("M5_ChieuMungBay", BuildM5),
+            ("M6_ThuThach", BuildM6),
             ("Sandbox", BuildSandbox),
         };
 
@@ -86,6 +87,9 @@ namespace DBP.EditorTools
                 }
                 buildScenes.Add(new EditorBuildSettingsScene(path, true));
             }
+            // Giữ các scene khác đã có trong Build Settings (vd. hầm chữ A Bunker_HamChuA)
+            foreach (var other in EditorBuildSettings.scenes)
+                if (!buildScenes.Any(s => s.path == other.path)) buildScenes.Add(other);
             EditorBuildSettings.scenes = buildScenes.ToArray();
             AssetDatabase.SaveAssets();
         }
@@ -286,6 +290,34 @@ namespace DBP.EditorTools
                 Destroy("Loại bỏ ổ đề kháng", nests),
                 Reach("Vào hầm chỉ huy", new Vector3(0, 1, 101), new Vector3(5, 3, 5)));
             UnityEventTools.AddPersistentListener(mc.onWon, raiser.Raise);
+        }
+
+        /// Màn 6 – Thử thách vô hạn (ngoài chiến dịch): giữ trận địa bao cát giữa cánh đồng, địch kéo đến từ mọi phía
+        /// thành đợt ngày càng đông, không có điểm kết thúc — diệt càng nhiều càng tốt, kỷ lục lưu trên máy.
+        /// Mẫu lính (MauDich, ẩn) được nối thành lính thật rồi nhân bản theo đợt (EndlessObjective).
+        static void BuildM6()
+        {
+            SetupScene(night: false);
+            var env = Group("Environment");
+            var bag = Mat("Sandbag", SandbagColor);
+            for (int i = 0; i < 16; i++)
+            {
+                if (i % 4 == 0) continue; // 4 lối ra
+                float a = i * Mathf.PI * 2f / 16f;
+                var b = Box($"BaoCat_{i}", new Vector3(Mathf.Cos(a) * 8f, .4f, Mathf.Sin(a) * 8f), new Vector3(2.8f, .8f, .8f), bag, env);
+                b.transform.rotation = Quaternion.Euler(0, 90f - a * Mathf.Rad2Deg, 0);
+            }
+            var player = Spawn(new Vector3(0, 0, 0), 0);
+
+            var templates = Group("MauDich");
+            for (int i = 0; i < 6; i++)
+                Dummy($"MauLinh_{i}", new Vector3(-70 + i * 3f, 0, 80), TargetKind.Infantry, 100, templates);
+            templates.gameObject.SetActive(false);
+
+            Spawner(Points(-6, 6, -6, 6, 8, 0f), StandardRewards("W-MAT49"));
+            var endless = Make<EndlessObjective>("Tiêu diệt càng nhiều địch càng tốt — địch kéo đến vô hạn");
+            SetRef(endless, "templates", templates);
+            Mission("M6", "Thử thách vô hạn", "", "", player, true, endless);
         }
 
         /// Sandbox: thử mọi thứ ở một chỗ (không thuộc chiến dịch).

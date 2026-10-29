@@ -44,7 +44,7 @@ namespace DBP.Upgrades
             if (HasProfile) Repository.Unlock(nextMissionId);
             else if (!string.IsNullOrEmpty(nextMissionId) && !Data.unlockedMissions.Contains(nextMissionId)) Data.unlockedMissions.Add(nextMissionId);
         }
-        public static bool IsUnlocked(string missionId) => UnlockAllForPlaytest || Data.unlockedMissions.Contains(missionId);
+        public static bool IsUnlocked(string missionId) => missionId == "M6" || UnlockAllForPlaytest || Data.unlockedMissions.Contains(missionId);
 
         /// Chơi thử: mở mọi màn để cả nhóm góp ý một lượt. Bản build mặc định bật, Editor mặc định tắt
         /// (để test luật mở màn vẫn đúng). Đổi trong màn Cài đặt; không ghi vào hồ sơ.
