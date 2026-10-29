@@ -176,11 +176,20 @@ namespace DBP.Tests
         {
             yield return Begin("M5_ChieuMungBay");
             var river = GameObject.Find("SongNamRom").GetComponent<Collider>().bounds;
-            foreach (float z in new[] { river.min.z + 1.5f, river.max.z - 1.5f })
+            var terrain = Object.FindAnyObjectByType<Terrain>();
+            Assert.IsNotNull(terrain, "Màn 5 có địa hình thật");
+            // Đi từ giữa sông lên mỗi bờ: mặt bước (đáy đất hoặc mặt nước) không dốc quá 45°
+            foreach (int side in new[] { -1, 1 })
             {
-                Assert.IsTrue(Physics.Raycast(new Vector3(-20f, 5f, z), Vector3.down, out var hit, 10f), "Có dốc bờ sông");
-                Assert.That(hit.point.y, Is.InRange(river.max.y + 0.2f, -0.2f), "Giữa dốc phải nằm giữa lòng sông và mặt bờ");
-                Assert.Less(Vector3.Angle(hit.normal, Vector3.up), 40f, "Dốc thoải để leo lên được");
+                float prev = float.NaN;
+                for (float d = 0f; d <= river.extents.z + 4f; d += .25f)
+                {
+                    var p = new Vector3(-20f, 0, river.center.z + side * d);
+                    float h = Mathf.Max(terrain.SampleHeight(p) + terrain.transform.position.y, river.max.y);
+                    if (!float.IsNaN(prev)) Assert.Less(Mathf.Abs(h - prev), .25f, $"Bờ {(side < 0 ? "nam" : "bắc")} dốc quá tại {p.z:0.0}");
+                    prev = h;
+                }
+                Assert.AreEqual(0f, prev, .4f, "Lên tới mặt bờ");
             }
         }
 
@@ -230,6 +239,32 @@ namespace DBP.Tests
                 var normal = Object.FindObjectsByType<Health>(FindObjectsSortMode.None).First(h => h.Kind == TargetKind.Infantry && !h.GetComponent<OfficerLeader>());
                 Assert.Greater(boss.GetComponent<Health>().Max, normal.Max * 4f, "Trùm máu rất trâu");
                 Assert.IsNotNull(GameObject.Find("BossHudCanvas"), "Có thanh máu trùm");
+            }
+        }
+
+        /// Màn 2–4: địch không đứng yên — đợt phản kích tiến đánh ngay; lính gác / lính hào thấy bộ đội thì giao chiến.
+        [UnityTest] public IEnumerator Maps234_EnemiesEngageAllies_InsteadOfStandingStill()
+        {
+            yield return Begin("M2_GiuDocLap");
+            float end = Time.realtimeSinceStartup + 12f;
+            while (Time.realtimeSinceStartup < end && !SoldierAI.All.Any(s => s && s.isActiveAndEnabled && s.CurrentState != SoldierAI.State.Idle)) yield return null;
+            Assert.IsTrue(SoldierAI.All.Any(s => s && s.isActiveAndEnabled && s.CurrentState != SoldierAI.State.Idle), "M2: đợt phản kích phải tiến đánh");
+
+            foreach (var (scene, kind) in new[] { ("M3_DoiED", typeof(SentryAI)), ("M4_LongHao", typeof(TrenchSoldierAI)) })
+            {
+                yield return Begin(scene);
+                var enemy = (MonoBehaviour)Object.FindObjectsByType(kind, FindObjectsSortMode.None).Cast<MonoBehaviour>()
+                    .First(e => e.isActiveAndEnabled && !e.GetComponent<Health>().IsDead);
+                var ally = ComradeFollower.All.First();
+                var p = enemy.transform.position + enemy.transform.forward * 8f;
+                if (UnityEngine.AI.NavMesh.SamplePosition(p, out var hit, 6f, UnityEngine.AI.NavMesh.AllAreas)) p = hit.position;
+                ally.GetComponent<UnityEngine.AI.NavMeshAgent>().Warp(p);
+                end = Time.realtimeSinceStartup + 4f;
+                while (Time.realtimeSinceStartup < end && !(enemy.TryGetComponent<SoldierAI>(out var s0) && s0.isActiveAndEnabled)) yield return null;
+                Assert.IsTrue(enemy.TryGetComponent<SoldierAI>(out var s) && s.isActiveAndEnabled, $"{scene}: thấy bộ đội thì chuyển sang tiến đánh");
+                yield return null; yield return null;
+                Assert.AreNotEqual(SoldierAI.State.Idle, s.CurrentState, $"{scene}: không đứng yên");
+                Assert.IsFalse(enemy.enabled, $"{scene}: AI cũ nhường quyền");
             }
         }
 

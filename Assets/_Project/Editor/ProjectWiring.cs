@@ -25,6 +25,7 @@ namespace DBP.EditorTools
         static readonly List<(string name, Func<string, string> step)> Steps = new List<(string, Func<string, string>)>
         {
             ("Giao diện câu hỏi T18", WireQuizPanel),
+            ("Địa hình chiến trường (Màn 2–5)", WireTerrain),
             ("Môi trường T41–T60, sửa Màn 1", WireDressing),
             ("Không khí bi tráng T44–T60", WireAtmosphere),
             ("AI & chiến đấu T07–T59, model T32–T33", WireCombat),

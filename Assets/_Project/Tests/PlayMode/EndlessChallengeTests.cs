@@ -31,6 +31,7 @@ namespace DBP.Tests
             Assert.GreaterOrEqual(wave.Count, 4, "Đợt 1 có ít nhất 4 lính");
             Assert.IsTrue(wave.All(s => Vector3.Distance(s.transform.position, mission.Player.transform.position) > 30f), "Địch xuất hiện ở xa, quanh trận địa");
             Assert.IsTrue(wave.All(s => s.CurrentState != SoldierAI.State.Idle), "Địch mới tới là tiến đánh ngay");
+            Assert.IsFalse(wave.Any(s => s.GetComponent<OfficerLeader>()), "Đợt 1 chỉ có lính thường (sĩ quan từ đợt 2)");
 
             foreach (var s in wave) s.Health.TakeDamage(9999f, DamageType.Bullet, s.transform.position);
             yield return null; yield return null;

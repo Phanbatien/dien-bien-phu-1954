@@ -25,7 +25,7 @@ namespace DBP.EditorTools
             var notes = new List<string>();
             if (sceneName.StartsWith("M3")) notes.Add(DressHills(root));
             if (sceneName.StartsWith("M2")) notes.Add(DressM2(root));
-            if (sceneName.StartsWith("M5")) notes.Add(RiverBanks(root));
+            if (sceneName.StartsWith("M5") && !HasBattlefieldTerrain) notes.Add(RiverBanks(root)); // có địa hình thì lòng sông đã thoải
             notes.Add($"{FallenTrees(root, rng, keep, area)} cây gãy đổ / cháy");
             notes.Add(WireWarMap(root, sceneName, rng, keep, area));
             return string.Join(", ", notes.Where(n => !string.IsNullOrEmpty(n)));

@@ -51,6 +51,7 @@ namespace DBP.EditorTools
             group.SetParent(root, false);
             var notes = new List<string>();
             if (sceneName.StartsWith("M4")) notes.Add(BuildTrenches(group, rng, keep));
+            notes.Add(ComposeBattlefield(group, sceneName, keep)); // bố cục có chủ đích quanh tuyến đánh (M2, M3, M5)
 
             var extras = new List<Scatter>(WarMapCommon);
             if (sceneName.StartsWith("M5")) extras.Add(new Scatter(2, 5.4f, true, 0f, "Vehicles/SM_Veh_Artillery_01"));
@@ -92,6 +93,9 @@ namespace DBP.EditorTools
             // Nước hố bom của gói sáng như tuyết trên nền đất → nước bùn tối, bóng
             if (prefab.Contains("Crater_Water"))
                 foreach (var r in go.GetComponentsInChildren<Renderer>()) r.sharedMaterial = MuddyWater();
+            // Ụ đất / đất xới của gói màu xám sáng → màu đất khớp địa hình
+            if (prefab.Contains("Mound") || prefab.Contains("Trench_Dirt"))
+                foreach (var r in go.GetComponentsInChildren<Renderer>()) r.sharedMaterial = Earth();
             Settle(go, cover);
             return true;
         }
@@ -190,8 +194,8 @@ namespace DBP.EditorTools
                     string piece = rng.Next(3) == 0 ? "Environment/SM_Env_Trench_Deep_Straight_Insert_02_Dirt" : "Environment/SM_Env_Trench_Deep_Straight_Insert_02";
                     if (Raw(group, piece, pivot, yaw, new Vector3(1f, sy, step / PieceLen))) pieces++;
                 }
-                // Ụ đất đắp sau vách che mép tấm vách, dốc xuống mặt đất
-                for (float d = -len * .5f + 5f; d < len * .5f; d += 10f)
+                // Ụ đất đắp sau vách che mép tấm vách, dốc xuống mặt đất (có địa hình thì hào đã chìm trong đất)
+                if (!HasBattlefieldTerrain) for (float d = -len * .5f + 5f; d < len * .5f; d += 10f)
                 {
                     var along = alongZ ? new Vector3(0, 0, d) : new Vector3(d, 0, 0);
                     var p = new Vector3(inner.x, b.min.y, inner.z) + along + outward * 3.6f;
@@ -200,7 +204,7 @@ namespace DBP.EditorTools
                 }
                 wall.enabled = false;
                 // Hai đầu vách: ụ đất che mặt cắt của tấm vách
-                foreach (int end in new[] { -1, 1 })
+                if (!HasBattlefieldTerrain) foreach (int end in new[] { -1, 1 })
                 {
                     var along = (alongZ ? Vector3.forward : Vector3.right) * end * (len * .5f + .4f);
                     var cap = Raw(group, "Environment/SM_Env_Trench_Mound_01", new Vector3(inner.x, b.min.y, inner.z) + along + outward * 1.6f, yaw, new Vector3(1f, b.size.y / .84f, 1f));

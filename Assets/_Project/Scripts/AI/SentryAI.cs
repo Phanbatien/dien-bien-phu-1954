@@ -128,6 +128,12 @@ namespace DBP.AI
                 BecomeSuspicious(player.position);
                 return;
             }
+            // Bộ đội tới gần (thấy trong 22 m, hoặc nghe tiếng súng / bước chân trong 12 m) thì báo động ngay
+            if (Time.time >= nextAllyCheck)
+            {
+                nextAllyCheck = Time.time + .3f;
+                if (AllyNear()) { EnterAlert(); return; }
+            }
 
             // Đi theo các waypoints tuần tra
             if (waypoints != null && waypoints.Length > 0 && agent != null && agent.enabled)
@@ -194,14 +200,8 @@ namespace DBP.AI
             // Báo động cho các nhóm xung quanh
             AlertNearby();
 
-            // Nếu có SoldierAI trên cùng đối tượng, chuyển giao quyền điều khiển
-            if (soldierAI != null)
-            {
-                soldierAI.enabled = true;
-                soldierAI.SetState(SoldierAI.State.Shoot);
-                // Vô hiệu hóa SentryAI để tránh xung đột vòng lặp Update
-                enabled = false;
-            }
+            // Giao quyền cho SoldierAI (thêm nếu chưa có): tiến đánh, bắn cả bộ đội; SentryAI tự tắt
+            soldierAI = SoldierAI.TakeOver(this, eyePoint, muzzle, DamageMul, player ? player.position : transform.position);
         }
 
         void TickAlertCombat()
@@ -216,6 +216,22 @@ namespace DBP.AI
                 nextFireAt = Time.time + fireInterval;
                 TryFire();
             }
+        }
+
+        float nextAllyCheck;
+
+        bool AllyNear()
+        {
+            var eye = eyePoint ? eyePoint.position : transform.position + Vector3.up * 1.5f;
+            foreach (var c in ComradeFollower.All)
+            {
+                if (!c || c.IsDead) continue;
+                var to = c.transform.position + Vector3.up * 1.2f - eye;
+                float d = to.magnitude;
+                if (d < 12f) return true;
+                if (d < 22f && !Physics.Raycast(eye, to / d, d, sightMask, QueryTriggerInteraction.Ignore)) return true;
+            }
+            return false;
         }
 
         void TryFire()
