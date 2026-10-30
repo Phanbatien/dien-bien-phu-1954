@@ -36,10 +36,10 @@ namespace DBP.AI
         /// Lựu đạn chưa nổ: lính địch thấy thì chạy tránh.
         public static readonly System.Collections.Generic.List<Grenade> Live = new System.Collections.Generic.List<Grenade>();
         public float BlastRadius => blastRadius;
-        /// Bộc phá: bán kính, sát thương và cỡ nổ nhân power, ngòi ngắn hơn. Gọi ngay sau Instantiate.
+        /// Bộc phá: bán kính và cỡ nổ nhân power, ngòi ngắn hơn. Gọi ngay sau Instantiate.
         public void Boost(float power)
         {
-            blastRadius *= power; maxDamage *= power; blastForce *= power;
+            blastRadius *= power; blastForce *= power; // nổ rộng hơn nhưng không mạnh hơn: đứng sát vẫn sống nếu đầy máu
             fuseSec = Mathf.Min(fuseSec, 2.2f);
             boost = power;
             transform.localScale *= 1.6f;

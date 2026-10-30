@@ -24,7 +24,7 @@ namespace DBP.Weapons
         {
             var current = weapons ? weapons.Inventory.Current : null;
             if (current == null || !arms) return;
-            arms.ShowModel(current.Def.stats.scopeZoom > 1f ? "VM_Scoped" : current.Def.Automatic ? "VM_Smg" : "VM_Rifle");
+            arms.ShowModel(current.Def.id == "W-BAZOOKA" ? "VM_Bazooka" : current.Def.stats.scopeZoom > 1f ? "VM_Scoped" : current.Def.Automatic ? "VM_Smg" : "VM_Rifle");
         }
     }
 }

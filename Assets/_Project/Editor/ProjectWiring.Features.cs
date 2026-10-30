@@ -195,41 +195,7 @@ namespace DBP.EditorTools
             var gun = GameObject.Find("USungMay");
             if (gun)
             {
-                var old = gun.transform.Find("ModelSungMay");
-                if (old) Object.DestroyImmediate(old.gameObject);
-                gun.GetComponent<MeshRenderer>().enabled = false;
-                var model = UnscaledChild(gun.transform, "ModelSungMay");
-                model.name = "ModelSungMay";
-                // Súng máy hạng nặng trên giá ba chân (War Map); không có gói thì dùng LMG + giá tự dựng
-                var hmg = PlaceFitted(model, WarMap + "Weapons/SM_Wep_German_HeavyMachineGun_Tripod_01.prefab", new Vector3(0, -0.77f, 0), 90f, 1.5f);
-                var lmg = hmg ? null : PlaceFitted(model, LmgPreset, Vector3.zero, 90f, 1.35f) ?? PlaceFitted(model, LmgModelPath, Vector3.zero, 90f, 1.35f);
-                if (lmg) { lmg.transform.localPosition = new Vector3(0, -0.05f, 0); var lb = WorldBounds(lmg); lmg.transform.position += Vector3.up * (gun.transform.position.y - lb.center.y); }
-                var metal = darkMat;
-                // Giá ba chân, dây đạn vắt ra, hòm đạn dưới chân
-                for (int i = 0; i < (hmg ? 0 : 3); i++)
-                {
-                    float a = (90f + i * 120f) * Mathf.Deg2Rad;
-                    var foot = new Vector3(Mathf.Cos(a) * 0.7f, -0.65f, Mathf.Sin(a) * 0.7f - 0.1f);
-                    var leg = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                    Object.DestroyImmediate(leg.GetComponent<Collider>());
-                    leg.transform.SetParent(model, false);
-                    leg.transform.localPosition = foot * 0.5f + new Vector3(0, -0.12f, 0);
-                    leg.transform.localRotation = Quaternion.FromToRotation(Vector3.up, (new Vector3(0, -0.12f, 0) - foot).normalized);
-                    leg.transform.localScale = new Vector3(0.04f, foot.magnitude * 0.5f, 0.04f);
-                    leg.GetComponent<Renderer>().sharedMaterial = metal;
-                }
-                var brass = LoadOrMakeMat("DongDan", new Color(0.72f, 0.56f, 0.24f));
-                for (int i = 0; i < 9; i++)
-                {
-                    var round = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                    Object.DestroyImmediate(round.GetComponent<Collider>());
-                    round.transform.SetParent(model, false);
-                    round.transform.localPosition = new Vector3(0.12f + i * 0.035f, -0.05f - i * i * 0.004f, 0.05f);
-                    round.transform.localRotation = Quaternion.Euler(0, 0, 90);
-                    round.transform.localScale = new Vector3(0.018f, 0.04f, 0.018f);
-                    round.GetComponent<Renderer>().sharedMaterial = brass;
-                }
-                PlaceFitted(model, AmmoBoxPrefab, new Vector3(0.45f, -0.75f, -0.2f), 15f, 0.55f);
+                DressMountedGun(gun);
                 notes.Add("đại liên trên giá ba chân");
             }
             int fence = 0;

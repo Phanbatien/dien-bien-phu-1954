@@ -21,7 +21,9 @@ namespace DBP.Player
         /// Điểm xuất phát của tia ngắm từ camera.
         public static Vector3 AimOrigin(Transform cam) => cam.position + cam.forward * (current ? current.aimSkip : 0f);
         /// Đầu nòng súng trên thân nhân vật (góc thứ ba) để vẽ lửa đầu nòng, đạn vạch.
-        public static Transform Muzzle => current && ThirdPerson ? current.muzzle : null;
+        public static Transform Muzzle => current && ThirdPerson ? current.ActiveMuzzle : null;
+        /// Đang ngồi súng máy: ẩn tay + súng cá nhân, chỉ thấy khẩu súng máy.
+        public static bool HideArms { get; set; }
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Install()
@@ -36,7 +38,9 @@ namespace DBP.Player
             if (body && !body.GetComponent<PlayerView>()) body.gameObject.AddComponent<PlayerView>();
         }
 
-        Transform pivot, cam, muzzle;
+        Transform pivot, cam, muzzle, bodyRifle, bodyBazooka, bazookaMuzzle;
+        DBP.Weapons.WeaponController weapons;
+        Transform ActiveMuzzle => bodyBazooka && bodyBazooka.gameObject.activeSelf && bazookaMuzzle ? bazookaMuzzle : muzzle;
         Vector3 camRest;
         float aimSkip, nextArmsScan;
         readonly List<Renderer> bodyRenderers = new List<Renderer>();
@@ -45,6 +49,7 @@ namespace DBP.Player
         void Awake()
         {
             current = this;
+            HideArms = false; // màn mới không còn ngồi súng máy
             pivot = transform.Find("CameraPivot");
             var c = GetComponentInChildren<Camera>();
             if (c) { cam = c.transform; camRest = cam.localPosition; }
@@ -53,7 +58,14 @@ namespace DBP.Player
             if (body)
             {
                 bodyRenderers.AddRange(body.GetComponentsInChildren<Renderer>(true));
-                foreach (var t in body.GetComponentsInChildren<Transform>(true)) if (t.name == "Muzzle") muzzle = t;
+                foreach (var t in body.GetComponentsInChildren<Transform>(true))
+                {
+                    if (t.name == "AlliedRifle") bodyRifle = t;
+                    else if (t.name == "BazookaThan") bodyBazooka = t;
+                }
+                if (bodyRifle) muzzle = bodyRifle.Find("Muzzle");
+                if (bodyBazooka) bazookaMuzzle = bodyBazooka.Find("Muzzle");
+                weapons = GetComponentInChildren<DBP.Weapons.WeaponController>();
             }
             ThirdPerson = PlayerPrefs.GetInt(Key, 0) == 1;
         }
@@ -85,7 +97,10 @@ namespace DBP.Player
                 var arms = FindAnyObjectByType<FirstPersonArms>();
                 armsRenderers = arms ? arms.GetComponentsInChildren<Renderer>(true) : new Renderer[0];
             }
-            foreach (var r in armsRenderers) if (r) r.forceRenderingOff = ThirdPerson;
+            foreach (var r in armsRenderers) if (r) r.forceRenderingOff = ThirdPerson || HideArms;
+            bool holdsBazooka = weapons && weapons.Inventory != null && weapons.Inventory.Current != null && weapons.Inventory.Current.Def.id == "W-BAZOOKA";
+            if (bodyBazooka && bodyBazooka.gameObject.activeSelf != holdsBazooka) bodyBazooka.gameObject.SetActive(holdsBazooka);
+            if (bodyRifle && bodyRifle.gameObject.activeSelf == holdsBazooka) bodyRifle.gameObject.SetActive(!holdsBazooka);
 
             if (!ThirdPerson)
             {

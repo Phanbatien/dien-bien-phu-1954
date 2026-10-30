@@ -21,7 +21,7 @@ namespace DBP.Tests
             var weapons = cam.GetComponent<WeaponController>();
             var arms = Object.FindAnyObjectByType<FirstPersonArms>();
             string dir = System.Environment.GetEnvironmentVariable("SHOT_DIR");
-            foreach (var (id, model) in new[] { ("W-MOSIN", "VM_Rifle"), ("W-MAT49", "VM_Smg"), ("W-MOSIN-SCOPE", "VM_Scoped") })
+            foreach (var (id, model) in new[] { ("W-MOSIN", "VM_Rifle"), ("W-MAT49", "VM_Smg"), ("W-MOSIN-SCOPE", "VM_Scoped"), ("W-BAZOOKA", "VM_Bazooka") })
             {
                 weapons.Inventory.GiveWeapon(WeaponCatalog.Get(id), 30);
                 yield return null; yield return null;

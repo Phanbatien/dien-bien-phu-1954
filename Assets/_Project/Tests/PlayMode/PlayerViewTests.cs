@@ -75,6 +75,55 @@ namespace DBP.Tests
             knife.gameObject.SetActive(false);
         }
 
+        [UnityTest] public IEnumerator M2_MountedGun_FollowsAim_KicksWhenFiring_AndBazookaHasModel()
+        {
+            yield return Begin("M2_GiuDocLap");
+            var gun = Object.FindAnyObjectByType<DBP.Weapons.MountedGun>();
+            var pivot = gun.transform.Find("ModelSungMay/NongSung");
+            Assert.IsNotNull(pivot, "Súng máy có phần nòng xoay");
+            Assert.IsNotNull(pivot.Find("DauNong"), "Có đầu nòng để đặt lửa");
+            Assert.IsNotNull(pivot.Find("DayDan"), "Có dây đạn");
+            var bounds = pivot.GetComponentsInChildren<Renderer>().Select(r => r.bounds).Aggregate((a, b) => { a.Encapsulate(b); return a; });
+            Assert.Greater(bounds.size.z, 1.2f, "Thân súng đủ lớn để thấy rõ");
+            var player = Object.FindAnyObjectByType<FirstPersonController>();
+            var interactor = player.GetComponent<DBP.Interaction.Interactor>();
+            gun.Interact(interactor);
+            yield return null;
+            Assert.IsTrue(PlayerView.HideArms, "Ngồi súng máy thì ẩn tay + súng cá nhân");
+            var cam = Camera.main.transform;
+            float eyeGap = Vector3.Distance(cam.position, pivot.position);
+            Assert.Less(eyeGap, 1.5f, "Súng ở ngay trước mắt khi ngồi");
+            float end = Time.realtimeSinceStartup + 1f;
+            while (Time.realtimeSinceStartup < end) yield return null;
+            Assert.Less(Quaternion.Angle(pivot.rotation, cam.rotation), 3f, "Nòng theo tâm ngắm");
+            Shot(cam.GetComponent<Camera>(), "sung_may_ngoi");
+
+            var supply = GameObject.Find("DiemCap_Bazooka");
+            Assert.IsNotNull(supply);
+            Assert.IsFalse(supply.GetComponent<MeshRenderer>().enabled, "Khối xám đã ẩn");
+            Assert.IsNotNull(supply.transform.Find("ModelBazooka/Bazooka"), "Điểm cấp có ống phóng thật");
+            PlayerView.HideArms = false;
+        }
+
+        [UnityTest] public IEnumerator Bazooka_ShowsOnBody_InThirdPerson()
+        {
+            yield return Begin("M1_HimLam");
+            var player = Object.FindAnyObjectByType<FirstPersonController>();
+            var weapons = player.GetComponentInChildren<DBP.Weapons.WeaponController>();
+            weapons.Inventory.GiveWeapon(DBP.Weapons.WeaponCatalog.Get("W-BAZOOKA"), 4);
+            PlayerView.Set(true);
+            yield return null; yield return null;
+            var body = player.transform.Find("ThanNhanVat");
+            var baz = body.GetComponentsInChildren<Transform>(true).First(t => t.name == "BazookaThan");
+            var rifle = body.GetComponentsInChildren<Transform>(true).First(t => t.name == "AlliedRifle");
+            Assert.IsTrue(baz.gameObject.activeInHierarchy, "Cầm bazooka: thân nhân vật hiện ống phóng");
+            Assert.IsFalse(rifle.gameObject.activeInHierarchy, "Súng trường ẩn đi");
+            Shot(Camera.main, "bazooka_goc_ba");
+            PlayerView.Set(false);
+            yield return null; yield return null;
+            Shot(Camera.main, "bazooka_goc_nhat");
+        }
+
         [UnityTest] public IEnumerator M5_BridgeDeck_IsTheWalkingSurface()
         {
             yield return Begin("M5_ChieuMungBay");

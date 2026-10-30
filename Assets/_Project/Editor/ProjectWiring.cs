@@ -30,6 +30,7 @@ namespace DBP.EditorTools
             ("Không khí bi tráng T44–T60", WireAtmosphere),
             ("AI & chiến đấu T07–T59, model T32–T33", WireCombat),
             ("Lưỡi lê thật trên súng (sau khi dựng bộ đội, lính)", s => $"{SceneBayonets()} lưỡi lê"),
+            ("Điểm cấp bazooka có model thật", s => DressBazookaSupply()),
             ("Vật liệu URP (không hồng tím)", WireUrpMaterials),
         };
 
