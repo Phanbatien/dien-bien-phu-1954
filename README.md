@@ -16,7 +16,10 @@ và **thế giới đứng yên trong lúc trả lời**.
    git lfs install
    git clone https://github.com/Phanbatien/dien-bien-phu-1954.git
    ```
-3. Unity Hub → **Add project from disk** → chọn thư mục `dien-bien-phu-1954`.
+   - **Không dùng "Download ZIP"** của GitHub: ZIP không có file Git LFS (ảnh, font, model) → mặt đất / tay nhân vật trắng, mất chữ giao diện.
+   - Đã clone mà chưa có Git LFS: cài Git LFS rồi chạy `git lfs install` và `git lfs pull` trong thư mục project, sau đó mở lại Unity.
+   - Đường dẫn thư mục dài (Windows): chạy `git config --global core.longpaths true` trước khi clone.
+3. Unity Hub → **Add project from disk** → chọn thư mục `dien-bien-phu-1954`. Mở project mà thiếu file LFS thì Unity tự báo kèm cách sửa (menu **DBP → Kiểm tra file Git LFS**).
 4. Mở scene `Assets/_Project/Scenes/Sandbox.unity` → bấm **Play**.
 
 | Phím | Tác dụng |
