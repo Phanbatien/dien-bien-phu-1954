@@ -9,13 +9,13 @@ using UnityEngine.UI;
 namespace DBP.AI
 {
     /// Trùm mỗi màn: lính địch đứng xa người chơi nhất (ưu tiên sĩ quan) được nâng thành trùm khi vào màn.
-    /// Trùm có mọi kỹ năng chỉ huy (OfficerLeader), to hơn, máu gấp 4 lần chỉ huy; hiện tên và thanh máu lớn
+    /// Trùm có mọi kỹ năng chỉ huy (OfficerLeader), to hơn, máu gấp 2,5 lần chỉ huy; hiện tên và thanh máu lớn
     /// trên đỉnh màn hình khi đã giao chiến hoặc đến gần trong 45 m.
     public sealed class Boss : MonoBehaviour
     {
         public static Boss Current { get; private set; }
         public string Title { get; private set; }
-        const float HealthMul = 4f, ShowRange = 45f;
+        const float HealthMul = 2.5f, ShowRange = 45f;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         static void Install()
