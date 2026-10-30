@@ -6,7 +6,7 @@ namespace DBP.AI
     /// Mìn do chỉ huy địch đặt: đĩa sắt nằm sát đất, người chơi hoặc đồng đội bước vào 1,3 m thì nổ.
     public sealed class Landmine : MonoBehaviour
     {
-        const float TriggerRadius = 1.3f, BlastRadius = 4f, PlayerDamage = 60f, AllyDamage = 80f;
+        const float TriggerRadius = 1.3f, BlastRadius = 4f, PlayerDamage = 40f, AllyDamage = 80f;
         static Material metal, plate;
         Transform player;
 

@@ -10,7 +10,7 @@ namespace DBP.AI
     /// Sĩ quan Pháp chỉ huy một tốp lính (model Officer): lính trong bán kính chỉ huy bắn nhanh và chuẩn hơn,
     /// sĩ quan phát hiện người chơi thì hô cả tốp vào trận. Sĩ quan gục thì lính quanh đó bắn loạn một lúc
     /// — hạ sĩ quan trước là chiến thuật đáng thưởng.
-    /// Từ 28/10 chỉ huy mạnh hơn: to hơn, máu và sát thương gấp đôi, né đạn, và khi giao chiến dùng kỹ năng:
+    /// Từ 28/10 chỉ huy mạnh hơn (giảm sức mạnh 31/10): to hơn, máu gấp đôi, sát thương +40%, né 20% đạn, và khi giao chiến dùng kỹ năng:
     /// gọi viện binh, đặt mìn, quăng bộc phá, gọi máy bay ném bom; vẫn xung phong và đâm dao như lính (SoldierAI).
     [RequireComponent(typeof(Health))]
     public class OfficerLeader : MonoBehaviour
@@ -23,9 +23,10 @@ namespace DBP.AI
         [Tooltip("Hệ số nhịp bắn và độ tản của lính trong bán kính chỉ huy (nhỏ hơn 1 = tốt hơn).")]
         public float fireBonus = 0.8f;
 
-        public const float DodgeChance = 0.35f;
-        const float BlastPower = 1.7f;
-        const int MaxReinforce = 2, MaxMines = 3;
+        public const float DodgeChance = 0.2f, DamageBonus = 1.4f;
+        const float BlastPower = 1.3f;
+        static float nextAirRaidAny; // cả màn chỉ một lệnh gọi máy bay mỗi 2 phút, dù có nhiều chỉ huy
+        const int MaxReinforce = 1, MaxMines = 2;
 
         Health health;
         SoldierAI soldier;
@@ -45,9 +46,9 @@ namespace DBP.AI
         {
             transform.localScale *= 1.15f;
             health.Configure(health.Kind, health.Max * 2f);
-            if (soldier) soldier.DamageMul = 2f;
-            if (sentry) sentry.DamageMul = 2f;
-            if (trench) trench.DamageMul = 2f;
+            if (soldier) soldier.DamageMul = DamageBonus;
+            if (sentry) sentry.DamageMul = DamageBonus;
+            if (trench) trench.DamageMul = DamageBonus;
             var p = GameObject.FindGameObjectWithTag("Player");
             if (p) player = p.transform;
         }
@@ -67,20 +68,20 @@ namespace DBP.AI
             {
                 shouted = true;
                 engagedAt = Time.time;
-                nextReinforce = Time.time + 6f; nextMine = Time.time + 4f; nextBlast = Time.time + 9f; nextAirRaid = Time.time + 15f;
+                nextReinforce = Time.time + 6f; nextMine = Time.time + 4f; nextBlast = Time.time + 12f; nextAirRaid = Time.time + 40f;
                 SoldierAI.AlertAround(transform.position, commandRadius * 1.6f, player.position);
             }
             var foe = soldier && soldier.isActiveAndEnabled ? soldier.FoePosition : player.position;
             float dist = Vector3.Distance(transform.position, foe);
 
             if (reinforced < MaxReinforce && Time.time >= nextReinforce) { nextReinforce = Time.time + 25f; Reinforce(); }
-            if (mines < MaxMines && Time.time >= nextMine && dist > 6f && dist < 30f) { nextMine = Time.time + 12f; PlaceMine(foe); }
+            if (mines < MaxMines && Time.time >= nextMine && dist > 6f && dist < 30f) { nextMine = Time.time + 18f; PlaceMine(foe); }
             if (Time.time >= nextBlast && dist > 7f && dist < 24f && SoldierAI.SafeToBlast(foe, soldier))
             {
-                nextBlast = Time.time + 14f;
+                nextBlast = Time.time + 22f;
                 if (SoldierAI.Lob(this, foe, BlastPower)) DBP.UI.CampaignNotices.Show("Chỉ huy địch quăng bộc phá!");
             }
-            if (Time.time >= nextAirRaid) { nextAirRaid = Time.time + 75f; DBP.Missions.AirRaid.Now(); Gesture(); DBP.UI.CampaignNotices.Show("Chỉ huy địch gọi máy bay yểm trợ!"); }
+            if (Time.time >= nextAirRaid && Time.time >= nextAirRaidAny) { nextAirRaid = nextAirRaidAny = Time.time + 120f; DBP.Missions.AirRaid.Now(); Gesture(); DBP.UI.CampaignNotices.Show("Chỉ huy địch gọi máy bay yểm trợ!"); }
         }
 
         /// Né: lách ngang 1,5 m.

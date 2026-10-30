@@ -63,6 +63,7 @@ namespace DBP.EditorTools
                 }
             }
             finally { EditorSceneManager.ClosePreviewScene(preview); }
+            BuildBazookaViewModel(rebuild);
         }
         static void Anchor(Transform root, string name, Vector3 local)
         {

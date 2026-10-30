@@ -219,7 +219,7 @@ namespace DBP.Tests
                 SoldierAI.AlertAround(officer.transform.position, 1f, player.transform.position);
                 yield return null; yield return null;
                 if (!oh.IsDead) Assert.AreEqual(OfficerLeader.DodgeChance, oh.DodgeChance, "Giao chiến thì chỉ huy biết né đạn");
-                Assert.AreEqual(2f, officer.GetComponent<SoldierAI>().DamageMul, "Chỉ huy sát thương gấp đôi");
+                Assert.AreEqual(OfficerLeader.DamageBonus, officer.GetComponent<SoldierAI>().DamageMul, "Chỉ huy sát thương cao hơn lính");
                 Assert.Greater(oh.Max, normalMax, "Chỉ huy máu trâu hơn");
             }
         }
@@ -237,7 +237,7 @@ namespace DBP.Tests
                 Assert.IsTrue(boss.Title.StartsWith("TRÙM"));
                 if (!boss.isActiveAndEnabled) continue; // trùm thuộc đợt sau, chưa xuất hiện
                 var normal = Object.FindObjectsByType<Health>(FindObjectsSortMode.None).First(h => h.Kind == TargetKind.Infantry && !h.GetComponent<OfficerLeader>());
-                Assert.Greater(boss.GetComponent<Health>().Max, normal.Max * 4f, "Trùm máu rất trâu");
+                Assert.Greater(boss.GetComponent<Health>().Max, normal.Max * 3f, "Trùm máu trâu hơn hẳn lính");
                 Assert.IsNotNull(GameObject.Find("BossHudCanvas"), "Có thanh máu trùm");
             }
         }
