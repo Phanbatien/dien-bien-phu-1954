@@ -25,16 +25,24 @@ namespace DBP.AI
         public float fireDamage = 18f;
         public float meleeDamage = 50f;
         public Transform muzzle;
+        [Min(1)] public int magazineSize = 5;
+        [Min(.1f)] public float reloadSeconds = 4.1f;
 
         public float Health { get; private set; }
         public bool IsDead => Health <= 0f;
         public SoldierAI Target => target;
-        public bool IsCrouching => !IsDead && Time.time < crouchUntil;
+        /// Đang đứng yên bắn vào địch thấy được: ngồi bắn (clip Crouch Fire Rifle). Đi lại, rảnh hay trúng đạn thì đứng.
+        public bool IsFiringStance => !IsDead && target && !IsReloading && Time.time - lastSeenAt < 1f && agent && agent.velocity.sqrMagnitude < .5f;
+        public bool IsReloading => !IsDead && Time.time < reloadUntil;
 
         NavMeshAgent agent;
         Animator animator;
         static readonly int ShootAnimation = Animator.StringToHash("Shoot");
-        bool hasShootAnimation;
+        static readonly int ReloadAnimation = Animator.StringToHash("Reload");
+        static readonly int FireVariant = Animator.StringToHash("FireVariant");
+        bool hasShootAnimation, hasReloadAnimation, hasFireVariant, reloadAnimationStarted;
+        int shotsFired;
+        float reloadStartsAt, reloadUntil;
         Transform player;
         SoldierAI target;
         float nextThinkAt, nextShotAt, crouchUntil, lastSeenAt, nextMeleeAt, nextSpotAt;
@@ -48,8 +56,14 @@ namespace DBP.AI
             animator = GetComponentInChildren<Animator>();
             if (animator)
                 foreach (var parameter in animator.parameters)
+                {
                     if (parameter.nameHash == ShootAnimation && parameter.type == AnimatorControllerParameterType.Trigger)
                         hasShootAnimation = true;
+                    if (parameter.nameHash == ReloadAnimation && parameter.type == AnimatorControllerParameterType.Trigger)
+                        hasReloadAnimation = true;
+                    if (parameter.nameHash == FireVariant && parameter.type == AnimatorControllerParameterType.Float)
+                        hasFireVariant = true;
+                }
             Health = maxHealth;
             nextShotAt = Time.time + Random.Range(1f, 3f);
             burst = Random.Range(2, 4);
@@ -81,7 +95,19 @@ namespace DBP.AI
 
         void Update()
         {
-            if (IsDead || !player || !agent.isOnNavMesh) return;
+            if (IsDead) return;
+            if (IsReloading)
+            {
+                if (agent.enabled && agent.isOnNavMesh) agent.ResetPath();
+                if (!reloadAnimationStarted && Time.time >= reloadStartsAt)
+                {
+                    animator.ResetTrigger(ShootAnimation);
+                    animator.SetTrigger(ReloadAnimation);
+                    reloadAnimationStarted = true;
+                }
+                return;
+            }
+            if (!player || !agent.enabled || !agent.isOnNavMesh) return;
             if (Time.time >= nextThinkAt) { nextThinkAt = Time.time + 0.3f; Think(); }
             if (!target) { Follow(); return; }
 
@@ -158,7 +184,10 @@ namespace DBP.AI
 
         void Fire()
         {
-            if (hasShootAnimation) animator.SetTrigger(ShootAnimation);
+            if (IsDead || IsReloading) return;
+            if (hasFireVariant) animator.SetFloat(FireVariant, Random.Range(0, 2));
+            // Ngồi bắn: clip toàn thân đã có động tác bắn, không chồng clip đứng bắn của thân trên
+            if (hasShootAnimation && !IsFiringStance) animator.SetTrigger(ShootAnimation);
             nextShotAt = Time.time + Random.Range(0.9f, 1.6f);
             var from = muzzle ? muzzle.position : transform.position + Vector3.up * 1.4f;
             var aimAt = target.transform.position + Vector3.up * 1.1f;
@@ -174,6 +203,15 @@ namespace DBP.AI
             CampaignAudio.Play(AudioCatalog.Weapon("W-MOSIN", Random.Range(0, 5)), from, true, 0.55f);
             if (hit && target.Health) target.Health.TakeAllyDamage(fireDamage * (crit ? 2f : 1f), DamageType.Bullet, end, crit);
             if (--burst <= 0) { burst = Random.Range(2, 4); crouchUntil = Time.time + Random.Range(1f, 2f); }
+            if (hasReloadAnimation && ++shotsFired >= Mathf.Max(1, magazineSize))
+            {
+                shotsFired = 0;
+                reloadStartsAt = Time.time + .25f;
+                reloadUntil = reloadStartsAt + Mathf.Max(.1f, reloadSeconds);
+                reloadAnimationStarted = false;
+                crouchUntil = Time.time;
+                nextShotAt = reloadUntil;
+            }
         }
 
         /// Chỗ nấp có tầm bắn tới mục tiêu, cách 8–25 m, không xa người chơi, không trùng đồng đội.

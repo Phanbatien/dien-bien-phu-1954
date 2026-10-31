@@ -82,8 +82,6 @@ namespace DBP.EditorTools
             Put(g, "Vehicles/SM_Veh_Small_Tank_01_Destroyed", 14f, 41f, -60f, 5.2f, true);
             Put(g, "Vehicles/SM_Veh_Artillery_01_Destroyed", 6f, 27f, 150f, 5.4f, true);
             Put(g, "Vehicles/SM_Veh_British_Plane_01_Destroyed", -22f, 45f, 20f, 8.7f, true);
-            Put(g, "Environment/SM_Env_Crater_Water_01", 9f, 17f, 0f, 6f, sink: -.02f);
-            Put(g, "Environment/SM_Env_Crater_Water_02", -6f, 38f, 0f, 5f, sink: -.02f);
             foreach (var (x, z) in new[] { (-4f, 30f), (10f, 35f), (-9f, 44f), (3f, 48f) }) Put(g, Barricades[(int)(z) % 3], x, z, x * 11f, 3.4f, true);
             foreach (var (x, z) in new[] { (-19f, 24f), (21f, 31f), (24f, 52f), (-26f, 56f), (-10f, 15f) }) Put(g, "Environment/SM_Env_Tree_Dead_04", x, z, z * 13f, 4.6f);
             // Trận địa Pháp phía bắc: chướng ngại, ụ đất, đại liên, cao xạ, pháo
@@ -121,8 +119,6 @@ namespace DBP.EditorTools
             Put(g, "Vehicles/SM_Veh_British_Tank_01_Destroyed", 13f, 50f, -25f, 8f, true);
             Put(g, "Vehicles/SM_Veh_Artillery_01_Destroyed", -14f, 28f, 120f, 5.4f, true);
             Put(g, "Vehicles/SM_Veh_German_Plane_01_Destroyed", 20f, 30f, -70f, 6.5f, true);
-            Put(g, "Environment/SM_Env_Crater_Water_01", 4f, 24f, 0f, 6f, sink: -.02f);
-            Put(g, "Environment/SM_Env_Crater_Water_02", -9f, 47f, 0f, 5f, sink: -.02f);
             foreach (var (x, z) in new[] { (-3f, 16f), (9f, 21f), (-17f, 40f) }) Put(g, "Environment/SM_Env_Trench_Mound_0" + (1 + (int)Mathf.Abs(x) % 4), x, z, x * 9f, 4.5f);
             foreach (var (x, z) in new[] { (-28f, 30f), (27f, 44f), (-30f, 80f), (32f, 62f) }) Put(g, "Environment/SM_Env_Tree_Dead_04", x, z, z * 7f, 4.6f);
             Put(g, "Vehicles/SM_Veh_Artillery_01", 0f, 96f, 180f, 5.4f, true);
@@ -136,8 +132,6 @@ namespace DBP.EditorTools
             Put(g, "Environment/SM_Env_Trench_Mound_02", -6f, 17f, 90f, 6f);
             Put(g, "Environment/SM_Env_Trench_Mound_01", 7f, 15f, 0f, 4.5f);
             Put(g, "Vehicles/SM_Veh_British_Tank_01_Destroyed", -22f, 20f, 60f, 8f, true);
-            Put(g, "Environment/SM_Env_Crater_Water_01", 18f, 22f, 0f, 6f, sink: -.02f);
-            Put(g, "Environment/SM_Env_Crater_Water_02", -16f, 6f, 0f, 5f, sink: -.02f);
             // Bờ bắc (địch): thép gai dọc bờ chừa đầu cầu; ổ đề kháng có ụ đất và đại liên
             Line(g, WireFences, -34f, 57f, 34f, 57f, 10f, 10f, (-6f, 6f));
             foreach (var x in new[] { -9f, 9f }) Put(g, Barricades[(int)Mathf.Abs(x) % 3], x, 60f, 0f, 3.4f, true);

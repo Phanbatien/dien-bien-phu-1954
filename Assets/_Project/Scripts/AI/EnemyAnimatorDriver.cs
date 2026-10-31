@@ -39,6 +39,9 @@ namespace DBP.AI
         Quaternion standRotation, fallRotation;
         Vector3 standPosition;
         const float FallSeconds = .75f;
+        [Tooltip("The death clip already animates the complete fall; skip the legacy transform fall.")]
+        public bool useAuthoredDeathAnimation;
+        float previousSpeed;
 
         void Awake()
         {
@@ -96,9 +99,12 @@ namespace DBP.AI
                 lastPosition = transform.position;
             }
             animator.SetFloat(Speed, speed, 0.15f, Time.deltaTime);
+            if (speed > .15f && previousSpeed <= .15f)
+                Trigger(Animator.StringToHash("StartWalking"));
+            previousSpeed = speed;
             SetBool(ClimbHash, climber && climber.IsClimbing || playerBody && playerBody.IsClimbing);
             SetBool(CrouchHash, playerBody ? playerBody.IsCrouching
-                : comrade ? comrade.IsCrouching
+                : comrade ? comrade.IsFiringStance
                 : trench ? trench.CurrentState == TrenchSoldierAI.State.HaoCover
                 : soldier && soldier.CurrentState == SoldierAI.State.Suppress);
         }
@@ -108,15 +114,22 @@ namespace DBP.AI
             if (fallTime < 0f)
             {
                 fallTime = 0f;
+                if (parameters.Contains(Animator.StringToHash("StartWalking")))
+                    animator.ResetTrigger("StartWalking");
                 // Có động tác gục thì khuỵu gối trong lúc đổ; không có thì đứng hình như cũ
                 if (parameters.Contains(DeadHash)) animator.SetTrigger(DeadHash);
                 else animator.speed = 0f;
+                if (useAuthoredDeathAnimation)
+                {
+                    for (int layer = 1; layer < animator.layerCount; layer++) animator.SetLayerWeight(layer, 0f);
+                }
                 standRotation = transform.localRotation;
                 standPosition = transform.localPosition;
                 // Ngã ngửa hoặc gục về trước, hơi xoay người để các xác không nằm thẳng hàng
                 float pitch = Random.value < .6f ? -90f : 90f;
                 fallRotation = Quaternion.Euler(pitch, Random.Range(-35f, 35f), Random.Range(-12f, 12f)) * standRotation;
             }
+            if (useAuthoredDeathAnimation) return;
             if (fallTime >= FallSeconds) return;
             fallTime += Time.deltaTime;
             float t = Mathf.Clamp01(fallTime / FallSeconds);

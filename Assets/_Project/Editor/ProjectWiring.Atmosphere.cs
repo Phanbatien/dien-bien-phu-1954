@@ -23,7 +23,7 @@ namespace DBP.EditorTools
 
         static string WireAtmosphere(string sceneName)
         {
-            if (!(sceneName.Length > 1 && sceneName[0] == 'M' && "12345".Contains(sceneName[1]))) return null;
+            if (!(sceneName.Length > 1 && sceneName[0] == 'M' && "123456".Contains(sceneName[1]))) return null;
             var old = GameObject.Find("Atmosphere");
             if (old) Object.DestroyImmediate(old);
             var root = new GameObject("Atmosphere").transform;

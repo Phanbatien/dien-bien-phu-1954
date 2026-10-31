@@ -18,6 +18,29 @@ namespace DBP.Tests
             ("Shoot", 1), ("Stab", 1), ("Punch", 1), ("Throw", 1), ("Hit", 1), ("Command", 1), ("Rally", 1),
         };
 
+        [UnityTest] public IEnumerator SuppliedClips_AreUsed_AlliesCrouchFire_EnemiesStabAndThrow()
+        {
+            yield return SceneManager.LoadSceneAsync("M1_HimLam"); yield return null; yield return null;
+            var allyClips = ComradeFollower.All.First().GetComponentInChildren<Animator>().runtimeAnimatorController.animationClips.Select(c => c.name).ToArray();
+            CollectionAssert.Contains(allyClips, "Crouch Fire Rifle", "Bộ đội ngồi bắn bằng clip thật");
+            foreach (var soldier in SoldierAI.All.Take(6))
+            {
+                var clips = soldier.GetComponentInChildren<Animator>().runtimeAnimatorController.animationClips.Select(c => c.name).ToArray();
+                CollectionAssert.Contains(clips, "Stabbing", "Địch đâm dao bằng clip thật");
+                CollectionAssert.Contains(clips, "Grenade Throw", "Địch ném lựu đạn bằng clip thật");
+            }
+        }
+
+        [UnityTest] public IEnumerator Allies_DoNotCrouch_WhenHitWithNoEnemyInSight()
+        {
+            yield return SceneManager.LoadSceneAsync("M1_HimLam"); yield return null; yield return null;
+            var ally = ComradeFollower.All.First();
+            var animator = ally.GetComponentInChildren<Animator>();
+            ally.TakeHit(1f); // trúng đạn: trước đây bộ đội ngồi xuống 1,2 giây
+            yield return null; yield return null;
+            Assert.IsFalse(animator.GetBool("Crouch"), "Trúng đạn mà không có địch trong tầm: không ngồi");
+        }
+
         [UnityTest] public IEnumerator EveryCharacter_HasActionAnimations_AndPosesDiffer()
         {
             yield return SceneManager.LoadSceneAsync("M1_HimLam"); yield return null; yield return null;

@@ -197,6 +197,13 @@ namespace DBP.EditorTools
 
         static void AddSoldierModel(Transform soldier, string prefabPath = InfantryPrefabPath)
         {
+            var supplied = AssetDatabase.LoadAssetAtPath<GameObject>(SuppliedCharacters
+                + (prefabPath == OfficerPrefabPath ? "EnemyLeader" : "Enemies") + "/Soldier.prefab");
+            if (supplied)
+            {
+                ReplaceSuppliedVisual(soldier, supplied);
+                return;
+            }
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
             if (!prefab) return;
             var root = UnscaledChild(soldier, "Model");
