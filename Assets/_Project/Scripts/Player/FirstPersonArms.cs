@@ -138,7 +138,7 @@ namespace DBP.Player
             if (models.Count > 0 || !rifle) return;
             foreach (var skin in GetComponentsInChildren<SkinnedMeshRenderer>(true)) skin.enabled = false;
             foreach (var r in rifle.GetComponentsInChildren<MeshRenderer>(true)) r.enabled = false;
-            foreach (var name in new[] { "VM_Rifle", "VM_Scoped", "VM_Smg" })
+            foreach (var name in new[] { "VM_Rifle", "VM_Scoped", "VM_Smg", "VM_Bazooka" })
             {
                 var prefab = Resources.Load<GameObject>("ViewModels/" + name);
                 if (!prefab) continue;
@@ -152,7 +152,7 @@ namespace DBP.Player
             ShowModel("VM_Rifle");
         }
 
-        /// Đổi bộ tay + súng hiển thị: "VM_Rifle", "VM_Scoped" hoặc "VM_Smg".
+        /// Đổi bộ tay + súng hiển thị: "VM_Rifle", "VM_Scoped", "VM_Smg" hoặc "VM_Bazooka".
         public void ShowModel(string name)
         {
             if (name == currentModel || !models.ContainsKey(name)) return;

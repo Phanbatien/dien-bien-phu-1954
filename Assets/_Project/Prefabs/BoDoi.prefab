@@ -980,7 +980,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 88be262114ab75a4f96e6c4df8a3f982, type: 3}
-  m_Name:
+  m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.AI.AlliedRifleGrip
   rifle: {fileID: 7834431691240221881}
   rightHand: {fileID: 5233682016268628992}

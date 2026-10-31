@@ -37,6 +37,18 @@ namespace DBP.EditorTools
                     foreach (var c in body.GetComponentsInChildren<Collider>(true)) Object.DestroyImmediate(c);
                     foreach (var r in body.GetComponentsInChildren<Renderer>(true)) r.shadowCastingMode = UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly;
                     body.GetComponent<Animator>().cullingMode = AnimatorCullingMode.AlwaysAnimate;
+                    // Bazooka trên tay nhân vật (góc thứ ba): cùng chỗ cầm với súng trường, bật khi đang dùng
+                    var rifle = body.GetComponentsInChildren<Transform>(true).FirstOrDefault(t => t.name == "AlliedRifle");
+                    if (rifle)
+                    {
+                        var baz = BuildBazooka("BazookaThan");
+                        baz.transform.SetParent(rifle.parent, false);
+                        baz.transform.localPosition = rifle.localPosition;
+                        baz.transform.localRotation = rifle.localRotation;
+                        var ls = rifle.parent.lossyScale;
+                        baz.transform.localScale = new Vector3(1f / ls.x, 1f / ls.y, 1f / ls.z);
+                        baz.SetActive(false);
+                    }
                 }
 
                 var cam = root.GetComponentInChildren<Camera>(true).transform;

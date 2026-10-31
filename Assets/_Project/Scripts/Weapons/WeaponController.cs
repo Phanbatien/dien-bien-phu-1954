@@ -146,11 +146,14 @@ namespace DBP.Weapons
             var gunMuzzle = DBP.Player.PlayerView.Muzzle;
             var fxFrom = gunMuzzle ? gunMuzzle.position : origin + cam.transform.forward * .75f + cam.transform.right * .16f - cam.transform.up * .12f;
             if (body) DBP.AI.EnemyAnimatorDriver.Play(body, "Shoot");
-            if (!Scoped || gunMuzzle) CombatEffects.Muzzle(fxFrom, cam.transform.rotation);
+            bool rocket = weapon.Def.id == "W-BAZOOKA";
+            if (!rocket && (!Scoped || gunMuzzle)) CombatEffects.Muzzle(fxFrom, cam.transform.rotation);
 
             bool struck = Physics.Raycast(origin, direction, out var hit, stats.range, hitMask, QueryTriggerInteraction.Ignore);
 
-            CombatEffects.Tracer(fxFrom, struck ? hit.point : origin + direction * (stats.range), false);
+            // Bazooka: đạn rocket bay thấy được, nổ khi tới đích (BazookaView lo lửa đầu và đuôi ống)
+            if (rocket) RocketFlight.Launch(fxFrom, struck ? hit.point : origin + direction * stats.range, struck);
+            else CombatEffects.Tracer(fxFrom, struck ? hit.point : origin + direction * (stats.range), false);
             ShotFired?.Invoke(origin, struck ? hit.point : origin + direction * stats.range);
 
             if (struck)
