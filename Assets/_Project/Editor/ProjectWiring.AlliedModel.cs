@@ -64,8 +64,8 @@ namespace DBP.EditorTools
 
                 // Fit the rifle in the supplied aiming pose, then retain that
                 // hand-relative grip while locomotion and recoil animate the rig.
-                var firingClip = animator.runtimeAnimatorController.animationClips
-                    .First(c => AssetDatabase.GetAssetPath(c) == AlliedAnimatedModelPath);
+                var firingClip = AssetDatabase.LoadAllAssetsAtPath(AlliedAnimatedModelPath).OfType<AnimationClip>()
+                    .First(c => !c.name.StartsWith("__preview__"));
                 firingClip.SampleAnimation(model, 0f);
                 var rightHand = animator.GetBoneTransform(HumanBodyBones.RightHand);
                 var leftHand = animator.GetBoneTransform(HumanBodyBones.LeftHand);
@@ -92,7 +92,9 @@ namespace DBP.EditorTools
                 agent.angularSpeed = 360f;
                 agent.stoppingDistance = .8f;
                 agent.avoidancePriority = 70;
-                root.AddComponent<ComradeFollower>().muzzle = muzzle;
+                var follower = root.AddComponent<ComradeFollower>();
+                follower.muzzle = muzzle;
+                if (HasSuppliedAlliedAnimations) ConfigureAlliedAnimation(follower);
                 return PrefabUtility.SaveAsPrefabAsset(root, ComradePrefabPath);
             }
             finally { EditorSceneManager.ClosePreviewScene(preview); }
