@@ -105,6 +105,8 @@ MonoBehaviour:
   fireDamage: 18
   meleeDamage: 50
   muzzle: {fileID: 654518118998701242}
+  magazineSize: 5
+  reloadSeconds: 4.1000004
 --- !u!1001 &5842412104604273608
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -931,7 +933,15 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
       insertIndex: -1
       addedObject: {fileID: 132328211826508508}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6605534427909656595}
   m_SourcePrefab: {fileID: 100100000, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
+--- !u!4 &803907984534265355 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6502182839619065283, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
+  m_PrefabInstance: {fileID: 5842412104604273608}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5233682016268628992 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1852576806548013000, guid: 13dcad1021d592942bab0375a08f3460, type: 3}
@@ -959,6 +969,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e8bbeea04f566e47a3fe80f5e9f210a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: DBP.Runtime::DBP.AI.EnemyAnimatorDriver
+  useAuthoredDeathAnimation: 1
+--- !u!114 &6605534427909656595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6761313762057942681}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88be262114ab75a4f96e6c4df8a3f982, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: DBP.Runtime::DBP.AI.AlliedRifleGrip
+  rifle: {fileID: 7834431691240221881}
+  rightHand: {fileID: 5233682016268628992}
+  leftHand: {fileID: 803907984534265355}
+  localGrip: {x: 0.010350439, y: -0.030134471, z: 0.010008408}
 --- !u!1001 &7169222696856305583
 PrefabInstance:
   m_ObjectHideFlags: 0
