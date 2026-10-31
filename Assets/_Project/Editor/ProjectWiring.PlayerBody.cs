@@ -75,7 +75,12 @@ namespace DBP.EditorTools
         static int SceneBayonets()
         {
             int n = 0;
-            foreach (var gun in All<Transform>().Where(t => (t.name.StartsWith("Rifle1") || t.name == "AlliedRifle") && t.GetComponentInParent<Animator>()).ToArray())
+            // Thân người chơi đã có lưỡi lê trong prefab. Gắn thêm trên bản trong scene thì mỗi lần dựng lại prefab, lưỡi lê
+            // mồ côi rơi về gốc Player và lơ lửng trước chân: dọn các bản đó, không gắn nữa.
+            foreach (var player in All<DBP.Player.FirstPersonController>())
+                foreach (var stray in player.GetComponentsInChildren<Transform>(true).Where(t => t.name == "LuoiLe_Model" && t.parent == player.transform).ToArray())
+                    Object.DestroyImmediate(stray.gameObject);
+            foreach (var gun in All<Transform>().Where(t => (t.name.StartsWith("Rifle1") || t.name == "AlliedRifle") && t.GetComponentInParent<Animator>() && !t.GetComponentInParent<DBP.Player.FirstPersonController>()).ToArray())
                 if (FitBayonet(gun)) n++;
             return n;
         }

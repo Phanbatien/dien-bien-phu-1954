@@ -23,11 +23,14 @@ namespace DBP.EditorTools
 
         static string WireTerrain(string sceneName)
         {
-            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5"))) return "";
+            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5") || sceneName.StartsWith("M6"))) return "";
+            // Màn 6: mẫu lính ẩn chỉ để nhân bản, dồn về giữa để không kéo lệch vùng rải đồ
+            var templatesRoot = All<Transform>().FirstOrDefault(t => t.name == "MauDich");
+            if (templatesRoot) { int k = 0; foreach (Transform t in templatesRoot) t.position = new Vector3(-4f + 1.6f * k++, 0f, 0f); }
             var old = GameObject.Find("DiaHinh");
             if (old) Object.DestroyImmediate(old);
             foreach (var r in All<Collider>().Where(c => c.name == "Ground" || c.name == "BoSongBen_Kia")) r.enabled = true; // đo lại từ đầu
-            var center = sceneName.StartsWith("M2") ? new Vector2(0, 30) : new Vector2(0, 45);
+            var center = sceneName.StartsWith("M2") ? new Vector2(0, 30) : sceneName.StartsWith("M6") ? Vector2.zero : new Vector2(0, 45);
             var origin = new Vector3(center.x - TerrainSize / 2f, -TerrainBase, center.y - TerrainSize / 2f);
             var rng = new System.Random(sceneName.GetHashCode());
 
@@ -70,6 +73,7 @@ namespace DBP.EditorTools
             var trenches = new List<Vector2[]>();
             if (sceneName.StartsWith("M2")) trenches.Add(Zigzag(-34, 34, 17f, 2.2f));
             if (sceneName.StartsWith("M3")) { trenches.Add(Zigzag(-34, -8, 11f, 2f)); trenches.Add(Zigzag(8, 34, 11f, 2f)); }
+            if (sceneName.StartsWith("M6")) { trenches.Add(Zigzag(-44, 44, 20f, 2.4f)); trenches.Add(Zigzag(-44, 44, -20f, 2.4f)); }
             // Màn 5: chiến hào bờ nam liền một dải, sâu hơn (đánh giữ hào mở màn); hào địch bờ bắc hai bên
             if (sceneName.StartsWith("M5")) { trenches.Add(Zigzag(-42, 42, 30f, 2.4f)); trenches.Add(Zigzag(-40, -16, 66f, 2f)); trenches.Add(Zigzag(16, 40, 66f, 2f)); }
 

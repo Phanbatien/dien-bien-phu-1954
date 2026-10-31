@@ -33,6 +33,7 @@ namespace DBP.EditorTools
             }
             else RebuildController(SoldierControllerPath, clips, null, mask);
             ApplyAlliedAnimationClips();
+            ApplyActionClips();
             AssetDatabase.SaveAssets();
         }
 

@@ -62,6 +62,9 @@ namespace DBP.Tests
             yield return Begin("M1_HimLam");
             var player = Object.FindAnyObjectByType<FirstPersonController>();
             var cam = player.GetComponentInChildren<Camera>();
+            Assert.IsFalse(player.GetComponentsInChildren<Transform>(true).Any(t => t.name == "LuoiLe_Model" && t.parent == player.transform), "Không có lưỡi lê mồ côi lơ lửng trước chân người chơi");
+            foreach (var r in player.transform.Find("ThanNhanVat").GetComponentsInChildren<Renderer>(true))
+                Assert.AreEqual(UnityEngine.Rendering.ShadowCastingMode.ShadowsOnly, r.shadowCastingMode, "Góc thứ nhất không thấy thân mình: " + r.name);
             var knife = cam.transform.Find("DaoGam_Model");
             Assert.IsNotNull(knife, "Dao găm là model thật");
             Assert.Greater(knife.GetComponentsInChildren<MeshFilter>(true).Length, 0);

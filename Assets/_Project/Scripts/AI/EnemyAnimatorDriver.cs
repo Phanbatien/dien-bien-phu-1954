@@ -104,7 +104,7 @@ namespace DBP.AI
             previousSpeed = speed;
             SetBool(ClimbHash, climber && climber.IsClimbing || playerBody && playerBody.IsClimbing);
             SetBool(CrouchHash, playerBody ? playerBody.IsCrouching
-                : comrade ? comrade.IsCrouching
+                : comrade ? comrade.IsFiringStance
                 : trench ? trench.CurrentState == TrenchSoldierAI.State.HaoCover
                 : soldier && soldier.CurrentState == SoldierAI.State.Suppress);
         }

@@ -20,6 +20,11 @@ namespace DBP.Tests
             var begin = Object.FindObjectsByType<UnityEngine.UI.Button>(FindObjectsSortMode.None).FirstOrDefault(b => b.name == "BeginMission");
             if (begin) begin.onClick.Invoke();
             Time.timeScale = 1f;
+            Assert.IsNotNull(GameObject.Find("DiaHinh"), "Màn 6 có địa hình thật");
+            var war = GameObject.Find("ChienTruongWarMap");
+            Assert.IsNotNull(war, "Màn 6 có đồ War Map");
+            Assert.Greater(war.transform.childCount, 80, "Màn 6 đầy đồ chiến trường");
+            Assert.IsFalse(GameObject.Find("BaoCat_1").GetComponent<Renderer>().enabled, "Bao cát thật thay khối vàng");
             var mission = MissionController.Current;
             var endless = mission.Objectives.OfType<EndlessObjective>().Single();
             mission.Player.Configure(TargetKind.Player, 100000f);

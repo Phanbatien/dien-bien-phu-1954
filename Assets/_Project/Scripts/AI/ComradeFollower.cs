@@ -31,7 +31,8 @@ namespace DBP.AI
         public float Health { get; private set; }
         public bool IsDead => Health <= 0f;
         public SoldierAI Target => target;
-        public bool IsCrouching => !IsDead && Time.time < crouchUntil;
+        /// Đang đứng yên bắn vào địch thấy được: ngồi bắn (clip Crouch Fire Rifle). Đi lại, rảnh hay trúng đạn thì đứng.
+        public bool IsFiringStance => !IsDead && target && !IsReloading && Time.time - lastSeenAt < 1f && agent && agent.velocity.sqrMagnitude < .5f;
         public bool IsReloading => !IsDead && Time.time < reloadUntil;
 
         NavMeshAgent agent;
@@ -185,7 +186,8 @@ namespace DBP.AI
         {
             if (IsDead || IsReloading) return;
             if (hasFireVariant) animator.SetFloat(FireVariant, Random.Range(0, 2));
-            if (hasShootAnimation) animator.SetTrigger(ShootAnimation);
+            // Ngồi bắn: clip toàn thân đã có động tác bắn, không chồng clip đứng bắn của thân trên
+            if (hasShootAnimation && !IsFiringStance) animator.SetTrigger(ShootAnimation);
             nextShotAt = Time.time + Random.Range(0.9f, 1.6f);
             var from = muzzle ? muzzle.position : transform.position + Vector3.up * 1.4f;
             var aimAt = target.transform.position + Vector3.up * 1.1f;
