@@ -87,6 +87,12 @@ namespace DBP.Weapons
             if (keyboard.eKey.wasPressedThisFrame && Time.frameCount != mountedFrame) { Dismount(); return; }
             if (!mouse.leftButton.isPressed || Time.time < nextShotAt) return;
 
+            Shoot();
+        }
+
+        /// Một phát đạn (Update gọi theo nhịp rpm; quay trailer gọi trực tiếp).
+        public void Shoot()
+        {
             nextShotAt = Time.time + 60f / rpm;
             var cam = Camera.main.transform;
             kick = 1f;

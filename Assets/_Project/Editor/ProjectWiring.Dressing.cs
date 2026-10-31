@@ -32,7 +32,7 @@ namespace DBP.EditorTools
         static string WireDressing(string sceneName)
         {
             if (sceneName.StartsWith("M1")) return FixFloatingWire();
-            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5"))) return null;
+            if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5") || sceneName.StartsWith("M6"))) return null;
 
             var old = GameObject.Find("Dressing");
             if (old) Object.DestroyImmediate(old);

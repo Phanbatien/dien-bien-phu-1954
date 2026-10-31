@@ -32,7 +32,6 @@ namespace DBP.EditorTools
             new Scatter(6, 6f, false, .15f, "Environment/SM_Env_Trench_Mound_01", "Environment/SM_Env_Trench_Mound_02", "Environment/SM_Env_Trench_Mound_03", "Environment/SM_Env_Trench_Mound_04"),
             new Scatter(5, 3.4f, false, .05f, "Environment/SM_Env_Trench_Dirt_01"),
             new Scatter(8, 4.6f, false, 0f, "Environment/SM_Env_Tree_Dead_04"),
-            new Scatter(5, 7f, false, -.02f, "Environment/SM_Env_Crater_Water_01", "Environment/SM_Env_Crater_Water_02"),
             new Scatter(3, 5.4f, true, 0f, "Vehicles/SM_Veh_Artillery_01_Destroyed"),
             new Scatter(3, 8f, true, 0f, "Vehicles/SM_Veh_German_Tank_01_Destroyed", "Vehicles/SM_Veh_British_Tank_01_Destroyed", "Vehicles/SM_Veh_Small_Tank_01_Destroyed"),
             new Scatter(2, 8.5f, true, 0f, "Vehicles/SM_Veh_British_Plane_01_Destroyed", "Vehicles/SM_Veh_German_Plane_01_Destroyed"),
@@ -44,6 +43,7 @@ namespace DBP.EditorTools
         static string WireWarMap(Transform root, string sceneName, System.Random rng, List<Vector3> keep, Rect area)
         {
             if (!(sceneName.StartsWith("M2") || sceneName.StartsWith("M3") || sceneName.StartsWith("M4") || sceneName.StartsWith("M5") || sceneName.StartsWith("M6"))) return "";
+            if (sceneName.StartsWith("M6")) area = new Rect(-50f, -50f, 100f, 100f); // rải đều quanh trận địa giữa cánh đồng
             if (!AssetDatabase.IsValidFolder("Assets/PolygonWarMap")) return "";
             FixWarMapParticles();
             int grounds = GroundTexture();
@@ -67,6 +67,14 @@ namespace DBP.EditorTools
                 extras.Add(new Scatter(3, 3.4f, false, 0f, "Environment/SM_Prop_Trench_Bridge_01", "Environment/SM_Prop_Trench_Bridge_02"));
                 extras.Add(new Scatter(4, 9f, false, 0f, "Environment/SM_Prop_Blimp_Piece_01", "Environment/SM_Prop_Blimp_Piece_02", "Environment/SM_Prop_Blimp_Piece_03",
                     "Environment/SM_Prop_Blimp_Piece_04", "Environment/SM_Prop_Blimp_Piece_05"));
+                // Vòng bao cát thật thay các khối vàng (giữ va chạm)
+                foreach (var box in All<Renderer>().Where(r => r.name.StartsWith("BaoCat_")).ToArray())
+                {
+                    box.enabled = false;
+                    var bottom = new Vector3(box.transform.position.x, 0f, box.transform.position.z);
+                    var bag = PlaceFitted(group, SandbagPrefab, group.InverseTransformPoint(bottom), box.transform.eulerAngles.y, 3.2f);
+                    if (bag) Settle(bag, false);
+                }
                 // Khinh khí cầu nguyên vẹn lơ lửng trên trời
                 Raw(group, "Vehicles/SM_Veh_Blimp_01", new Vector3(area.center.x + 30f, 75f, area.center.y + 90f), 120f, Vector3.one);
             }
